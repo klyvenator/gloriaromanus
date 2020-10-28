@@ -1,34 +1,37 @@
 package unsw.gloriaromanus;
 
+import unsw.gloriaromanus.Tax;
+
 public class Town {
     
     private Faction faction;
     private int wealth;
-    private double taxRate; 
+    private Tax tax;
 
-    public Town(Faction faction, int wealth, double taxRate){
-        
+    public Town(Faction faction){
         this.faction = faction;
-        this.wealth = 0; //set initial town wealth to zero
-        this.taxRate = 0.10; //set initial tax rate to low, 0.10
-
+        this.tax = new Tax(); // set tax rate to low
+        this.wealth = 10; // set initial province wealth to 10
     }
-
-    public int getTax(){
+    public int getWealth(){
+        return this.wealth;
+    }
+    
+    public int getTaxOwed(){
         if(this.wealth <= 0 ){
             return 0;
         }
-        int tax = (int)Math.round(this.taxRate * this.wealth);
-        return tax;
+        int taxOwed = (int)Math.round( this.tax.getTaxRate() * this.wealth);
+        return taxOwed;
     }
 
-    public changeTaxRate(String rate){
-        //TO DO 
-        if( rate.equals("Low") ){
-            this.taxRate = 0.10;
-        }
-        else if( rate.equals("Normal") ){
-            this.taxRate = 0.10;
+    public void wealthGrowth(){
+        int growth = tax.getTaxGrowth();
+        if( this.wealth + growth <= 0 ){
+            this.wealth = 0;
+        }else {
+            this.wealth = this.wealth + growth;
         }
     }
+    
 }
