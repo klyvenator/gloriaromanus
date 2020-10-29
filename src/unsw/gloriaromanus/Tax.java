@@ -30,6 +30,7 @@ public class Tax {
             this.taxRate = 0.25;
             this.growth = -30;
         }
+        this.taxType = taxName;
     }
 
     public double getTaxRate(){
