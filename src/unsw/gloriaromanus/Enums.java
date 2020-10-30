@@ -1,7 +1,7 @@
 package unsw.gloriaromanus;
 
 public class Enums {
-    enum Range {
+    public enum Range {
         MELEE,
         RANGED
     }
