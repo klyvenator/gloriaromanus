@@ -12,17 +12,19 @@ public class TownTest {
 
     @Test
     public void townOwnerWealth(){
-        Town t = new Town();
+        Town t = new Town("Temp Faction", "Australia");
         //Town owner autmatically set to a string called 
         // "Temp Faction" should equal owner
         assertEquals("Temp Faction", t.getFaction());
+        // TownName or province should be "Australia"
+        assertEquals("Australia", t.getTownName());
         // wealth is initially set to 10 gold
         assertEquals(10, t.getWealth());
     }
 
     @Test
     public void taxCheck(){
-        Town t = new Town();
+        Town t = new Town("Temp Faction", "Australia");
         // tax status should be set to low initially
         assertEquals("Low", t.getTaxStatus());
         // since "Low" taxrate = 10% growth is +10 gold 
