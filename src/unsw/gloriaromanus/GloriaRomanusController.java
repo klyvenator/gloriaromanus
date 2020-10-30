@@ -355,7 +355,7 @@ public class GloriaRomanusController{
   }
 
 
-/** change the String content parse to just read directly for the file in milestone 3 
+/** TO DO change the String content parse to just read directly for the file in milestone 3 
  * I just did it like this for milestone 2 tests so I could use the Controller functionality 
  */
   // added by jayden - to get a simple list of all the provinces from a json file
@@ -372,6 +372,10 @@ public class GloriaRomanusController{
     System.out.println(list);
     return list;
   }
+  /** TO DO String Content is currently a json escape of initial_provinces.json at the moment
+   *  probably need to change it so it's not parsing the content in and just read the file since 
+   *  I only need to do it once but this works for the backend testing 
+   */
   // gets a list of factions and randomly allocates them provinces and creates towns
   public static List<Faction> allocateTowns(List<String> factions, String content) throws IOException{
     Random rand = new Random();
