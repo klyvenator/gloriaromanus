@@ -12,7 +12,7 @@ import unsw.gloriaromanus.Enums.Range;
  * 
  * current version represents a heavy infantry unit (almost no range, decent armour and morale)
  */
-public class Unit {
+public abstract class Unit {
 
     private String name;
     private int numTroops = 100;  // the number of troops in this unit (should reduce based on depletion)
@@ -28,18 +28,9 @@ public class Unit {
     private List<Buff> buffs;
 
 
-    public Unit(String name, Range range, int number, int attack, int defense, int speed, int morale, int turns, int cost, List<Ability> abilities) {
+    public Unit(String name) {
         this.name = name;
-        numTroops = number;
-        this.type = range;
-        this.defense = defense;
-        this.morale = morale;
-        this.speed = speed;
-        this.attack = attack;
-        this.cost = cost;
-        turnsToMake = turns;
-        this.abilities = abilities;
-
+        abilities = new ArrayList<Ability>();
         buffs = new ArrayList<Buff>();
     }
 
@@ -54,8 +45,11 @@ public class Unit {
         this.numTroops = numTroops;
     }
 
-    public Range getRange() {
+    public Range getType() {
         return type;
+    }
+    public void setType(Range type) {
+        this.type = type;
     }
     
     public int getDefense() {
