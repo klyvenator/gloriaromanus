@@ -4,15 +4,17 @@ package unsw.gloriaromanus;
 public class Town {
     
     // TO DO uncomment when faction has been created 
-    //private Faction faction; 
+    //public Faction faction; 
+    public String townName;
     private String faction;
     private int wealth;
     private Tax tax;
 
     // TO DO uncomment when faction has been created 
-    // public Town(Faction faction){
-    public Town(){
-        this.faction = "Temp Faction";
+    // public Town(Faction faction, String townName){
+    public Town(String faction, String townName){
+        this.faction = faction;
+        this.townName = townName;
         this.tax = new Tax(); // set tax rate to low
         this.wealth = 10; // set initial province wealth to 10
     }
@@ -21,6 +23,9 @@ public class Town {
     }
     public String getFaction(){
         return this.faction;
+    }
+    public String getTownName(){
+        return this.townName;
     }
     public int getTaxOwed(){
         int currWealth = getWealth();
