@@ -3,6 +3,7 @@ package unsw.gloriaromanus;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import unsw.gloriaromanus.Enums.Range;
 
 public class Skirmishes {
     private Unit unitA;
@@ -32,7 +33,7 @@ public class Skirmishes {
 
         // Adjust according to units' speed values
         double changeMelee;
-        if (unitA == "melee") {
+        if (unitA.getType() == Range.MELEE) {
             // A is melee
             changeMelee = unitA.getSpeed() - unitB.getSpeed();
         } else {
@@ -52,10 +53,17 @@ public class Skirmishes {
 
         return chanceMelee;
     }
+
     private void decideEngagementType() {
-        if (unitA.getType("melee") && unitB.getType("melee")) {
+        if (
+            unitA.getType() == Range.MELEE &&
+            unitB.getType() == Range.MELEE
+        ) {
             engagement = new MeleeEngagements();
-        } else if (unitA.getType("ranged") && unitB.getType("ranged")) {
+        } else if (
+            unitA.getType() == Range.RANGED &&
+            unitB.getType() == Range.RANGED
+        ) {
             engagement = new RangedEngagements();
         } else {
             
@@ -78,21 +86,104 @@ public class Skirmishes {
         return false;
     }
 
+    private double chanceOfFleeing(Unit routing, Unit pursuing) {
+
+        double baseChance = 0.5;
+
+        double speedVariation = 0.1 * (routing.getSpeed() - pursuing.getSpeed());
+
+        // TODO Possible speed modifiers?
+
+        double fleeingChance = baseChance + speedVariation;
+        // Limit chance, Min = 10%, Max = 100%
+        if (fleeingChance < 0.1) {
+            fleeingChance = 0.1;
+        } else if (fleeingChance > 1) {
+            fleeingChance = 1;
+        }
+
+        return fleeingChance;
+    }
+
+    private boolean attemptToFlee(Unit routing, Unit pursuing) {
+        double fleeingChance = chanceOfFleeing(routing, pursuing);
+
+        // Toss the dice and decide
+        Random r = new Random();
+        double diceRoll = r.nextDouble();
+        if (diceRoll < fleeingChance) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void routingActions() {
+        if (!unitA.isBroken() && !unitB.isBroken()) {
+            return;
+        }
+
+        if (unitA.isBroken() && unitB.isBroken()) {
+            return;
+        }
+
+        Unit routing, pursuing;
+        if (unitA.isBroken()) {
+            routing = unitA;
+            pursuing = unitB;
+        } else { // (unitB.isBroken()) {
+            routing = unitB;
+            pursuing = unitA;
+        }
+
+        while (routing.getNumTroops() > 0) {
+            
+            if (attemptToFlee(routing, pursuing)) {
+                break;
+            }
+            
+            decideEngagementType();
+          
+            engagement.routeEngage(routing, pursuing);
+        }
+
+    }
     public Unit startEngagements() {
+        
+        int firstBeforeSize = 0;
+        int secondBeforeSize = 0;
+        int firstAfterSize = 0;
+        int secondAfterSize = 0;
+
         while (numEngagements < maxEngagements &&
                !isRoutingNecessary()) {
             decideEngagementType();
             
-            
+            firstBeforeSize = unitA.getNumTroops();
+            secondBeforeSize = unitB.getNumTroops();
+
             Units tmp = engagement.engage(unitA, unitB);
+
+            firstAfterSize = unitA.getNumTroops();
+            secondAfterSize = unitB.getNumTroops();
             // TODO Check tmp val to determine if victory...
 
-            // TODO: Try breaking units - if breaks, break this loop
-            // tryBreaking(unitA)
-            // unitA.tryBreaking() <- prefered
-            // enocde info:
-            //      current morale
-            //      size(unitA / unitB) -> before + after engaging
+            unitA.attemptToBreak(
+                firstBeforeSize - firstAfterSize, firstBeforeSize,
+                secondBeforeSize - secondAfterSize, secondBeforeSize
+            );
+            unitB.attemptToBreak(
+                secondBeforeSize - secondAfterSize, secondBeforeSize,
+                firstBeforeSize - firstAfterSize, firstBeforeSize
+            );
+
+            if (isRoutingNecessary()) {
+                routingActions();
+                break;
+            }
+
         }
+
+
     }
 }
