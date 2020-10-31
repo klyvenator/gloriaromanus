@@ -1,10 +1,11 @@
 package unsw.gloriaromanus;
 
-import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.json.JSONObject;
 import unsw.gloriaromanus.Enums.Range;
 
@@ -17,10 +18,24 @@ public class UnitFactory implements Factory{
     }
 
     // extracts file into json objects and stores it as a list.
-    public void initialise() {
-        Files.readString(Paths.get("unsw/gloriousromanus/Json/Units.json"));
-        
-        //to do. also check no duplicate names., has name and has category
+    public void initialise(){
+        String jsonString = null;
+        try {
+            jsonString = Files.readString(Paths.get("src/unsw/gloriaromanus/Json/Units.json"));
+        } catch (IOException e) {
+            System.out.println(e);
+            System.exit(1);
+        }
+
+        JSONObject json = new JSONObject(jsonString);
+        for (String key: json.keySet()) {
+            if (!json.getJSONObject(key).has("category")) {
+                System.out.println("Unit must have a category");
+                System.exit(1);
+            }
+            json.getJSONObject(key).put("name", key);
+            blueprints.add(json.getJSONObject(key));
+        }
     }
 
     // Deserialises a single unit contained in a json object and returns a Unit.
@@ -47,13 +62,13 @@ public class UnitFactory implements Factory{
                 newUnit.setType(Range.RANGED);
             } 
         }
-        if (json.has("defense skill")) {
+        if (json.has("defense")) {
             newUnit.getDefense().setDefenseSkill(json.getInt("defense"));
         }
         if (json.has("armour")) {
             newUnit.getDefense().setArmour(json.getInt("armour"));
         }
-        if (json.has("defense skill")) {
+        if (json.has("shield")) {
             newUnit.getDefense().setShield(json.getInt("defense"));
         }
         if (json.has("morale")) {
@@ -68,7 +83,7 @@ public class UnitFactory implements Factory{
         if (json.has("cost")) {
             newUnit.setCost(json.getInt("cost"));
         }
-        if (json.has("turns")) {
+        if (json.has("turnsToProduce")) {
             newUnit.setTurnsToMake(json.getInt("turns"));
         }
 
