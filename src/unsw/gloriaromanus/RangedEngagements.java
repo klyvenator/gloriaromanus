@@ -10,9 +10,17 @@ public class RangedEngagements implements Engagements {
     }
 
     @Override
-    public Unit startEngagement(Unit a, Unit b) {
+    public Unit engage(Unit a, Unit b) {
+        // Decide who goes first
         attack(a, b);
         attack(b, a);
     }
+
+    @Override
+    public Unit route(Unit routing, Unit pursuing) {
+        attack(pursuing, routing);
+    }
+
+    
     
 }
