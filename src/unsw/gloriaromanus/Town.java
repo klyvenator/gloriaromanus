@@ -15,11 +15,20 @@ public class Town {
         this.tax = new Tax(); // set tax rate to low
         this.wealth = 10; // set initial province wealth to 10
     }
+    public Town(String townName) {
+        this.faction = null;
+        this.townName = townName;
+        this.tax = new Tax(); // set tax rate to low
+        this.wealth = 10; // set initial province wealth to 10
+    }
     public int getWealth(){
         return this.wealth;
     }
     public String getFaction(){
         return this.faction.getFactionName();
+    }
+    public void setFaction(Faction faction) {
+        this.faction = faction;
     }
     public String getTownName(){
         return this.townName;
@@ -59,7 +68,7 @@ public class Town {
         return tax.getTaxType();
     }
     public void updateTaxStatus(String taxType){
-        tax.changeTax(taxType);
+        tax.updateTax(taxType);
     }
     
 }
