@@ -17,7 +17,7 @@ public abstract class Unit {
     private String name;
     private int numTroops = 100;  // the number of troops in this unit (should reduce based on depletion)
     private Range type = Range.MELEE;  // range of the unit
-    private int defense = 10;  // armour defense
+    private DefenseStat defense;   // armour defense
     private int morale = 10;  // resistance to fleeing
     private int speed = 10;  // ability to disengage from disadvantageous battle
     private int attack = 10;  // can be either missile or melee attack to simplify. Could improve implementation by differentiating!
@@ -30,6 +30,7 @@ public abstract class Unit {
 
     public Unit(String name) {
         this.name = name;
+        this.defense = new DefenseStat();
         abilities = new ArrayList<Ability>();
         buffs = new ArrayList<Buff>();
     }
@@ -52,10 +53,10 @@ public abstract class Unit {
         this.type = type;
     }
     
-    public int getDefense() {
+    public DefenseStat getDefense() {
         return defense;
     }
-    public void setDefense(int defense) {
+    public void setDefense(DefenseStat defense) {
         this.defense = defense;
     }
 

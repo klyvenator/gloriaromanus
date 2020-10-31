@@ -1,5 +1,8 @@
 package unsw.gloriaromanus;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONObject;
@@ -15,6 +18,8 @@ public class UnitFactory implements Factory{
 
     // extracts file into json objects and stores it as a list.
     public void initialise() {
+        Files.readString(Paths.get("unsw/gloriousromanus/Json/Units.json"));
+        
         //to do. also check no duplicate names., has name and has category
     }
 
@@ -42,8 +47,14 @@ public class UnitFactory implements Factory{
                 newUnit.setType(Range.RANGED);
             } 
         }
-        if (json.has("defense")) {
-            newUnit.setDefense(json.getInt("defense"));
+        if (json.has("defense skill")) {
+            newUnit.getDefense().setDefenseSkill(json.getInt("defense"));
+        }
+        if (json.has("armour")) {
+            newUnit.getDefense().setArmour(json.getInt("armour"));
+        }
+        if (json.has("defense skill")) {
+            newUnit.getDefense().setShield(json.getInt("defense"));
         }
         if (json.has("morale")) {
             newUnit.setMorale(json.getInt("morale"));
