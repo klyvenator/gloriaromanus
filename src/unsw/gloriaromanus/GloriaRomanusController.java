@@ -86,7 +86,7 @@ public class GloriaRomanusController{
     Random r = new Random();
     for (String provinceName : provinceToOwningFactionMap.keySet()) {
       provinceToNumberTroopsMap.put(provinceName, r.nextInt(500));
-    } 
+    }
 
     // TODO = load this from a configuration file you create (user should be able to
     // select in loading screen)
@@ -322,7 +322,6 @@ public class GloriaRomanusController{
     return ArrayUtil.convert(ownership.getJSONArray(humanFaction));
   }
 
-
   /**
    * returns query for arcgis to get features representing human provinces can
    * apply this to FeatureTable.queryFeaturesAsync() pass string to
@@ -354,48 +353,6 @@ public class GloriaRomanusController{
     output_terminal.appendText(message+"\n");
   }
 
-
-/** TO DO change the String content parse to just read directly for the file in milestone 3 
- * I just did it like this for milestone 2 tests so I could use the Controller functionality 
- */
-  // added by jayden - to get a simple list of all the provinces from a json file
-  private static List<String> getProvinceList(String content) throws IOException {
-    // uncomment this for milestone 3
-    //String content = Files.readString(Paths.get("src/unsw/gloriaromanus/Json/list_provinces.json"));
-    List<String> list = new ArrayList<String>();
-    JSONObject province = new JSONObject(content);
-    JSONArray jA = province.getJSONArray("Provinces");
-    
-    for (int i = 0; i < jA.length(); i++) {
-      list.add( jA.getString(i) );
-    }
-    System.out.println(list);
-    return list;
-  }
-  /** TO DO String Content is currently a json escape of initial_provinces.json at the moment
-   *  probably need to change it so it's not parsing the content in and just read the file since 
-   *  I only need to do it once but this works for the backend testing 
-   */
-  // gets a list of factions and randomly allocates them provinces and creates towns
-  public static List<Faction> allocateTowns(List<String> factions, String content) throws IOException{
-    Random rand = new Random();
-    // remove content for milestone 3 and jsut read file as normal
-    List<String> list = getProvinceList(content);
-    List<Faction> facList = new ArrayList<Faction>();
-    for(String f : factions){
-      Faction newFac = new Faction(f);
-      facList.add(newFac);
-      for (int i = 0; i < list.size(); i++) {
-        int randomIndex = rand.nextInt(list.size());
-        String randomElement = list.get(randomIndex);
-        newFac.addTown(newFac, randomElement);
-        list.remove(randomIndex);
-      }
-    }
-    return facList;
-  }
-
-  //
   /**
    * Stops and releases all resources used in application.
    */
