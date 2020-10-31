@@ -6,16 +6,26 @@ import java.util.List;
 public class BattleResolver {
     private Army armyA;
     private Army armyB;
+    private Towns invaderProvince;
+    private Towns defenderProvince;
 
     BattleResolver() {
         armyA = null;
         armyB = null;
+        invaderProvince = null;
+        defenderProvince = null;
     }
 
     BattleResolver(Army a, Army b) {
         this();
         this.armyA = a;
         this.armyB = b;
+    }
+
+    BattleResolver(Army a, Army b, Towns attackerTown, Towns defenderTown) {
+        this(a, b);
+        this.invaderProvince = attackerTown;
+        this.defenderProvince = defenderTown;
     }
 
     /**
@@ -27,8 +37,10 @@ public class BattleResolver {
         while (
             (armyA.getNumUnits() > 0) &&
             (armyB.getNumUnits() > 0)
+            // TODO Maybe some sort of routing condition?
+            // TODO How to identify a draw?
         ) {
             Skirmishes skirmish = new Skirmishes(armyA.randomlySelectUnit(), armyB.randomlySelectUnit());
-            Untis tmp = skirmish.startEngagements();
+            Units tmp = skirmish.startEngagements();
         }
     }
