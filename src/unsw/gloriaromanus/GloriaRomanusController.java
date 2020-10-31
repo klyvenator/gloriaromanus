@@ -361,7 +361,7 @@ public class GloriaRomanusController{
   // added by jayden - to get a simple list of all the provinces from a json file
   private static List<String> getProvinceList(String content) throws IOException {
     // uncomment this for milestone 3
-    //String content = Files.readString(Paths.get("src/unsw/gloriaromanus/list_provinces.json"));
+    //String content = Files.readString(Paths.get("src/unsw/gloriaromanus/Json/list_provinces.json"));
     List<String> list = new ArrayList<String>();
     JSONObject province = new JSONObject(content);
     JSONArray jA = province.getJSONArray("Provinces");
