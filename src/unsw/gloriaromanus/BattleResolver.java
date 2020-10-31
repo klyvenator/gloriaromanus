@@ -41,6 +41,8 @@ public class BattleResolver {
             // TODO How to identify a draw?
         ) {
             Skirmishes skirmish = new Skirmishes(armyA.randomlySelectUnit(), armyB.randomlySelectUnit());
+            // TODO: Print "skirmish started with A and B!"
+            // TODO: Unit.toString() to print out unit confrontation
             Units tmp = skirmish.startEngagements();
         }
     }
