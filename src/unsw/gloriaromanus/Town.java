@@ -8,9 +8,14 @@ public class Town {
     private int wealth;
     private Tax tax;
 
-
     public Town(Faction faction, String townName){
         this.faction = faction;
+        this.townName = townName;
+        this.tax = new Tax(); // set tax rate to low
+        this.wealth = 10; // set initial province wealth to 10
+    }
+    public Town(String townName) {
+        this.faction = null;
         this.townName = townName;
         this.tax = new Tax(); // set tax rate to low
         this.wealth = 10; // set initial province wealth to 10
@@ -20,6 +25,9 @@ public class Town {
     }
     public String getFaction(){
         return this.faction.getFactionName();
+    }
+    public void setFaction(Faction faction) {
+        this.faction = faction;
     }
     public String getTownName(){
         return this.townName;
