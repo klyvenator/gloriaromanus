@@ -31,7 +31,7 @@ public class Faction {
         for(Town t : towns){
             total += t.getTaxOwed();
         }
-        this.totalGold = total;
+        this.totalGold += total;
     }
     private void calculateTotalWealth(){
         int total = 0;
