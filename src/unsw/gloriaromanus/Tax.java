@@ -13,7 +13,7 @@ public class Tax {
         this.growth = 10;
     }
 
-    public void changeTax(String taxName){
+    private void changeTax(String taxName){
         if( taxName.equals("Low") ){
             this.taxRate = 0.10;
             this.growth = 10;
@@ -32,7 +32,9 @@ public class Tax {
         }
         this.taxType = taxName;
     }
-
+    public void updateTax(String taxType){
+        changeTax(taxType);
+    }
     public double getTaxRate(){
         return this.taxRate;
     }
