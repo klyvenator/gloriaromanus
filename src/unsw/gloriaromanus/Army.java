@@ -21,7 +21,7 @@ public class Army {
 
     /**
      * Returns a random unit from this army
-     * (uniformly random)
+     * (<<general>> uniformly random)
      * @return unit, randomly (uniformly) chosen
      */
     public Unit randomlySelectUnit() {
@@ -34,5 +34,28 @@ public class Army {
         Random r = new Random();
         
         return units.get(r.nextInt(units.size()));
+    }
+
+    public List<Unit> getAvailableUnits() {
+        return null;
+    }
+    /**
+     * Returns a uniformly randomly selected unit
+     * which is:
+     * <ol>
+     * <li> Alive
+     * <li> Not Broken
+     * </ol>
+     * @return
+     */
+    public Unit randomlySelectAvailableUnit() {
+
+        // If this army has no units
+        if (units.size() == 0) {
+            return null;
+        }
+
+        // TODO
+        return null;
     }
 }

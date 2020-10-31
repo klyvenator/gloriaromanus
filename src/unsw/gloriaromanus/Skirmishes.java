@@ -25,6 +25,12 @@ public class Skirmishes {
         this.unitB = b;
     }
 
+    private boolean bothUnitsAlive() {
+        return 
+            unitA.getNumTroops() > 0 &&
+            unitB.getNumTroops() > 0;
+    }
+
     // TODO Add this calculation at initialisation time
     // Since speed doesn't change during a skirmish
     private double calcChanceMeleeEngagement() {
@@ -155,8 +161,11 @@ public class Skirmishes {
         int firstAfterSize = 0;
         int secondAfterSize = 0;
 
-        while (numEngagements < maxEngagements &&
-               !isRoutingNecessary()) {
+        while (
+            bothUnitsAlive() &&
+            !isRoutingNecessary() &&
+            numEngagements < maxEngagements
+        ) {
             decideEngagementType();
             
             firstBeforeSize = unitA.getNumTroops();
@@ -177,7 +186,7 @@ public class Skirmishes {
                 firstBeforeSize - firstAfterSize, firstBeforeSize
             );
 
-            if (isRoutingNecessary()) {
+            if (isRoutingNecessary() && bothUnitsAlive()) {
                 routingActions();
                 break;
             }

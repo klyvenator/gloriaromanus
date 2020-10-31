@@ -65,6 +65,14 @@ public abstract class Unit {
         this.defense = defense;
     }
 
+    public int getDefenseMelee() {
+        return defense.getMeleeDef();
+    }
+
+    public int getDefenseRanged() {
+        return defense.getRangedDef();
+    }
+
     public int getMorale() {
         return morale;
     }
