@@ -15,17 +15,23 @@ public class Faction {
         this.name = name;
         this.towns = new ArrayList<>();
     }
+    
+    public void addTown(Town town) {
+        towns.add(town);
+    }
+
     public Town addTown(Faction faction, String townName){
         Town newTown = new Town(faction, townName);
-        this.towns.add(newTown);
+        addTown(newTown);
         return newTown;
     }
+    
     private void calculateTotalGold(){
         int total = 0;
         for(Town t : towns){
             total += t.getTaxOwed();
         }
-        this.totalGold = total;
+        this.totalGold += total;
     }
     private void calculateTotalWealth(){
         int total = 0;

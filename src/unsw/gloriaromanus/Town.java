@@ -8,7 +8,6 @@ public class Town {
     private int wealth;
     private Tax tax;
 
-
     public Town(Faction faction, String townName){
         this.faction = faction;
         this.townName = townName;

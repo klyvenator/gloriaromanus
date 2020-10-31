@@ -29,7 +29,11 @@ public class Tax {
         else if ( taxName.equals("Very high") ){
             this.taxRate = 0.25;
             this.growth = -30;
+        } else {
+            // No change
+            taxName = this.taxType;
         }
+
         this.taxType = taxName;
     }
     public void updateTax(String taxType){
