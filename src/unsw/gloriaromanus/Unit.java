@@ -2,6 +2,8 @@ package unsw.gloriaromanus;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
 import unsw.gloriaromanus.Enums.Range;
 
 /**
@@ -27,12 +29,15 @@ public abstract class Unit {
     private List<Ability> abilities;
     private List<Buff> buffs;
 
+    private boolean broken;
 
     public Unit(String name) {
         this.name = name;
         this.defense = new DefenseStat();
         abilities = new ArrayList<Ability>();
         buffs = new ArrayList<Buff>();
+
+        broken = false;
     }
 
     public String getName() {
@@ -108,5 +113,65 @@ public abstract class Unit {
     }
     public void setMovementPoints(int movementPoints) {
         this.movementPoints = movementPoints;
+    }
+
+    public boolean isBroken() {
+        return broken;
+    }
+
+    private double chanceOfBreaking(
+        int thisCasualties, int thisStartSize,
+        int otherCasualties, int otherStartSize
+    ) {
+        // Base level probability
+        // TODO Apply morale modifier adjustments
+        // >>> For beserker
+        // if (getMorale() == Integer.MAX_VALUE) {
+        //     return 0;
+        // }
+
+        double baseChance = 1 - (getMorale() * 0.1);
+
+        double casualtiesChance =
+        (((double) thisCasualties) / thisStartSize) /
+        (((double) otherCasualties) / otherStartSize);
+
+        double breakingChance = baseChance + casualtiesChance;
+        
+        // Limit chance, Min = 5%, Max = 100%
+        if (breakingChance < 0.05) {
+            breakingChance = 0.05;
+        } else if (breakingChance > 1) {
+            breakingChance = 1;
+        }
+
+        return breakingChance;
+    }
+
+    /**
+     * Attempt to break this unit using adjustments
+     * from proportions of this and enemy unit lost
+     * @param thisCasualties
+     * @param thisStartSize
+     * @param otherCasualties
+     * @param otherStartSize
+     */
+    public void attemptToBreak(
+        int thisCasualties, int thisStartSize,
+        int otherCasualties, int otherStartSize
+    ) {
+        double breakingChance = chanceOfBreaking(
+            thisCasualties, thisStartSize,
+            otherCasualties, otherStartSize
+        );
+        
+        // Toss the dice and decide
+        Random r = new Random();
+        double diceRoll = r.nextDouble();
+        if (diceRoll < breakingChance) {
+            broken = true;
+        } else {
+            broken = false;
+        }
     }
 }
