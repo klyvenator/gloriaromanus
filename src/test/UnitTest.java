@@ -41,7 +41,7 @@ public class UnitTest{
     public void unitFactoryTests(){
         UnitFactory factory = new UnitFactory();
         List<JSONObject> blueprints = factory.getBlueprints();
-        assertEquals(factory.createUnit("blah"), null);
+        assertEquals(factory.createUnit("blah", null, null), null);
 
         JSONObject json = new JSONObject();
         json.put("name", "Panda Bears");
@@ -50,9 +50,9 @@ public class UnitTest{
         json.put("type", Range.RANGED);
         json.put("category", "cavalry");
         blueprints.add(json);
-        assertEquals(factory.createUnit("blah"), null);
+        assertEquals(factory.createUnit("blah", null, null), null);
 
-        Cavalry panda = (Cavalry)factory.createUnit("Panda Bears");
+        Cavalry panda = (Cavalry)factory.createUnit("Panda Bears", null, null);
         assertEquals(panda.getCost(), 500);
         assertEquals(panda.getSpeed(), 10);
         assertEquals(panda instanceof Cavalry , true);
