@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class Army {
     private List<Unit> units;
-    private Towns currentlyOn;
+    private Town currentlyOn;
 
     Army() {
         units = new ArrayList<Unit>();
@@ -80,7 +80,7 @@ public class Army {
      * <li> Alive
      * <li> Not Broken
      * </ol>
-     * @return
+     * @return available unit
      */
     public Unit randomlySelectAvailableUnit() {
 
