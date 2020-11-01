@@ -7,7 +7,11 @@ import unsw.gloriaromanus.Enums.Range;
 public class RangedEngagements implements Engagements {
 
     private static final int MIN_DEFENSE = 10;
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> master
     @Override
     public void attack(Unit attacker, Unit defender) {
         if (attacker.getType() == Range.MELEE) {
@@ -15,7 +19,11 @@ public class RangedEngagements implements Engagements {
         }
 
         // original number of troops of defender
+<<<<<<< HEAD
         int originalSize = defender.getNumTroops()
+=======
+        int originalSize = defender.getNumTroops();
+>>>>>>> master
         double part1 = 0.1 * originalSize;
 
         // TODO Apply modifiers?

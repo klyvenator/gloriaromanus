@@ -54,6 +54,7 @@ public class UnitFactory implements Factory{
                 break;
         }
 
+        newUnit.setCategory(json.getString("category"));
         if (json.has("number")) {
             newUnit.setNumTroops(json.getInt("number"));
         }
@@ -83,7 +84,7 @@ public class UnitFactory implements Factory{
         if (json.has("cost")) {
             newUnit.setCost(json.getInt("cost"));
         }
-        if (json.has("turnsToProduce")) {
+        if (json.has("turns")) {
             newUnit.setTurnsToMake(json.getInt("turns"));
         }
 
@@ -106,9 +107,17 @@ public class UnitFactory implements Factory{
                 newUnit = deserialise(current);
                 newUnit.setCurrentlyOn(town);
                 newUnit.setFaction(faction);
+                return newUnit;
             }
         }
         return null;
+    }
+
+    public static void main(String[] args) {
+        UnitFactory factory = new UnitFactory();
+        factory.initialise();
+        Infantry newUnit = (Infantry)factory.createUnit("Melee Infantry", null, null);
+        System.out.println(newUnit);
     }
 
     public List<JSONObject> getBlueprints() {
