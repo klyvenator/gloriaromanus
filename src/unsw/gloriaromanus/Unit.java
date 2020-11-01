@@ -15,6 +15,7 @@ import unsw.gloriaromanus.Enums.Range;
 public abstract class Unit {
 
     private String name;
+    private String category;
     private int numTroops = 100;  // the number of troops in this unit (should reduce based on depletion)
     private Range type = Range.MELEE;  // range of the unit
     private DefenseStat defense;   // armour defense
@@ -124,5 +125,12 @@ public abstract class Unit {
     }
     public void setFaction(Faction faction) {
         this.faction = faction;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+    public void setCategory(String category) {
+        this.category = category;
     }
 }
