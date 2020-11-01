@@ -152,6 +152,8 @@ public abstract class Unit {
         this.category = category;
     }
 
+    // Actual Methods
+    
     public boolean isBroken() {
         return broken;
     }
