@@ -25,10 +25,14 @@ public class Skirmishes {
         this.unitB = b;
     }
 
-    private boolean bothUnitsAlive() {
+    public boolean bothUnitsAlive() {
         return 
-            unitA.getNumTroops() > 0 &&
-            unitB.getNumTroops() > 0;
+            (unitA.getNumTroops() > 0) &&
+            (unitB.getNumTroops() > 0);
+    }
+
+    public boolean bothUnitsBroken () {
+        return unitA.isBroken() || unitB.isBroken();
     }
 
     // TODO Add this calculation at initialisation time
@@ -86,12 +90,6 @@ public class Skirmishes {
         }
     }
 
-    private boolean isRoutingNecessary () {
-        if (unitA.isBroken()) {return true;}
-        if (unitB.isBroken()) {return true;}
-        return false;
-    }
-
     private double chanceOfFleeing(Unit routing, Unit pursuing) {
 
         double baseChance = 0.5;
@@ -124,13 +122,20 @@ public class Skirmishes {
         }
     }
 
-    private void routingActions() {
+    /**
+     * Perform necessary routing actions
+     * @return
+     */
+    private Unit routingActions() {
+        // both units intact - no routing actions
         if (!unitA.isBroken() && !unitB.isBroken()) {
-            return;
+            return null;
         }
 
+        // Both broken, and flee without inflicitng further damage
         if (unitA.isBroken() && unitB.isBroken()) {
-            return;
+            // TODO Print both units fleed successfully
+            return null;
         }
 
         Unit routing, pursuing;
@@ -145,15 +150,31 @@ public class Skirmishes {
         while (routing.getNumTroops() > 0) {
             
             if (attemptToFlee(routing, pursuing)) {
-                break;
+                return null;
             }
             
             decideEngagementType();
           
-            engagement.routeEngage(routing, pursuing);
+            Unit winner = engagement.routeEngage(routing, pursuing);
+            if (winner != null) {
+                return winner;
+            }
+
         }
 
+        return pursuing;
+        /*
+            Either:
+            1. Fleeing succesful
+            2. Routing unit defeated
+        */
     }
+
+    /**
+     * Start a series of engagements between 2 units
+     * With possible breaking and routing
+     * @return
+     */
     public Unit startEngagements() {
         
         int firstBeforeSize = 0;
@@ -161,9 +182,10 @@ public class Skirmishes {
         int firstAfterSize = 0;
         int secondAfterSize = 0;
 
+        Unit winner = null;
         while (
             bothUnitsAlive() &&
-            !isRoutingNecessary() &&
+            !bothUnitsBroken() &&
             numEngagements < maxEngagements
         ) {
             decideEngagementType();
@@ -171,11 +193,14 @@ public class Skirmishes {
             firstBeforeSize = unitA.getNumTroops();
             secondBeforeSize = unitB.getNumTroops();
 
-            Units tmp = engagement.engage(unitA, unitB);
+            winner = engagement.engage(unitA, unitB);
+
+            if (winner != null) {
+                return winner;
+            }
 
             firstAfterSize = unitA.getNumTroops();
             secondAfterSize = unitB.getNumTroops();
-            // TODO Check tmp val to determine if victory...
 
             unitA.attemptToBreak(
                 firstBeforeSize - firstAfterSize, firstBeforeSize,
@@ -186,13 +211,26 @@ public class Skirmishes {
                 firstBeforeSize - firstAfterSize, firstBeforeSize
             );
 
-            if (isRoutingNecessary() && bothUnitsAlive()) {
-                routingActions();
-                break;
+            if (bothUnitsBroken() && bothUnitsAlive()) {
+                return routingActions();
             }
 
+            // Just finished an engagement
+            numEngagements++;
         }
 
+        // TODO Figure out what a draw means
+        // Could be:
+        // 1. Both Alive
+        // 2. Both not broken
+
+        if (bothUnitsAlive()) {
+            return null;
+        } else if (unitA.getNumTroops() > 0) {
+            return unitA;
+        } else {
+            return unitB;
+        }
 
     }
 }
