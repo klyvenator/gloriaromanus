@@ -17,6 +17,7 @@ import unsw.gloriaromanus.Enums.Range;
 public abstract class Unit {
 
     private String name;
+    private String category;
     private int numTroops = 100;  // the number of troops in this unit (should reduce based on depletion)
     private Range type = Range.MELEE;  // range of the unit
     private DefenseStat defense;   // armour defense
@@ -35,12 +36,17 @@ public abstract class Unit {
 
     public Unit(String name) {
         this.name = name;
+        this.type = Range.MELEE;
         this.defense = new DefenseStat();
         abilities = new ArrayList<Ability>();
         buffs = new ArrayList<Buff>();
 
         broken = false;
     }
+
+    /*
+        Getters and Setters
+    */
 
     public String getName() {
         return name;
@@ -139,10 +145,17 @@ public abstract class Unit {
         this.faction = faction;
     }
 
+    public String getCategory() {
+        return category;
+    }
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     public boolean isBroken() {
         return broken;
     }
-
+    
     private double chanceOfBreaking(
         int thisCasualties, int thisStartSize,
         int otherCasualties, int otherStartSize
@@ -198,4 +211,5 @@ public abstract class Unit {
             broken = false;
         }
 
+    }
 }
