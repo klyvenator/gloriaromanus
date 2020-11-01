@@ -31,8 +31,9 @@ public class CompositeEvaluator implements ComponentEvaluator{
     }
 
     public boolean conditionFulfilled(Faction faction) {
-        if (compList.size() == 0);
-
+        if (compList.size() == 0) {
+            return true;
+        }
         if (compList.size() == 1) {
             return compList.get(0).conditionFulfilled(faction);
         } else {

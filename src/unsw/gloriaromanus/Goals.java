@@ -13,17 +13,21 @@ import unsw.gloriaromanus.Enums.Condition;
 public class Goals {
     private int wealth = 400000;
     private int gold = 100000;
+    private int totalProvinces;
     private CompositeEvaluator winConditions;
     private List<Condition> conditionList;
 
-    // updates the wealth/gold amount from json
-
-    public Goals() {
+    public Goals(int numProvinces) {
         conditionList = new ArrayList<Condition>();
         winConditions = new CompositeEvaluator();
+        totalProvinces = numProvinces;
+        fillShuffle();
+        generateConditions();
     }
-    public void initialise() {
 
+    // Deserialises json config for win conditions
+    public void deserialise() {
+        // to do
     }
 
     // randomly generates winning condition.
@@ -79,7 +83,7 @@ public class Goals {
                 if (c instanceof CompositeEvaluator) {
                     CompositeEvaluator newComp = (CompositeEvaluator)c;
                     if (newComp.getCompList().size() < 2) {
-                        newComp.addChild(new LeafEvaluator(gold, wealth, condition));
+                        newComp.addChild(new LeafEvaluator(gold, wealth, condition, totalProvinces));
                         return;
                     } else {
                         if (newComp.getCompList().get(0) instanceof LeafEvaluator) {
@@ -104,9 +108,7 @@ public class Goals {
 
     public static void main(String[] args) {
         Faction f = new Faction("Kly Faction");
-        Goals goal = new Goals();
-        goal.fillShuffle();
-        goal.generateConditions();
+        Goals goal = new Goals(0);
         goal.printWinConditions((ComponentEvaluator)goal.winConditions);
         System.out.println(goal.checkWin(f));
     }
