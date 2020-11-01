@@ -1,0 +1,9 @@
+[{"faction1":{
+    "Gold":0,
+    "Towns":[
+        "Sydney",{
+            "Tax Type":"Low",
+            "Town Wealth":10
+        },
+        "Melbourne",{
+            "Tax Type":"Low","Town Wealth":10},"Brisbane",{"Tax Type":"Low","Town Wealth":10}],"Wealth":0}}]

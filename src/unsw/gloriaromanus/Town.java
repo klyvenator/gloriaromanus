@@ -32,7 +32,7 @@ public class Town {
     public String getTownName(){
         return this.townName;
     }
-    public int getTaxOwed(){
+    private int getTaxOwed(){
         int currWealth = getWealth();
         if( currWealth <= 0 ) return 0;
 
@@ -49,19 +49,24 @@ public class Town {
             this.wealth = total;
         }
     }
-    public void wealthAfterTax(){
+    // calculates and sets wealth and then returns
+    // how much tax you owe Big Brother
+    public int wealthAfterTax(){
         growWealth();
+        int tax = 0;
         int currWealth = getWealth();
         if( currWealth <= 0 ){
-            return;
+            return tax;
         }else{ 
-            int total = currWealth - getTaxOwed();
+            tax = getTaxOwed();
+            int total = currWealth - tax;
             if( total <= 0 ){ 
                 this.wealth = 0;
             }else{
                 this.wealth = total;
             }
         }
+        return tax;
     }
     public String getTaxStatus(){
         return tax.getTaxType();
