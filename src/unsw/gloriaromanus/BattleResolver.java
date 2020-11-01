@@ -3,17 +3,22 @@ package unsw.gloriaromanus;
 import java.util.ArrayList;
 import java.util.List;
 
+import unsw.gloriaromanus.Enums.BattleStatus;
+import unsw.gloriaromanus.Enums.FightStatus;
+
 public class BattleResolver {
     private Army armyA;
     private Army armyB;
     private Town invaderProvince;
     private Town defenderProvince;
+    private BattleStatus status;
 
     BattleResolver() {
         armyA = null;
         armyB = null;
         invaderProvince = null;
         defenderProvince = null;
+        status = BattleStatus.FIGHTING;
     }
 
     BattleResolver(Army a, Army b) {
@@ -22,10 +27,49 @@ public class BattleResolver {
         this.armyB = b;
     }
 
-    BattleResolver(Army a, Army b, Towns attackerTown, Towns defenderTown) {
+    BattleResolver(Army a, Army b, Town attackerTown, Town defenderTown) {
         this(a, b);
         this.invaderProvince = attackerTown;
         this.defenderProvince = defenderTown;
+    }
+
+    public BattleStatus getStatus() {
+        return status;
+    }
+
+    private void printStartSkirmishMessage(Skirmishes fight) {
+        // TODO Print "skirmish started with A and B!"
+    }
+    private void printEndSkirmishMessage(Skirmishes fight) {
+        switch (fight.getStatus()) {
+            case WIN_A:
+                // TODO Print A has won!
+                break;
+            
+            case WIN_B:
+                // TODO Print B has won!
+            break;
+
+            case FLEE_A:
+                // TODO Print A successfully ran away!
+            break;
+
+            case FLEE_B:
+                // TODO Print B successfully ran away!
+            break;
+
+            case FLEE_ALL:
+                // TODO Print A & B successfully ran away!
+            break;
+
+            case DRAW:
+                // TODO Print It's a draw!
+            break;
+
+            case FIGHTING: default:
+                // This should never happen!
+            break;
+        }
     }
 
     /**
@@ -33,52 +77,44 @@ public class BattleResolver {
      * Returns the Army which won
      * @return winning army
      */
-    public Army startBattle() {
+    public void startBattle() {
         
         // TODO Print battle start
+
         Unit selectedA = null, selectedB = null;
 
         while (
             (armyA.numAvailableUnits() > 0) &&
             (armyB.numAvailableUnits() > 0)
-            // TODO How to identify a draw?
         ) {
             selectedA = armyA.randomlySelectAvailableUnit();
             selectedB = armyB.randomlySelectAvailableUnit();
+            
             Skirmishes skirmish = new Skirmishes(selectedA, selectedB);
             
-            // TODO Print "skirmish started with A and B!"
+            printStartSkirmishMessage(skirmish);
             
-            // TODO Print Unit.toString() to print out unit confrontation
-            Unit winner = skirmish.startEngagements();
-            // TODO Determine:
-            //  1. Winner
-            //  2. Both alive & broken units =>
-            //      one unit broken
-            //      both units broken
-            //  3. Both alive, neither broken
-            //      Draw
-            if (winner != null) {
-                // TODO Print winner won!
-            } {
-                if (skirmish.bothUnitsBroken()) {
-                    // TODO both fleed successfully
-                }   // TODO Either fleed succesffully
-                    // TODO Draw
-            }
+            // TODO Apply abilities
+
+            // TODO Print Unit.toString() to print out unit name in confrontation
+            skirmish.startEngagements();
+            
+            // TODO Cancel abilities
+        
+            printEndSkirmishMessage(skirmish);
+            
         }
 
-        Army winningArmy = null;
         if ((armyA.numAvailableUnits() == 0) && (armyB.numAvailableUnits() == 0)) {
             // BOTH defeated
-            winningArmy = null;
+            status = BattleStatus.DRAW;
         } else if (armyA.numAvailableUnits() == 0) {
-            winningArmy = armyB;
+            status = BattleStatus.WIN_B;
         } else if (armyB.numAvailableUnits() == 0) {
-            winningArmy = armyA;
+            status = BattleStatus.WIN_A;
         } else {
             // Shouldn't reach here
+            status = BattleStatus.FIGHTING;
         }
 
-        return winningArmy;
     }
