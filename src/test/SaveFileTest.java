@@ -7,7 +7,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.io.File;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +20,7 @@ import java.util.List;
 import unsw.gloriaromanus.*;
 
 public class SaveFileTest {
+    // provided lists to test 
     List<String> givenList = Arrays.asList("faction1");
     List<String> smallTowns = Arrays.asList("Sydney", "Melbourne", "Brisbane");
 	private SaveFile saveFile;
@@ -39,20 +44,26 @@ public class SaveFileTest {
         // create some units and add them to Sydney and Melbourne
         createSomeUnits("Melee Infantry", f1, townList.get(0));
         createSomeUnits("Elephant", f1, townList.get(1));
+        // delete file before use for sanity reasons
         File temp = new File("testSave.json"); 
         temp.delete();
         saveFile = new SaveFile(facList, "testSave");
-        System.out.println(saveFile);
+        // store contents of file to a string 
+        File newFile = saveFile.getFile();
+        String created = Files.readString(Paths.get(newFile.getName()));
+        String expected = "[{\"faction1\":{\"Gold\":0,\"Towns\":[{\"Sydney\":{\"Tax Type\":\"Low\",\"Town Wealth\":10,\"Units\":[{\"Melee Infantry\":{\"shield\":1,\"cost\":1,\"Abilities\":[],\"type\":\"MELEE\",\"speed\":1,\"armour\":1,\"number\":1,\"Movement Points\":10,\"defense\":1,\"attack\":1,\"Buffs\":[],\"morale\":1,\"turnstoproduce\":1,\"catergory\":\"infantry\"}}]}},{\"Melbourne\":{\"Tax Type\":\"Low\",\"Town Wealth\":10,\"Units\":[{\"Elephant\":{\"shield\":1,\"cost\":1,\"Abilities\":[],\"type\":\"MELEE\",\"speed\":1,\"armour\":1,\"number\":1,\"Movement Points\":15,\"defense\":1,\"attack\":1,\"Buffs\":[],\"morale\":1,\"turnstoproduce\":1,\"catergory\":\"cavalry\"}}]}},{\"Brisbane\":{\"Tax Type\":\"Low\",\"Town Wealth\":10,\"Units\":[]}}],\"Wealth\":0}}]";
+        // checks that the expected output is the same as the created file 
+        assertEquals(expected, created);
+        // delete file after use for santiy reasons 
         temp = new File("testSave.json"); 
         temp.delete();
     }
-
+    // creates some units from a name, makes a reference to the factin and the town it's located 
+    // then adds that unit to list of units in town
     public void createSomeUnits(String name, Faction faction, Town town){
         UnitFactory factory = new UnitFactory();
         factory.initialise();
         Unit unit = factory.createUnit(name, faction, town);
         town.addUnit(unit);
-        //List<Unit> u = town.getUnits();
-       // System.out.println(u.get(0).getName());
     }
 }

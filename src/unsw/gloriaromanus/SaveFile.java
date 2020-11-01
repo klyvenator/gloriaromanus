@@ -97,6 +97,7 @@ public class SaveFile {
             JSONObject jsonObject = new JSONObject();
             JSONObject unit = new JSONObject();
             jsonObject.put("type", u.getType());
+            jsonObject.put("catergory", u.getCategory());
             jsonObject.put("number", u.getNumTroops());
             jsonObject.put("defense", u.getDefense().getDefenseSkill());
             jsonObject.put("armour", u.getDefense().getArmour());
