@@ -1,5 +1,7 @@
 package unsw.gloriaromanus;
 
+import java.util.ArrayList;
+import java.util.List;
 
 public class Town {
     
@@ -7,18 +9,23 @@ public class Town {
     public String townName;
     private int wealth;
     private Tax tax;
+    public List<Unit> units;
 
     public Town(Faction faction, String townName){
         this.faction = faction;
         this.townName = townName;
         this.tax = new Tax(); // set tax rate to low
         this.wealth = 10; // set initial province wealth to 10
+        this.units = new ArrayList<Unit>();
     }
     public Town(String townName) {
         this.faction = null;
         this.townName = townName;
         this.tax = new Tax(); // set tax rate to low
         this.wealth = 10; // set initial province wealth to 10
+    }
+    public void setWealth(int wealth){
+        this.wealth = wealth;
     }
     public int getWealth(){
         return this.wealth;
@@ -32,7 +39,13 @@ public class Town {
     public String getTownName(){
         return this.townName;
     }
-    public int getTaxOwed(){
+    public void addUnit(Unit unit) {
+        units.add(unit);
+    }
+    public List<Unit> getUnits(){
+        return this.units;
+    }
+    private int getTaxOwed(){
         int currWealth = getWealth();
         if( currWealth <= 0 ) return 0;
 
@@ -49,19 +62,24 @@ public class Town {
             this.wealth = total;
         }
     }
-    public void wealthAfterTax(){
+    // calculates and sets wealth and then returns
+    // how much tax you owe Big Brother
+    public int wealthAfterTax(){
         growWealth();
+        int tax = 0;
         int currWealth = getWealth();
         if( currWealth <= 0 ){
-            return;
+            return tax;
         }else{ 
-            int total = currWealth - getTaxOwed();
+            tax = getTaxOwed();
+            int total = currWealth - tax;
             if( total <= 0 ){ 
                 this.wealth = 0;
             }else{
                 this.wealth = total;
             }
         }
+        return tax;
     }
     public String getTaxStatus(){
         return tax.getTaxType();

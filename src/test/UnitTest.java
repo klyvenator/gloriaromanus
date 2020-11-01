@@ -11,7 +11,7 @@ import unsw.gloriaromanus.Enums.Range;
 
 
 public class UnitTest{
-
+    
     @Test
     public void blahTest(){
         assertEquals("a", "a");
