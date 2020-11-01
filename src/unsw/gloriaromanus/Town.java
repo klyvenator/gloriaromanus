@@ -1,5 +1,7 @@
 package unsw.gloriaromanus;
 
+import java.util.ArrayList;
+import java.util.List;
 
 public class Town {
     
@@ -7,12 +9,14 @@ public class Town {
     public String townName;
     private int wealth;
     private Tax tax;
+    public List<Unit> units;
 
     public Town(Faction faction, String townName){
         this.faction = faction;
         this.townName = townName;
         this.tax = new Tax(); // set tax rate to low
         this.wealth = 10; // set initial province wealth to 10
+        this.units = new ArrayList<Unit>();
     }
     public Town(String townName) {
         this.faction = null;
@@ -31,6 +35,12 @@ public class Town {
     }
     public String getTownName(){
         return this.townName;
+    }
+    public void addUnit(Unit unit) {
+        units.add(unit);
+    }
+    public List<Unit> getUnits(){
+        return this.units;
     }
     private int getTaxOwed(){
         int currWealth = getWealth();
