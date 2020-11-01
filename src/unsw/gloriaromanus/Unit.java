@@ -26,6 +26,8 @@ public abstract class Unit {
     private int cost = 100;
     private int turnsToMake = 1;
     private int movementPoints;
+    private Town currentlyOn;
+    private Faction faction;
     private List<Ability> abilities;
     private List<Buff> buffs;
 
@@ -123,6 +125,20 @@ public abstract class Unit {
         this.movementPoints = movementPoints;
     }
 
+    public Town getCurrentlyOn() {
+        return currentlyOn;
+    }
+    public void setCurrentlyOn(Town currentlyOn) {
+        this.currentlyOn = currentlyOn;
+    }
+
+    public Faction getFaction() {
+        return faction;
+    }
+    public void setFaction(Faction faction) {
+        this.faction = faction;
+    }
+
     public boolean isBroken() {
         return broken;
     }
@@ -181,5 +197,5 @@ public abstract class Unit {
         } else {
             broken = false;
         }
-    }
+
 }
