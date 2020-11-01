@@ -25,25 +25,19 @@ public class Faction {
         addTown(newTown);
         return newTown;
     }
-    
-    private void calculateTotalGold(){
-        int total = 0;
-        for(Town t : towns){
-            total += t.getTaxOwed();
-        }
-        this.totalGold += total;
-    }
     private void calculateTotalWealth(){
         int total = 0;
+        int tax = 0;
         for(Town t : towns){
-            t.wealthAfterTax();
+            tax += t.wealthAfterTax();
             total += t.getWealth();
         }
+        this.totalGold += tax;
         this.totalWealth = total;
     }
-    public void updateGold(){
+    /* public void updateGold(){
         calculateTotalGold();
-    }
+    } */
     public void updateWealth(){
         calculateTotalWealth();
     }
@@ -56,5 +50,7 @@ public class Faction {
     public String getFactionName(){
         return this.name;
     }
-
+    public List<Town> getTowns(){
+        return this.towns;
+    }
 }

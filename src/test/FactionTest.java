@@ -55,7 +55,6 @@ public class FactionTest {
         // add growth to all towns and then claim tax for 3 provinces -> (10+10-2)*3 = 54 total wealth
         // there will then be 6 gold to treasury
         f1.updateWealth();
-        f1.updateGold();
         assertEquals(54, f1.getTotalWealth());
         assertEquals(6, f1.getTotalGold());
     }
