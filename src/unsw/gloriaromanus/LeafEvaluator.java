@@ -1,6 +1,5 @@
 package unsw.gloriaromanus;
 
-import java.util.Random;
 import unsw.gloriaromanus.Enums.Condition;
 
 public class LeafEvaluator implements ComponentEvaluator {
@@ -8,17 +7,17 @@ public class LeafEvaluator implements ComponentEvaluator {
     private int wealth;
     private Condition condition;
 
-    public LeafEvaluator(int gold, int wealth) {
+    public LeafEvaluator(int gold, int wealth, Condition condition) {
         this.gold = gold;
         this.wealth = wealth;
-        condition = randCondition();
+        this.condition = condition;
     }
     
     public boolean conditionFulfilled(Faction faction) {
         switch (condition) {
             case CONQUER:
                 //implement
-                break;
+                return true;
             case WEALTH:
                 if (faction.getTotalWealth() > wealth) {
                     return true;
@@ -32,12 +31,8 @@ public class LeafEvaluator implements ComponentEvaluator {
         return false;
     }
 
-    public Condition randCondition() {
-        Random random = new Random();
-        switch (random.nextInt(3)) {
-            case 0: return Condition.CONQUER;
-            case 1: return Condition.TREASURY;
-            default: return Condition.WEALTH;
-        }
+    public Condition getCondition() {
+        return condition;
     }
+
 }
