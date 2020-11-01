@@ -1,6 +1,8 @@
 package test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -12,12 +14,14 @@ public class TownTest {
     public Faction fac = new Faction("Bogans");
     public Town t = fac.addTown(fac,"Australia");
      @Test
-    public void townOwnerWealth(){
+    public void townOwner(){
         assertEquals("Bogans", t.getFaction());
         // TownName or province should be "Australia"
         assertEquals("Australia", t.getTownName());
         // wealth is initially set to 10 gold
         assertEquals(10, t.getWealth());
+        // no units were added so it'll just be empty
+        assertNotNull(t.getUnits());
     }
 
     @Test

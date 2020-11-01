@@ -18,7 +18,8 @@
                     "armour":1,
                     "turnsToProduce":1,
                     "Buffs":[],
-                    "morale":1
+                    "morale":1,
+                    "catergory":"infantry"
                 }
             }]
         }
@@ -41,7 +42,8 @@
                     "armour":1,
                     "turnsToProduce":1,
                     "Buffs":[],
-                    "morale":1
+                    "morale":1,
+                    "catergory":"cavalry"
                 }
             }]
         }

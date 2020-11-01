@@ -2,15 +2,11 @@ package unsw.gloriaromanus;
 
 import org.json.*;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-import com.google.gson.JsonObject;
-
-import java.util.ArrayList;
 
 public class SaveFile {
     public static String filename;
@@ -69,10 +65,11 @@ public class SaveFile {
             // adds a list of towns that the faction owns
             towns = addTowns(f.getTowns());
             jsonObject.put("Towns", towns);
+            jsonObject.put("faction", f.getFactionName());
             faction.put(f.getFactionName(), jsonObject);
             jArray.put(faction);
         }
-        //System.out.println(jArray);
+        System.out.println(jArray);
         return jArray;
     }
     // passes in a list of towns and gets the properties of each town and returns a json array
@@ -84,6 +81,7 @@ public class SaveFile {
             JSONArray units = new JSONArray();
             jsonObject.put("Tax Type", t.getTaxStatus());
             jsonObject.put("Town Wealth", t.getWealth());
+            jsonObject.put("name", t.getTownName());
             units = addUnits(t.getUnits());
             jsonObject.put("Units", units);
             town.put(t.getTownName(), jsonObject);
@@ -97,7 +95,7 @@ public class SaveFile {
             JSONObject jsonObject = new JSONObject();
             JSONObject unit = new JSONObject();
             jsonObject.put("type", u.getType());
-            jsonObject.put("catergory", u.getCategory());
+            jsonObject.put("category", u.getCategory());
             jsonObject.put("number", u.getNumTroops());
             jsonObject.put("defense", u.getDefense().getDefenseSkill());
             jsonObject.put("armour", u.getDefense().getArmour());
@@ -110,6 +108,7 @@ public class SaveFile {
             jsonObject.put("Movement Points", u.getMovementPoints());
             jsonObject.put("Abilities", u.getAbilities());
             jsonObject.put("Buffs", u.getBuffs());
+            jsonObject.put("name", u.getName());
             unit.put(u.getName(), jsonObject);
             jArray.put(unit);
         }
