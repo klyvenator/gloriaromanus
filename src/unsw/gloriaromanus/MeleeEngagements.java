@@ -1,5 +1,7 @@
 package unsw.gloriaromanus;
 
+import java.util.Random;
+
 public class MeleeEngagements implements Engagements {
 
     private static final int MIN_DEFENSE = 10;
