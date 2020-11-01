@@ -24,6 +24,9 @@ public class Town {
         this.tax = new Tax(); // set tax rate to low
         this.wealth = 10; // set initial province wealth to 10
     }
+    public void setWealth(int wealth){
+        this.wealth = wealth;
+    }
     public int getWealth(){
         return this.wealth;
     }

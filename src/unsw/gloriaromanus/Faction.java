@@ -38,6 +38,12 @@ public class Faction {
     public void updateWealth(){
         calculateTotalWealth();
     }
+    public void setGold(int gold){
+        this.totalGold = gold;
+    }
+    public void setwealth(int wealth){
+        this.totalWealth = wealth;
+    }
     public int getTotalGold(){
         return this.totalGold;
     }
