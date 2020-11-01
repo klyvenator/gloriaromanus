@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import unsw.gloriaromanus.Enums.Range;
+import unsw.gloriaromanus.Enums.FightStatus;
 
 public class Skirmishes {
     private Unit unitA;
@@ -11,12 +12,14 @@ public class Skirmishes {
     private int numEngagements;
     private static final int maxEngagements = 200;
     private Engagements engagement;
+    private FightStatus status;
 
     Skirmishes() {
         unitA = null;
         unitB = null;
         numEngagements = 0;
         engagement = null;
+        status = FightStatus.FIGHTING;
     }
 
     Skirmishes(Unit a, Unit b) {
@@ -25,13 +28,23 @@ public class Skirmishes {
         this.unitB = b;
     }
 
+    public FightStatus getStatus() {
+        return status;
+    }
+
     public boolean bothUnitsAlive() {
         return 
             (unitA.getNumTroops() > 0) &&
             (unitB.getNumTroops() > 0);
     }
 
-    public boolean bothUnitsBroken () {
+    public boolean bothUnitsDefeated() {
+        return 
+            (unitA.getNumTroops() <= 0) &&
+            (unitB.getNumTroops() <= 0);
+    }
+
+    public boolean eitherUnitsBroken () {
         return unitA.isBroken() || unitB.isBroken();
     }
 
@@ -129,12 +142,13 @@ public class Skirmishes {
     private Unit routingActions() {
         // both units intact - no routing actions
         if (!unitA.isBroken() && !unitB.isBroken()) {
+            status = FightStatus.FIGHTING;
             return null;
         }
 
         // Both broken, and flee without inflicitng further damage
         if (unitA.isBroken() && unitB.isBroken()) {
-            // TODO Print both units fleed successfully
+            status = FightStatus.FLEE_ALL;
             return null;
         }
 
@@ -150,16 +164,19 @@ public class Skirmishes {
         while (routing.getNumTroops() > 0) {
             
             if (attemptToFlee(routing, pursuing)) {
+                decideStatus();
                 return null;
             }
             
             decideEngagementType();
           
             Unit winner = engagement.routeEngage(routing, pursuing);
+            
             if (winner != null) {
+                decideStatus();
                 return winner;
             }
-
+            
         }
 
         return pursuing;
@@ -185,7 +202,7 @@ public class Skirmishes {
         Unit winner = null;
         while (
             bothUnitsAlive() &&
-            !bothUnitsBroken() &&
+            !eitherUnitsBroken() && // If either broken, assume fleed
             numEngagements < maxEngagements
         ) {
             decideEngagementType();
@@ -195,13 +212,32 @@ public class Skirmishes {
 
             winner = engagement.engage(unitA, unitB);
 
-            if (winner != null) {
+            /*
+                Cases:
+                1. One unit won, other defeated
+                2. Both alive
+                3. Both defeated
+            */
+
+            if (winner == unitA) {
+                status = FightStatus.WIN_A;
+            } else if (winner == unitB) {
+                status = FightStatus.WIN_B;
+            } else if (bothUnitsAlive()) {
+                status = FightStatus.FIGHTING;
+                // Keep fighting
+            } else {
+                status = FightStatus.DRAW;
+            }
+
+            if (status != FightStatus.FIGHTING) {
                 return winner;
             }
 
             firstAfterSize = unitA.getNumTroops();
             secondAfterSize = unitB.getNumTroops();
 
+            // Try breaking
             unitA.attemptToBreak(
                 firstBeforeSize - firstAfterSize, firstBeforeSize,
                 secondBeforeSize - secondAfterSize, secondBeforeSize
@@ -211,7 +247,7 @@ public class Skirmishes {
                 firstBeforeSize - firstAfterSize, firstBeforeSize
             );
 
-            if (bothUnitsBroken() && bothUnitsAlive()) {
+            if (eitherUnitsBroken() && bothUnitsAlive()) {
                 return routingActions();
             }
 
@@ -219,18 +255,33 @@ public class Skirmishes {
             numEngagements++;
         }
 
-        // TODO Figure out what a draw means
-        // Could be:
-        // 1. Both Alive
-        // 2. Both not broken
+        // TODO Fill in draw
 
-        if (bothUnitsAlive()) {
-            return null;
-        } else if (unitA.getNumTroops() > 0) {
-            return unitA;
-        } else {
-            return unitB;
+        decideStatus();
+
+        if (bothUnitsAlive() && !eitherUnitsBroken()) {
+            status = FightStatus.DRAW;
         }
 
+    }
+
+    private void decideStatus() {
+        if (bothUnitsAlive()) {
+            if (unitA.isBroken() && unitB.isBroken()) {
+                status = FightStatus.FLEE_ALL;
+            } else if (unitA.isBroken()) {
+                status = FightStatus.FLEE_A;
+            } else if (unitB.isBroken()) {
+                status = FightStatus.FLEE_B;
+            } else { // neither broken
+                status = FightStatus.FIGHTING;
+            }
+        } else if (bothUnitsDefeated()) {
+            status = FightStatus.DRAW;
+        } else if (unitA.getNumTroops() > 0) {
+            status = FightStatus.WIN_A;
+        } else {// unitB.getNumTroops() > 0
+            status = FightStatus.WIN_B;
+        }
     }
 }
