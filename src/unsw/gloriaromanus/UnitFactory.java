@@ -94,14 +94,18 @@ public class UnitFactory implements Factory{
     }
 
     // returns created unit
-    public Unit createUnit(String name) {
+    public Unit createUnit(String name, Faction faction, Town town) {
         if (blueprints.size() == 0) {
             return null;
         }
 
+        Unit newUnit;
+
         for (JSONObject current : blueprints) {
             if (current.getString("name").equals(name)) {
-                return deserialise(current);
+                newUnit = deserialise(current);
+                newUnit.setCurrentlyOn(town);
+                newUnit.setFaction(faction);
             }
         }
         return null;
