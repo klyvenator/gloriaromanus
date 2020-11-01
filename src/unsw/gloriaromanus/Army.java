@@ -36,8 +36,42 @@ public class Army {
         return units.get(r.nextInt(units.size()));
     }
 
+    public int numAvailableUnits() {
+        
+        int num = 0;
+        for (Unit unit : units) {
+            if (
+                unit.getNumTroops() > 0 &&
+                !unit.isBroken()
+            ) {
+                num++;
+            }
+        }
+        return num;
+    }
+
+    /**
+     * Returns a list of available units
+     * A unit is avaialble if it is:
+     * <ol>
+     * <li> Alive
+     * <li> Not Broken
+     * </ol>
+     * @return
+     */
     public List<Unit> getAvailableUnits() {
-        return null;
+        List<Unit> availableUnits = new ArrayList<>();
+
+        for (Unit unit : units) {
+            if (
+                unit.getNumTroops() > 0 &&
+                !unit.isBroken()
+            ) {
+                availableUnits.add(unit);
+            }
+        }
+
+        return availableUnits;
     }
     /**
      * Returns a uniformly randomly selected unit
@@ -55,7 +89,10 @@ public class Army {
             return null;
         }
 
-        // TODO
-        return null;
+        List<Unit> availableUnits = getAvailableUnits();
+
+        Random r = new Random();
+        
+        return availableUnits.get(r.nextInt(availableUnits.size()));
     }
 }
