@@ -11,7 +11,7 @@
         "morale": 1,
         "turnsToProduce": 1,
         "cost": 1,
-        "specialAbility": "shield"
+        "specialAbility": "shieldCharge"
     },
     "Heavy Infantry":{
         "type": "melee",
@@ -65,7 +65,7 @@
         "morale": 1,
         "turnsToProduce": 1,
         "cost": 1,
-        "specialAbility": "eagle"
+        "specialAbility": "legionaryEagle"
     },
     "Beserker":{
         "Type": "melee",
@@ -79,7 +79,7 @@
         "morale": 1,
         "turnsToProduce": 1,
         "cost": 1,
-        "specialAbility": "rage"
+        "specialAbility": "berserkerRage"
     },
     "Melee Cavalry":{
         "Type": "melee",
@@ -101,7 +101,7 @@
         "category": "cavalry",
         "number": 1,
         "attack": 1,
-        "charge": 1,
+        "charge": 2,
         "defense": 1,
         "armour": 1,
         "shield": 1,
@@ -115,7 +115,7 @@
         "category": "cavalry",
         "number": 1,
         "attack": 1,
-        "charge": 1,
+        "charge": 4,
         "defense": 1,
         "armour": 1,
         "shield": 1,

@@ -12,9 +12,13 @@ import unsw.gloriaromanus.Enums.Range;
 
 public class UnitFactory implements Factory{
     private List<JSONObject> blueprints;
+    AbilityFactory abilityFactory;
     
     public UnitFactory() {
         blueprints = new ArrayList<JSONObject>();
+        initialise();
+
+        abilityFactory = new AbilityFactory();
     }
 
     // extracts file into json objects and stores it as a list.
@@ -81,6 +85,9 @@ public class UnitFactory implements Factory{
         if (json.has("attack")) {
             newUnit.setAttack(json.getInt("attack"));
         }
+        if (json.has("charge")) {
+            newUnit.setCharge(json.getInt("charge"));
+        }
         if (json.has("cost")) {
             newUnit.setCost(json.getInt("cost"));
         }
@@ -88,7 +95,16 @@ public class UnitFactory implements Factory{
             newUnit.setTurnsToMake(json.getInt("turns"));
         }
 
-        //List<Ability> abilities = AbilityFactory.deserialise(json.getJSONArray("abilities"));  To be completed
+        if (json.has("specialAbility")) {
+            Ability ability = abilityFactory.deserialise(json.getString("specialAbility"));
+            if (ability != null) {
+                ability.setUnit(newUnit);
+                newUnit.setAbility(ability);
+            }
+            
+        } else {
+            newUnit.setAbility(null);
+        }
 
         return newUnit;
 
