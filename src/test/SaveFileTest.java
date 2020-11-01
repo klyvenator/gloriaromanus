@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,6 +32,8 @@ public class SaveFileTest {
         for(String st : smallTowns){
             f1.addTown(f1, st);
         }
-            saveFile = new SaveFile(facList, "testSave");
+        saveFile = new SaveFile(facList, "testSave");
+        File temp = new File("testSave.json"); 
+        temp.delete();
     }
 }
