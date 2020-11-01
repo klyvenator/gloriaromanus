@@ -1,6 +1,6 @@
 package unsw.gloriaromanus;
 
-public interface Engagements {
+public abstract class Engagements {
     
     /**
      * An engagement between to 2 units
@@ -11,7 +11,38 @@ public interface Engagements {
      * @param b
      * @return unit which defeated another, if applicable
      */
-    public Unit engage(Unit a, Unit b);
+    public Unit engage(Unit a, Unit b) {
+        
+        if (a.isAbilityType("engagement")) {
+            a.activateAbility();
+        }
+        if (b.isAbilityType("engagement")) {
+            b.activateAbility();
+        }
+        
+        // No special order
+        attack(a, b);
+        attack(b, a);
+
+        if (a.isAbilityType("engagement")) {
+            a.cancelAbility();
+        }
+        if (b.isAbilityType("engagement")) {
+            b.cancelAbility();
+        }
+    
+        if ((a.getNumTroops() <= 0) && (b.getNumTroops() <= 0)) {
+            // Both defeated, no winner
+            return null;
+        } else if (a.getNumTroops() > 0) {
+            return a;
+        } else if (b.getNumTroops() > 0) {
+            return b;
+        } else {
+            // Both alive, no winner
+            return null;
+        }
+    }
     
     /**
      * An engagement when one unit is routing, the other pursuing
@@ -20,8 +51,25 @@ public interface Engagements {
      * @param pursuing
      * @return
      */
-    public Unit routeEngage(Unit routing, Unit pursuing);
+    public Unit routeEngage(Unit routing, Unit pursuing) {
+        
+        if (pursuing.isAbilityType("engagement")) {
+            pursuing.activateAbility();
+        }
+
+        attack(pursuing, routing);
+
+        if (pursuing.isAbilityType("engagement")) {
+            pursuing.cancelAbility();
+        }
+
+        if (routing.getNumTroops() <= 0) {
+            return pursuing;
+        } else {
+            return null;
+        }
+    }
     
     // TODO Applying / removing buffs / debuffs
-    public void attack(Unit attacker, Unit defender);
+    public abstract void attack(Unit attacker, Unit defender);
 }

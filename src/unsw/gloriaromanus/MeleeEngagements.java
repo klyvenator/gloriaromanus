@@ -2,7 +2,7 @@ package unsw.gloriaromanus;
 
 import java.util.Random;
 
-public class MeleeEngagements implements Engagements {
+public class MeleeEngagements extends Engagements {
 
     private static final int MIN_DEFENSE = 10;
 
@@ -40,33 +40,12 @@ public class MeleeEngagements implements Engagements {
 
     @Override
     public Unit engage(Unit a, Unit b) {
-        // No special order
-        attack(a, b);
-        attack(b, a);
-
-        if ((a.getNumTroops() <= 0) && (b.getNumTroops() <= 0)) {
-            // Both defeated, no winner
-            return null;
-        } else if (a.getNumTroops() > 0) {
-            return a;
-        } else if (b.getNumTroops() > 0) {
-            return b;
-        } else {
-            // Both alive, no winner
-            return null;
-        }
-
+        return super.engage(a, b);
     }
 
     @Override
     public Unit routeEngage(Unit routing, Unit pursuing) {
-        attack(pursuing, routing);
-
-        if (routing.getNumTroops() <= 0) {
-            return pursuing;
-        } else {
-            return null;
-        }
+        return super.routeEngage(routing, pursuing);
     }
 
     
