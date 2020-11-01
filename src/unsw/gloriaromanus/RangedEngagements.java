@@ -4,7 +4,7 @@ import java.util.Random;
 
 import unsw.gloriaromanus.Enums.Range;
 
-public class RangedEngagements implements Engagements {
+public class RangedEngagements extends Engagements {
 
     private static final int MIN_DEFENSE = 10;
 
@@ -45,35 +45,11 @@ public class RangedEngagements implements Engagements {
 
     @Override
     public Unit engage(Unit a, Unit b) {
-        // No special order
-        attack(a, b);
-        attack(b, a);
-
-        if ((a.getNumTroops() <= 0) && (b.getNumTroops() <= 0)) {
-            // Both defeated, no winner
-            return null;
-        } else if (a.getNumTroops() > 0) {
-            return a;
-        } else if (b.getNumTroops() > 0) {
-            return b;
-        } else {
-            // Both alive, no winner
-            return null;
-        }
-
+        return super.engage(a, b);
     }
 
     @Override
     public Unit routeEngage(Unit routing, Unit pursuing) {
-        attack(pursuing, routing);
+        return super.routeEngage(routing, pursuing);
 
-        if (routing.getNumTroops() <= 0) {
-            return pursuing;
-        } else {
-            return null;
-        }
-    }
-
-    
-    
 }

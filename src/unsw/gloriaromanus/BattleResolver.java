@@ -13,7 +13,7 @@ public class BattleResolver {
     private Town defenderProvince;
     private BattleStatus status;
 
-    BattleResolver() {
+    private BattleResolver() {
         armyA = null;
         armyB = null;
         invaderProvince = null;
@@ -21,16 +21,20 @@ public class BattleResolver {
         status = BattleStatus.FIGHTING;
     }
 
-    BattleResolver(Army a, Army b) {
+    public BattleResolver(Army a, Army b) {
         this();
         this.armyA = a;
         this.armyB = b;
     }
 
-    BattleResolver(Army a, Army b, Town attackerTown, Town defenderTown) {
+    public BattleResolver(Army a, Army b, Town defenderTown) {
         this(a, b);
-        this.invaderProvince = attackerTown;
         this.defenderProvince = defenderTown;
+    }
+
+    public BattleResolver(Army a, Army b, Town attackerTown, Town defenderTown) {
+        this(a, b, defenderTown);
+        this.invaderProvince = attackerTown;
     }
 
     public BattleStatus getStatus() {
@@ -41,7 +45,8 @@ public class BattleResolver {
         // TODO Print "skirmish started with A and B!"
     }
     private void printEndSkirmishMessage(Skirmishes fight) {
-        switch (fight.getStatus()) {
+        FightStatus status = fight.getStatus();
+        switch (status) {
             case WIN_A:
                 // TODO Print A has won!
                 break;
@@ -81,6 +86,9 @@ public class BattleResolver {
         
         // TODO Print battle start
 
+        armyA.activateArmyAbilities();
+        armyB.activateArmyAbilities();
+
         Unit selectedA = null, selectedB = null;
 
         while (
@@ -94,11 +102,12 @@ public class BattleResolver {
             
             printStartSkirmishMessage(skirmish);
             
-            // TODO Apply abilities
+            skirmish.activateSkirmishAbilities();
 
             // TODO Print Unit.toString() to print out unit name in confrontation
             skirmish.startEngagements();
             
+            skirmish.cancelSkirmishAbilities();
             // TODO Cancel abilities
         
             printEndSkirmishMessage(skirmish);
@@ -117,4 +126,9 @@ public class BattleResolver {
             status = BattleStatus.FIGHTING;
         }
 
+        armyA.cancelArmyAbilities();
+        armyB.cancelArmyAbilities();
+
     }
+
+}

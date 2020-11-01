@@ -14,7 +14,7 @@ public class Skirmishes {
     private Engagements engagement;
     private FightStatus status;
 
-    Skirmishes() {
+    private Skirmishes() {
         unitA = null;
         unitB = null;
         numEngagements = 0;
@@ -22,7 +22,7 @@ public class Skirmishes {
         status = FightStatus.FIGHTING;
     }
 
-    Skirmishes(Unit a, Unit b) {
+    public Skirmishes(Unit a, Unit b) {
         this();
         this.unitA = a;
         this.unitB = b;
@@ -46,6 +46,24 @@ public class Skirmishes {
 
     public boolean eitherUnitsBroken () {
         return unitA.isBroken() || unitB.isBroken();
+    }
+
+    public void activateSkirmishAbilities() {
+        if (unitA.isAbilityType("skirmish")) {
+            unitA.activateAbility();
+        }
+        if (unitB.isAbilityType("skirmish")) {
+            unitB.activateAbility();
+        }
+    }
+
+    public void cancelSkirmishAbilities() {
+        if (unitA.isAbilityType("skirmish")) {
+            unitA.cancelAbility();
+        }
+        if (unitB.isAbilityType("skirmish")) {
+            unitB.cancelAbility();
+        }
     }
 
     // TODO Add this calculation at initialisation time
@@ -210,7 +228,13 @@ public class Skirmishes {
             firstBeforeSize = unitA.getNumTroops();
             secondBeforeSize = unitB.getNumTroops();
 
+            unitA.activateAbility();
+            unitB.activateAbility();
+
             winner = engagement.engage(unitA, unitB);
+
+            unitA.cancelAbility();
+            unitB.cancelAbility();
 
             /*
                 Cases:
@@ -261,8 +285,10 @@ public class Skirmishes {
 
         if (bothUnitsAlive() && !eitherUnitsBroken()) {
             status = FightStatus.DRAW;
+            return null;
         }
 
+        return winner;
     }
 
     private void decideStatus() {
