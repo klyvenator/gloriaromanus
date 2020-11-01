@@ -1,28 +1,21 @@
 package unsw.gloriaromanus;
 
-import java.util.Random;
-
-import unsw.gloriaromanus.Enums.Range;
-
-public class RangedEngagements implements Engagements {
+public class MeleeEngagements implements Engagements {
 
     private static final int MIN_DEFENSE = 10;
-    
+
     @Override
     public void attack(Unit attacker, Unit defender) {
-        if (attacker.getType() == Range.MELEE) {
-            return; // melee does not inflict damage in ranges engagements
-        }
-
         // original number of troops of defender
-        int originalSize = defender.getNumTroops()
+        int originalSize = defender.getNumTroops();
         double part1 = 0.1 * originalSize;
 
         // TODO Apply modifiers?
 
+        // TODO Diff. attack damage values for missile, melee?
         double part2;
         try { 
-            part2 = attacker.getAttack() / defender.getDefenseRanged();
+            part2 = attacker.getAttack() / defender.getDefenseMelee();
         } catch (ArithmeticException e) {
             part2 = attacker.getAttack() / MIN_DEFENSE;
         }
@@ -74,6 +67,5 @@ public class RangedEngagements implements Engagements {
         }
     }
 
-    
     
 }
