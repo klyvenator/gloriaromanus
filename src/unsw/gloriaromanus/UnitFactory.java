@@ -106,6 +106,7 @@ public class UnitFactory implements Factory{
                 newUnit = deserialise(current);
                 newUnit.setCurrentlyOn(town);
                 newUnit.setFaction(faction);
+                return newUnit;
             }
         }
         return null;
