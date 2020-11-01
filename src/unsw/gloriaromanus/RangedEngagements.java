@@ -44,14 +44,33 @@ public class RangedEngagements implements Engagements {
 
     @Override
     public Unit engage(Unit a, Unit b) {
-        // Decide who goes first
+        // No special order
         attack(a, b);
         attack(b, a);
+
+        if ((a.getNumTroops() <= 0) && (b.getNumTroops() <= 0)) {
+            // Both defeated, no winner
+            return null;
+        } else if (a.getNumTroops() <= 0) {
+            return b;
+        } else if (b.getNumTroops() <= 0) {
+            return a;
+        } else {
+            // Both alive, no winner
+            return null;
+        }
+
     }
 
     @Override
-    public Unit route(Unit routing, Unit pursuing) {
+    public Unit routeEngage(Unit routing, Unit pursuing) {
         attack(pursuing, routing);
+
+        if (routing.getNumTroops() <= 0) {
+            return pursuing;
+        } else {
+            return null;
+        }
     }
 
     
