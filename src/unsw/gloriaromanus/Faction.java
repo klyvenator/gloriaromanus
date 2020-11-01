@@ -35,9 +35,6 @@ public class Faction {
         this.totalGold += tax;
         this.totalWealth = total;
     }
-    /* public void updateGold(){
-        calculateTotalGold();
-    } */
     public void updateWealth(){
         calculateTotalWealth();
     }

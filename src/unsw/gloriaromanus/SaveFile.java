@@ -71,12 +71,33 @@ public class SaveFile {
         JSONArray jArray = new JSONArray();
         JSONObject jsonObject = new JSONObject();
         for(Town t : towns){
+            JSONArray units = new JSONArray();
             jArray.put(t.getTownName());
             jsonObject.put("Tax Type", t.getTaxStatus());
             jsonObject.put("Town Wealth", t.getWealth());
+            //units = addUnits(t.getArmy())
             jArray.put(jsonObject);
         }
         return jArray;
     }
-
+    public JSONArray addUnits(List<Unit>units){
+        JSONArray jArray = new JSONArray();
+        JSONObject jsonObject = new JSONObject();
+        for(Unit u : units){
+            jArray.put(u.getName());
+            jsonObject.put("NumTroops", u.getNumTroops());
+            jsonObject.put("Type", u.getType());
+            jsonObject.put("Defense", u.getDefense());
+            jsonObject.put("Morale", u.getMorale());
+            jsonObject.put("Speed", u.getSpeed());
+            jsonObject.put("Attack", u.getAttack());
+            jsonObject.put("Cost", u.getCost());
+            jsonObject.put("Turns to Make", u.getTurnsToMake());
+            jsonObject.put("Movement Points", u.getMovementPoints());
+            jsonObject.put("Abilities", u.getAbilities());
+            jsonObject.put("Buffs", u.getBuffs());
+            jArray.put(jsonObject);
+        }
+        return jArray;
+    }
 }
