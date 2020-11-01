@@ -83,7 +83,7 @@ public class UnitFactory implements Factory{
         if (json.has("cost")) {
             newUnit.setCost(json.getInt("cost"));
         }
-        if (json.has("turnsToProduce")) {
+        if (json.has("turns")) {
             newUnit.setTurnsToMake(json.getInt("turns"));
         }
 
