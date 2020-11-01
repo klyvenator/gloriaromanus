@@ -56,5 +56,9 @@ public class Faction {
     public String getFactionName(){
         return this.name;
     }
+    public List<Town> getTowns() {
+        return towns;
+    }
+
 
 }
