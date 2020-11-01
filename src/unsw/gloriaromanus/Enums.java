@@ -5,5 +5,16 @@ public class Enums {
         MELEE,
         RANGED
     }
+
+    public enum Condition {
+        TREASURY,
+        WEALTH,
+        CONQUER
+    }
+
+    public enum Operation {
+        AND,
+        OR
+    }
 }
 
