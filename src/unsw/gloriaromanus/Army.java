@@ -8,12 +8,12 @@ public class Army {
     private List<Unit> units;
     private Town currentlyOn;
 
-    Army() {
+    public Army() {
         units = new ArrayList<Unit>();
         currentlyOn = null;
     }
 
-    Army(Town currentlyOn) {
+    public Army(Town currentlyOn) {
         this();
         this.currentlyOn = currentlyOn;
     }

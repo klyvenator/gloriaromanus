@@ -143,52 +143,53 @@ public abstract class Unit {
     }
 
     public boolean isAbilityType(String type) {
-        if (ability == null) {
-            return false;
-        }
+        return false;
+        // if (ability == null) {
+        //     return false;
+        // }
         
-        switch (type) {
-            case "faction":
-                if (ability.getClass() == FactionAbility.class) {
-                    return true;
-                } else {
-                    return false;
-                }
-                break;
-            case "army":
-                if (ability.getClass() == ArmyAbility.class) {
-                    return true;
-                } else {
-                    return false;
-                }
-                break;
-            case "skirmish":
-                if (ability.getClass() == SkirmishAbility.class) {
-                    return true;
-                } else {
-                    return false;
-                }
-                break;
+        // switch (type) {
+        //     case "faction":
+        //         if (ability.getClass() == FactionAbility.class) {
+        //             return true;
+        //         } else {
+        //             return false;
+        //         }
+        //         break;
+        //     case "army":
+        //         if (ability.getClass() == ArmyAbility.class) {
+        //             return true;
+        //         } else {
+        //             return false;
+        //         }
+        //         break;
+        //     case "skirmish":
+        //         if (ability.getClass() == SkirmishAbility.class) {
+        //             return true;
+        //         } else {
+        //             return false;
+        //         }
+        //         break;
 
-            case "engagement":
-                if (ability.getClass() == EngagementAbility.class) {
-                    return true;
-                } else {
-                    return false;
-                }
-                break;
+        //     case "engagement":
+        //         if (ability.getClass() == EngagementAbility.class) {
+        //             return true;
+        //         } else {
+        //             return false;
+        //         }
+        //         break;
 
-            case "unit":
-                if (ability.getClass() == UnitAbility.class) {
-                    return true;
-                } else {
-                    return false;
-                }
-                break;
+        //     case "unit":
+        //         if (ability.getClass() == UnitAbility.class) {
+        //             return true;
+        //         } else {
+        //             return false;
+        //         }
+        //         break;
             
-            default:
-                return false;
-        }
+        //     default:
+        //         return false;
+        // }
     }
 
     public void activateAbility() {
