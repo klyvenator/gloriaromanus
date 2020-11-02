@@ -19,7 +19,21 @@ public class CompositeEvaluator implements ComponentEvaluator{
         compList.add(c);
     }
 
+    public void removeChild(ComponentEvaluator c) {
+        compList.remove(c);
+    }
+
+    public void replaceChild(int position) {
+        CompositeEvaluator newComp = new CompositeEvaluator();
+        newComp.addChild(compList.get(position));
+        compList.add(position, newComp);
+        this.removeChild(compList.get(position + 1));
+    }
+
     public boolean conditionFulfilled(Faction faction) {
+        if (compList.size() == 0) {
+            return true;
+        }
         if (compList.size() == 1) {
             return compList.get(0).conditionFulfilled(faction);
         } else {
@@ -46,6 +60,14 @@ public class CompositeEvaluator implements ComponentEvaluator{
             case 0: return Operation.AND;
             default: return Operation.OR;
         }
+    }
+    
+    public List<ComponentEvaluator> getCompList() {
+        return compList;
+    }
+
+    public Operation getOp() {
+        return op;
     }
 
 }
