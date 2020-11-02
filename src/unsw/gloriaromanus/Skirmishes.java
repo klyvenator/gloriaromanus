@@ -35,8 +35,8 @@ public class Skirmishes {
     }
 
     public void printAfterEngagementMessage(int firstBeforeSize, int secondBeforeSize) {
-        System.out.println("Unit A dealt " + (secondBeforeSize - unitB.getNumTroops()) + "damage!");
-        System.out.println("Unit B dealt " + (firstBeforeSize - unitA.getNumTroops()) + "damage!");
+        System.out.println("Unit A dealt " + (secondBeforeSize - unitB.getNumTroops()) + " damage!");
+        System.out.println("Unit B dealt " + (firstBeforeSize - unitA.getNumTroops()) + " damage!");
     }
 
     public void printEngagementType() {
@@ -202,6 +202,8 @@ public class Skirmishes {
         }
 
         while (routing.getNumTroops() > 0) {
+            
+            System.out.println("unit is trying to route...");
             
             if (attemptToFlee(routing, pursuing)) {
                 decideStatus();
