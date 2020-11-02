@@ -1,0 +1,60 @@
+[{"faction1":{
+    "Gold":0,
+    "Towns":[{
+        "Sydney":{
+            "Tax Type":"Low",
+            "Town Wealth":10,
+            "Units":[{
+                "Melee Infantry":{
+                    "speed":1,
+                    "Abilities":[],
+                    "shield":1,
+                    "attack":1,
+                    "type":"MELEE",
+                    "cost":1,
+                    "defense":1,
+                    "number":1,
+                    "Movement Points":10,
+                    "armour":1,
+                    "turnsToProduce":1,
+                    "Buffs":[],
+                    "morale":1,
+                    "catergory":"infantry"
+                }
+            }]
+        }
+    },
+    {
+        "Melbourne":{
+            "Tax Type":"Low",
+            "Town Wealth":10,
+            "Units":[{
+                "Elephant":{
+                    "speed":1,
+                    "Abilities":[],
+                    "shield":1,
+                    "attack":1,
+                    "type":"MELEE",
+                    "cost":1,
+                    "defense":1,
+                    "number":1,
+                    "Movement Points":15,
+                    "armour":1,
+                    "turnsToProduce":1,
+                    "Buffs":[],
+                    "morale":1,
+                    "catergory":"cavalry"
+                }
+            }]
+        }
+    },
+    {
+        "Brisbane":{
+            "Tax Type":"Low",
+            "Town Wealth":10,
+            "Units":[]
+        }
+    }],
+            "Wealth":0
+    }
+}]
