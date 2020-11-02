@@ -25,6 +25,7 @@ public class FactionTest {
 
     @Test
     public void allocateTownsTest() throws IOException {
+        // 
         List<Faction> facList = GloriaRomanusController.allocateTowns(givenList, file);
         // checks that two factions were created
         assertEquals(2, facList.size());
@@ -48,6 +49,7 @@ public class FactionTest {
         for(String st : smallTowns){
             f1.addTown(f1, st);
         }
+        assertEquals("Sydney",f1.getTowns().get(0).getTownName());
         // total wealth and gold for f2 should be zero since it has no provinces with towns
         assertEquals(0, f2.getTotalGold());
         assertEquals(0, f2.getTotalWealth());
@@ -55,7 +57,6 @@ public class FactionTest {
         // add growth to all towns and then claim tax for 3 provinces -> (10+10-2)*3 = 54 total wealth
         // there will then be 6 gold to treasury
         f1.updateWealth();
-        f1.updateGold();
         assertEquals(54, f1.getTotalWealth());
         assertEquals(6, f1.getTotalGold());
     }
