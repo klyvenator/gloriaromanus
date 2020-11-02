@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 package unsw.gloriaromanus;
 
 public class Enums {
@@ -23,16 +22,16 @@ public class Enums {
         FLEE_ALL,
         DRAW;
     }
-}
 
-=======
-package unsw.gloriaromanus;
+    public enum Condition {
+        TREASURY,
+        WEALTH,
+        CONQUER
+    }
 
-public class Enums {
-    public enum Range {
-        MELEE,
-        RANGED
+    public enum Operation {
+        AND,
+        OR
     }
 }
 
->>>>>>> 87090e9e2cd06b81be5a77114b7da5e86e480a86

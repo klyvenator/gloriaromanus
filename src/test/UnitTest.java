@@ -52,7 +52,7 @@ public class UnitTest{
         blueprints.add(json);
         assertEquals(factory.createUnit("blah", null, null), null);
 
-        Cavalry panda = (Cavalry)factory.createUnit("Panda Bears", null, null);
+        Unit panda = factory.createUnit("Panda Bears", null, null);
         assertEquals(panda.getCost(), 500);
         assertEquals(panda.getSpeed(), 10);
         assertEquals(panda instanceof Cavalry , true);
