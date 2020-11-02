@@ -22,4 +22,16 @@ public class Enums {
         FLEE_ALL,
         DRAW;
     }
+
+    public enum Condition {
+        TREASURY,
+        WEALTH,
+        CONQUER
+    }
+
+    public enum Operation {
+        AND,
+        OR
+    }
 }
+
