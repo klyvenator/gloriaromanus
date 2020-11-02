@@ -2,6 +2,7 @@ package unsw.gloriaromanus;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import unsw.gloriaromanus.Enums.BattleStatus;
 import unsw.gloriaromanus.Enums.FightStatus;
@@ -43,38 +44,40 @@ public class BattleResolver {
 
     private void printStartSkirmishMessage(Skirmishes fight) {
         // TODO Print "skirmish started with A and B!"
+        System.out.println("Skirmish START!");
     }
     private void printEndSkirmishMessage(Skirmishes fight) {
         FightStatus status = fight.getStatus();
         switch (status) {
             case WIN_A:
-                // TODO Print A has won!
+                System.out.println("Unit A wins!");
                 break;
             
             case WIN_B:
-                // TODO Print B has won!
-            break;
+                System.out.println("Unit B wins!");
+                break;
 
             case FLEE_A:
-                // TODO Print A successfully ran away!
-            break;
+                System.out.println("Unit A successfully routed!");
+                break;
 
             case FLEE_B:
-                // TODO Print B successfully ran away!
-            break;
+                System.out.println("Unit B successfully routed!");
+                break;
 
             case FLEE_ALL:
-                // TODO Print A & B successfully ran away!
-            break;
+                System.out.println("Both units successfully routed!");
+                break;
 
             case DRAW:
-                // TODO Print It's a draw!
-            break;
+                System.out.println("It's a draw!");
+                break;
 
             case FIGHTING: default:
                 // This should never happen!
             break;
         }
+        System.out.println("-------------------------");
     }
 
     /**
@@ -108,9 +111,14 @@ public class BattleResolver {
             skirmish.startEngagements();
             
             skirmish.cancelSkirmishAbilities();
-            // TODO Cancel abilities
         
             printEndSkirmishMessage(skirmish);
+
+            // Wait after each skirmish
+            try {TimeUnit.SECONDS.sleep(2);}
+            catch (Exception e) {
+                // just continue
+            }
             
         }
 
@@ -128,6 +136,12 @@ public class BattleResolver {
 
         armyA.cancelArmyAbilities();
         armyB.cancelArmyAbilities();
+
+        // Wait after each battle
+        try {TimeUnit.SECONDS.sleep(3);}
+        catch (Exception e) {
+            // just continue
+        }
 
     }
 
