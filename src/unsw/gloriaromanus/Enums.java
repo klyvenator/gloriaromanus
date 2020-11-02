@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 package unsw.gloriaromanus;
 
 public class Enums {
@@ -24,15 +23,3 @@ public class Enums {
         DRAW;
     }
 }
-
-=======
-package unsw.gloriaromanus;
-
-public class Enums {
-    public enum Range {
-        MELEE,
-        RANGED
-    }
-}
-
->>>>>>> 87090e9e2cd06b81be5a77114b7da5e86e480a86
