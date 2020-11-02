@@ -1,0 +1,54 @@
+{
+    "legionaryEagle": {
+        "type": "faction",
+        "this": {
+            "morale": 1
+        }
+    },
+    "berserkerRage": {
+        "type": "unit",
+        "this": {
+            "morale": "inf",
+            "double": "x2",
+            "armour": "zero",
+            "shield": "zero"
+        }
+    },
+    "heroicCharge": {
+        "type": "army",
+        "when": "less half other",
+        "this": {
+            "charge": "x2",
+            "morale": 0.5
+        }
+    },
+    "antiArmour": {
+        "type": "engagement",
+        "when": "ranged",
+        "other": {
+            "armour": "x1/2"
+        }
+    },
+    "cantabrianCircle": {
+        "type": "engagement",
+        "when": "artillery",
+        "other": {
+            "attack": -0.5
+        }
+    },
+    "druidFervour": {
+        "type": "army",
+        "this": {
+            "morale": 0.1
+        },
+        "other": {
+            "morale": -0.05
+        }
+    },
+    "shieldCharge": {
+        "type": "engagement",
+        "this": {
+            "attack": "shield"
+        }
+    }
+}
