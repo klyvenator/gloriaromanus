@@ -41,8 +41,18 @@ public class ArmyTest{
 
     }
 
+    @Test
     public void battleTest() {
-        
+        Army army1 = new Army();
+        Infantry infantry = new Infantry("Archers");
+        army1.addUnit(infantry);
+
+        Army army2 = new Army();
+        Artillery artillery = new Artillery("Catapults");
+        army2.addUnit(artillery);
+
+        BattleResolver res = new BattleResolver(army1, army2);
+        res.startBattle();
     }
 
     @BeforeClass
