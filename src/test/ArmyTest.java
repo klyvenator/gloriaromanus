@@ -31,9 +31,18 @@ public class ArmyTest{
         Artillery a = new Artillery("Catapults");
         
         
-        Army a = new Army();
-        a.addUnit(c);
+        Army army = new Army();
+        army.addUnit(c);
+        army.addUnit(a);
+        army.addUnit(i);
 
+        List<Unit> units = army.getAllUnits();
+        assertEquals(3, army.getNumUnits(), "Army initialisation not working");
+
+    }
+
+    public void battleTest() {
+        
     }
 
     @BeforeClass
@@ -54,6 +63,7 @@ public class ArmyTest{
         assertEquals(a.getSpeed(), 10);
     }
 
+    /*
     @Test
     public void unitFactoryTests(){
         UnitFactory factory = new UnitFactory();
@@ -77,6 +87,7 @@ public class ArmyTest{
 
     }
 
+    */
 }
 
 
