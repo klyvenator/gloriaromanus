@@ -13,12 +13,46 @@ public class Army {
         currentlyOn = null;
     }
 
+    Army(Town currentlyOn) {
+        this();
+        this.currentlyOn = currentlyOn;
+    }
+
+    public void addUnit(Unit unit) {
+        units.add(unit);
+    }
+
     // Getters and Setters
 
     public int getNumUnits() {
         return units.size();
     }
 
+    public List<Unit> getAllUnits() {
+        return units;
+    }
+
+    public void setAllUnbroken() {
+        for (Unit unit : units) {
+            unit.setBroken(false);
+        }
+    }
+
+    public void activateArmyAbilities() {
+        for (Unit unit : units) {
+            if (unit.isAbilityType("army")) {
+                unit.activateAbility();
+            }
+        }
+    }
+
+    public void cancelArmyAbilities() {
+        for (Unit unit : units) {
+            if (unit.isAbilityType("army")) {
+                unit.cancelAbility();
+            }
+        }
+    }
     /**
      * Returns a random unit from this army
      * (<<general>> uniformly random)
@@ -95,4 +129,6 @@ public class Army {
         
         return availableUnits.get(r.nextInt(availableUnits.size()));
     }
+
+
 }

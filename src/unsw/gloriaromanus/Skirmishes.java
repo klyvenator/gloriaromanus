@@ -3,6 +3,8 @@ package unsw.gloriaromanus;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
+
 import unsw.gloriaromanus.Enums.Range;
 import unsw.gloriaromanus.Enums.FightStatus;
 
@@ -30,6 +32,26 @@ public class Skirmishes {
 
     public FightStatus getStatus() {
         return status;
+    }
+
+    public void printAfterEngagementMessage(int firstBeforeSize, int secondBeforeSize) {
+        System.out.println("Unit A dealt " + (secondBeforeSize - unitB.getNumTroops()) + "damage!");
+        System.out.println("Unit B dealt " + (firstBeforeSize - unitA.getNumTroops()) + "damage!");
+    }
+
+    public void printEngagementType() {
+        System.out.print("It's a ");
+        if (engagement.getClass() == RangedEngagements.class) {
+            System.out.print("Ranged Engagement");
+        } else if (engagement.getClass() == MeleeEngagements.class) {
+            System.out.print("Melee Engagement");
+        }
+        System.out.println("!");
+    }
+
+    public void printUnitsHealth() {
+        System.out.println("UnitA: " + unitA.getNumTroops());
+        System.out.println("UnitB: " + unitB.getNumTroops());
     }
 
     public boolean bothUnitsAlive() {
@@ -155,7 +177,7 @@ public class Skirmishes {
 
     /**
      * Perform necessary routing actions
-     * @return
+     * @return winner, if applicable
      */
     private Unit routingActions() {
         // both units intact - no routing actions
@@ -208,14 +230,14 @@ public class Skirmishes {
     /**
      * Start a series of engagements between 2 units
      * With possible breaking and routing
-     * @return
+     * @return winner, if applicable
      */
     public Unit startEngagements() {
         
         int firstBeforeSize = 0;
         int secondBeforeSize = 0;
-        int firstAfterSize = 0;
-        int secondAfterSize = 0;
+        int damageA = 0;
+        int damageB = 0;
 
         Unit winner = null;
         while (
@@ -224,14 +246,23 @@ public class Skirmishes {
             numEngagements < maxEngagements
         ) {
             decideEngagementType();
-            
+            printEngagementType();
+
             firstBeforeSize = unitA.getNumTroops();
             secondBeforeSize = unitB.getNumTroops();
 
             unitA.activateAbility();
             unitB.activateAbility();
 
+            System.out.println("Units health before engagement:");
+            printUnitsHealth();
+
             winner = engagement.engage(unitA, unitB);
+
+            printAfterEngagementMessage(firstBeforeSize, secondBeforeSize);
+
+            System.out.println("Units health after engagement:");
+            printUnitsHealth();
 
             unitA.cancelAbility();
             unitB.cancelAbility();
@@ -251,6 +282,7 @@ public class Skirmishes {
                 status = FightStatus.FIGHTING;
                 // Keep fighting
             } else {
+                // Both units dead - no winner
                 status = FightStatus.DRAW;
             }
 
@@ -258,17 +290,17 @@ public class Skirmishes {
                 return winner;
             }
 
-            firstAfterSize = unitA.getNumTroops();
-            secondAfterSize = unitB.getNumTroops();
+            damageA = firstBeforeSize - unitA.getNumTroops();
+            damageB = secondBeforeSize - unitB.getNumTroops();
 
             // Try breaking
             unitA.attemptToBreak(
-                firstBeforeSize - firstAfterSize, firstBeforeSize,
-                secondBeforeSize - secondAfterSize, secondBeforeSize
+                damageA, firstBeforeSize,
+                damageB, secondBeforeSize
             );
             unitB.attemptToBreak(
-                secondBeforeSize - secondAfterSize, secondBeforeSize,
-                firstBeforeSize - firstAfterSize, firstBeforeSize
+                damageB, secondBeforeSize,
+                damageA, firstBeforeSize
             );
 
             if (eitherUnitsBroken() && bothUnitsAlive()) {
@@ -277,9 +309,14 @@ public class Skirmishes {
 
             // Just finished an engagement
             numEngagements++;
-        }
 
-        // TODO Fill in draw
+            // Give some time between engagements
+            try {TimeUnit.SECONDS.sleep(1);}
+            catch (Exception e) {
+                // just continue
+            }
+
+        }
 
         decideStatus();
 
