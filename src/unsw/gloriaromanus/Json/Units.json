@@ -11,7 +11,7 @@
         "morale": 1,
         "turnsToProduce": 1,
         "cost": 1,
-        "specialAbility": "shield"
+        "specialAbility": "shieldCharge"
     },
     "Heavy Infantry":{
         "type": "melee",
@@ -39,6 +39,20 @@
         "turnsToProduce": 1,
         "cost": 1
     },
+    "Javelin":{
+        "type": "ranged",
+        "category": "infantry",
+        "number": 1,
+        "attack": 1,
+        "defense": 1,
+        "armour": 1,
+        "shield": 1,
+        "speed": 1,
+        "morale": 1,
+        "turnsToProduce": 1,
+        "cost": 1,
+        "specialAbility": "antiArmour"
+    },
     "Legionary":{
         "Type": "melee",
         "category": "infantry",
@@ -51,7 +65,7 @@
         "morale": 1,
         "turnsToProduce": 1,
         "cost": 1,
-        "specialAbility": "eagle"
+        "specialAbility": "legionaryEagle"
     },
     "Beserker":{
         "Type": "melee",
@@ -65,13 +79,14 @@
         "morale": 1,
         "turnsToProduce": 1,
         "cost": 1,
-        "specialAbility": "rage"
+        "specialAbility": "berserkerRage"
     },
     "Melee Cavalry":{
         "Type": "melee",
         "category": "cavalry",
         "number": 1,
         "attack": 1,
+        "charge": 1,
         "defense": 1,
         "armour": 1,
         "shield": 1,
@@ -79,13 +94,14 @@
         "morale": 1,
         "turnsToProduce": 1,
         "cost": 1,
-        "specialAbility": "heroic"
+        "specialAbility": "heroicCharge"
     },
     "Chariot":{
         "Type": "melee",
         "category": "cavalry",
         "number": 1,
         "attack": 1,
+        "charge": 2,
         "defense": 1,
         "armour": 1,
         "shield": 1,
@@ -99,6 +115,7 @@
         "category": "cavalry",
         "number": 1,
         "attack": 1,
+        "charge": 4,
         "defense": 1,
         "armour": 1,
         "shield": 1,
@@ -106,7 +123,7 @@
         "morale": 1,
         "turnsToProduce": 1,
         "cost": 1,
-        "specialAbility": "random attack"
+        "specialAbility": "randomAttack"
     },
     "Horse Archer":{
         "Type": "ranged",
@@ -133,7 +150,7 @@
         "morale": 1,
         "turnsToProduce": 1,
         "cost": 1,
-        "specialAbility": "druid fervour"
+        "specialAbility": "druidFervour"
     },
     "Artillery":{
         "Type": "ranged",

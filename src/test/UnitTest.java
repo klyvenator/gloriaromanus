@@ -28,7 +28,7 @@ public class UnitTest{
         Cavalry c = new Cavalry("Elephants");
         assertEquals(c.getNumTroops(), 100);
         assertEquals(c.getType(), Range.MELEE);
-        assertEquals((c.getAbilities().size()), 0);
+        assertEquals(c.getAbility(), null);
         assertEquals(c.getName(), "Elephants");
         Infantry i = new Infantry("Archers");
         assertEquals(i.getAttack(), 10);
