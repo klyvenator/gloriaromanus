@@ -1,0 +1,85 @@
+[
+    {
+       "faction1":{
+          "Gold":0,
+          "Towns":[
+             {
+                "Sydney":{
+                   "Tax Type":"Low",
+                   "Town Wealth":10,
+                   "name":"Sydney",
+                   "Units":[
+                      {
+                         "Melee Infantry":{
+                            "shield":1,
+                            "cost":1,
+                            "Abilities":[
+                               
+                            ],
+                            "type":"MELEE",
+                            "speed":1,
+                            "armour":1,
+                            "number":1,
+                            "Movement Points":10,
+                            "defense":1,
+                            "attack":1,
+                            "Buffs":[
+                               
+                            ],
+                            "name":"Melee Infantry",
+                            "morale":1,
+                            "category":"infantry",
+                            "turnstoproduce":1
+                         }
+                      }
+                   ]
+                }
+             },
+             {
+                "Melbourne":{
+                   "Tax Type":"Low",
+                   "Town Wealth":10,
+                   "name":"Melbourne",
+                   "Units":[
+                      {
+                         "Elephant":{
+                            "shield":1,
+                            "cost":1,
+                            "Abilities":[
+                               
+                            ],
+                            "type":"MELEE",
+                            "speed":1,
+                            "armour":1,
+                            "number":1,
+                            "Movement Points":15,
+                            "defense":1,
+                            "attack":1,
+                            "Buffs":[
+                               
+                            ],
+                            "name":"Elephant",
+                            "morale":1,
+                            "category":"cavalry",
+                            "turnstoproduce":1
+                         }
+                      }
+                   ]
+                }
+             },
+             {
+                "Brisbane":{
+                   "Tax Type":"Low",
+                   "Town Wealth":10,
+                   "name":"Brisbane",
+                   "Units":[
+                      
+                   ]
+                }
+             }
+          ],
+          "faction":"faction1",
+          "Wealth":0
+       }
+    }
+ ]
