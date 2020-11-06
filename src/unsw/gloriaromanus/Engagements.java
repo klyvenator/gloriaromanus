@@ -34,13 +34,13 @@ public abstract class Engagements {
         if ((a.getNumTroops() <= 0) && (b.getNumTroops() <= 0)) {
             // Both defeated, no winner
             return null;
+        } else if ((a.getNumTroops() > 0) && (b.getNumTroops() > 0)) {
+            // both alive - no winner
+            return null;
         } else if (a.getNumTroops() > 0) {
             return a;
-        } else if (b.getNumTroops() > 0) {
-            return b;
         } else {
-            // Both alive, no winner
-            return null;
+            return b;
         }
     }
     
