@@ -1,4 +1,4 @@
-package unsw.gloriaromanus;
+package unsw.gloriaromanus.Model;
 
 import org.json.*;
 
@@ -34,14 +34,14 @@ public class LoadFile {
     // reads the json file and gets each objet and saves it
     public void load(String filename){
         // TO DO uncomment this for milestone 3 
-        /* String jsonString = null;
+        String jsonString = null;
         try {
             jsonString = Files.readString(Paths.get("src/unsw/gloriaromanus/SaveFiles/"+filename));
         } catch (IOException e) {
             System.out.println(e);
             System.exit(1);
-        } */
-        String jsonString = filename;
+        }
+        //String jsonString = filename;
         JSONArray jArray = new JSONArray(jsonString);
         JSONObject jObject = new JSONObject();
         for(int i = 0; i < jArray.length(); i++){

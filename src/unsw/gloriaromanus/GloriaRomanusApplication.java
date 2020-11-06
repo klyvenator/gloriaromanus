@@ -8,6 +8,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import unsw.gloriaromanus.View.*;
+
 public class GloriaRomanusApplication extends Application {
 
   private static GloriaRomanusController controller;
@@ -15,7 +17,9 @@ public class GloriaRomanusApplication extends Application {
   @Override
   public void start(Stage stage) throws IOException {
     // set up the scene
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
+    StartScreen startScreen = new StartScreen(stage);
+    startScreen.start();
+    /* FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
     Parent root = loader.load();
     controller = loader.getController();
     Scene scene = new Scene(root);
@@ -25,7 +29,7 @@ public class GloriaRomanusApplication extends Application {
     stage.setWidth(800);
     stage.setHeight(700);
     stage.setScene(scene);
-    stage.show();
+    stage.show(); */
 
   }
 
