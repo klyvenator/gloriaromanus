@@ -1,4 +1,4 @@
-package unsw.gloriaromanus;
+package unsw.gloriaromanus.Controller;
 
 import unsw.gloriaromanus.Model.*;
 
@@ -400,7 +400,7 @@ public class GloriaRomanusController{
   /**
    * Stops and releases all resources used in application.
    */
-  void terminate() {
+  public void terminate() {
 
     if (mapView != null) {
       mapView.dispose();

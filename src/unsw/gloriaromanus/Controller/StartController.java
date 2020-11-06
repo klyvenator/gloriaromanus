@@ -8,17 +8,21 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import unsw.gloriaromanus.View.*;
+
+
 public class StartController {
-    
+
+    @FXML
     public void initialize() {
         titleImage.setImage(new Image((new File("images/Title.png")).toURI().toString()));
         romanImage.setImage(new Image((new File("images/ExampleLegion.png")).toURI().toString()));
     }
     @FXML
-    ImageView titleImage;
+    private ImageView titleImage;
 
     @FXML
-    ImageView romanImage;
+    private ImageView romanImage;
 
     @FXML
     private Button newGame;
@@ -26,10 +30,16 @@ public class StartController {
     @FXML
     private Button loadGame;
 
+    private GameMenu gameMenu;
+
     @FXML
 	private void handleNewGame(ActionEvent event) {
-        return;
+        gameMenu.start();
     }
+    public void setNewGame(GameMenu gameMenu) {
+        this.gameMenu = gameMenu;
+    }
+
     @FXML
 	private void handleLoadGame(ActionEvent event) {
         return;

@@ -8,13 +8,16 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import unsw.gloriaromanus.Controller.*;
 
-public class StartScreen {
+import javafx.application.Application;
+
+public class StartScreen{
 
     private Stage stage;
     private String title;
     private StartController controller;
     private Scene scene;
     
+
     public StartScreen(Stage stage) throws IOException {
         this.stage = stage;
         this.title = "Start Menu";
@@ -37,4 +40,5 @@ public class StartScreen {
     public StartController getController() {
         return controller;
     }
+
 }

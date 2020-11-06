@@ -1,4 +1,4 @@
-package unsw.gloriaromanus;
+package unsw.gloriaromanus.View;
 
 import java.io.IOException;
 
@@ -8,17 +8,19 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import unsw.gloriaromanus.View.*;
+import unsw.gloriaromanus.Controller.*;
 
 public class GloriaRomanusApplication extends Application {
 
   private static GloriaRomanusController controller;
 
   @Override
-  public void start(Stage stage) throws IOException {
+  public void start(Stage primaryStage) throws IOException {
     // set up the scene
-    StartScreen startScreen = new StartScreen(stage);
+    StartScreen startScreen = new StartScreen(primaryStage);
+    GameMenu gameMenu = new GameMenu(primaryStage);
     startScreen.start();
+    
     /* FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
     Parent root = loader.load();
     controller = loader.getController();
