@@ -1,10 +1,10 @@
-package unsw.gloriaromanus;
+package unsw.gloriaromanus.Model;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import unsw.gloriaromanus.Enums.Operation;
+import unsw.gloriaromanus.Model.Enums.Operation;
 
 public class CompositeEvaluator implements ComponentEvaluator{
     private Operation op;

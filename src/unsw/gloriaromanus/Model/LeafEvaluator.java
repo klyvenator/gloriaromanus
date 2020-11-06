@@ -1,8 +1,8 @@
-package unsw.gloriaromanus;
+package unsw.gloriaromanus.Model;
 
 import java.util.List;
 
-import unsw.gloriaromanus.Enums.Condition;
+import unsw.gloriaromanus.Model.Enums.Condition;
 
 public class LeafEvaluator implements ComponentEvaluator {
     private int gold;

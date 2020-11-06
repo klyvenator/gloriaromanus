@@ -1,4 +1,4 @@
-package unsw.gloriaromanus;
+package unsw.gloriaromanus.Model;
 
 public class Enums {
     public enum Range {

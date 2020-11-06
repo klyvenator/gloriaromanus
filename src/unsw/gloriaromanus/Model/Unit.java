@@ -1,8 +1,8 @@
-package unsw.gloriaromanus;
+package unsw.gloriaromanus.Model;
 
 import java.util.ArrayList;
 import java.util.List;
-import unsw.gloriaromanus.Enums.Range;
+import unsw.gloriaromanus.Model.Enums.Range;
 
 /**
  * Represents a basic unit of soldiers
