@@ -143,9 +143,13 @@ public abstract class Unit {
     }
 
     public boolean isAbilityType(String type) {
+        return false;
+        
+        /*
         if (ability == null) {
             return false;
         }
+        
         
         switch (type) {
             case "faction":
@@ -189,6 +193,7 @@ public abstract class Unit {
             default:
                 return false;
         }
+        */
     }
 
     public void activateAbility() {
