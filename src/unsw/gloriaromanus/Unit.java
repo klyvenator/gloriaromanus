@@ -19,14 +19,11 @@ public abstract class Unit {
     private String name;
     private String category;
     private Range type = Range.MELEE;  // range of the unit
-    
     private int numTroops = 100;  // the number of troops in this unit (should reduce based on depletion)
     private int attack = 10;  // can be either missile or melee attack to simplify. Could improve implementation by differentiating!
-    private int charge = 0; // for melee cavalry / elephants / chariots
     private DefenseStat defense;   // armour defense
     private int morale = 10;  // resistance to fleeing
     private int speed = 10;  // ability to disengage from disadvantageous battle
-    
     private int cost = 100;
     private int turnsToMake = 1;
     private int movementPoints;
@@ -101,24 +98,11 @@ public abstract class Unit {
     }
 
     public int getAttack() {
-        /*
-        For ordinary units, charge = 0
-        elephants, melee cavalry and chariots have a
-        charge statistic
-        */
-        return attack + charge;
+        return attack;
     }
 
     public void setAttack(int attack) {
         this.attack = attack;
-    }
-
-    public int getCharge() {
-        return charge;
-    }
-    
-    public void setCharge(int charge) {
-        this.charge = charge;
     }
 
     public int getCost() {
