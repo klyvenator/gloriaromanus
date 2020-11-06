@@ -51,7 +51,6 @@ public class ArmyTest{
         Artillery artillery = new Artillery("Catapults");
         army2.addUnit(artillery);
 
-<<<<<<< HEAD
         assertEquals(1, army1.getNumUnits());
         assertEquals(1, army2.getNumUnits());
         
@@ -61,10 +60,6 @@ public class ArmyTest{
         // One of the armies lost => all defeated or broken
         assertEquals(true, (army1.numAvailableUnits() == 0) || (army2.numAvailableUnits() == 0)); 
 
-=======
-        BattleResolver res = new BattleResolver(army1, army2);
-        res.startBattle();
->>>>>>> BattleTests
     }
 
     @BeforeClass
