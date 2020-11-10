@@ -1,6 +1,7 @@
 package test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.*;
 import org.json.JSONObject;
@@ -58,7 +59,7 @@ public class ArmyTest{
         res.startBattle();
 
         // One of the armies lost => all defeated or broken
-        assertEquals(true, (army1.numAvailableUnits() == 0) || (army2.numAvailableUnits() == 0)); 
+        assertTrue((army1.numAvailableUnits() == 0) || (army2.numAvailableUnits() == 0)); 
 
     }
 
