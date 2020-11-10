@@ -12,12 +12,6 @@ import unsw.gloriaromanus.View.*;
 
 
 public class StartController {
-
-    @FXML
-    public void initialize() {
-        titleImage.setImage(new Image((new File("images/Title.png")).toURI().toString()));
-        romanImage.setImage(new Image((new File("images/ExampleLegion.png")).toURI().toString()));
-    }
     @FXML
     private ImageView titleImage;
 
@@ -31,6 +25,12 @@ public class StartController {
     private Button loadGame;
 
     private GameMenu gameMenu;
+
+    @FXML
+    public void initialize() {
+        titleImage.setImage(new Image((new File("images/Title.png")).toURI().toString()));
+        romanImage.setImage(new Image((new File("images/ExampleLegion.png")).toURI().toString()));
+    }
 
     @FXML
 	private void handleNewGame(ActionEvent event) {

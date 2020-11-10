@@ -17,7 +17,7 @@ public class GameMenu{
 	private Scene scene;
 	
 
-	public GameMenu(Stage stage) throws IOException {
+	public GameMenu(Stage stage, StartScreen startScreen) throws IOException {
 		this.stage = stage;
 		this.title = "Choose Game";
 		
@@ -27,7 +27,8 @@ public class GameMenu{
 
         Parent root = loader.load();
         scene = new Scene(root);
-        controller.setData();
+		controller.setData();
+		controller.setStartScreen(startScreen);
 	}
 	
 	public void start() {

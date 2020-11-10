@@ -18,7 +18,8 @@ public class GloriaRomanusApplication extends Application {
   public void start(Stage primaryStage) throws IOException {
     // set up the scene
     StartScreen startScreen = new StartScreen(primaryStage);
-    GameMenu gameMenu = new GameMenu(primaryStage);
+    GameMenu gameMenu = new GameMenu(primaryStage,startScreen);
+    startScreen.getController().setNewGame(gameMenu);
     startScreen.start();
     
     /* FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
