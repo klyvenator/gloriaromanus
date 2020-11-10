@@ -1,6 +1,7 @@
 package test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.*;
@@ -60,6 +61,9 @@ public class ArmyTest{
 
         // One of the armies lost => all defeated or broken
         assertTrue((army1.numAvailableUnits() == 0) || (army2.numAvailableUnits() == 0)); 
+
+        // At the end of the battle, status should not be fighting
+        assertNotEquals(BattleStatus.FIGHTING, res.getStatus(), "Battle still being fought, even though it's finished");
 
     }
 
