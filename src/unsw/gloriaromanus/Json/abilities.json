@@ -9,7 +9,7 @@
         "type": "unit",
         "this": {
             "morale": "inf",
-            "double": "x2",
+            "attack": "x2",
             "armour": "zero",
             "shield": "zero"
         }
@@ -31,7 +31,7 @@
     },
     "cantabrianCircle": {
         "type": "engagement",
-        "when": "artillery",
+        "when": "other artillery",
         "other": {
             "attack": -0.5
         }

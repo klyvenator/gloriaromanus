@@ -1,6 +1,8 @@
 package test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.*;
 import org.json.JSONObject;
@@ -41,8 +43,28 @@ public class ArmyTest{
 
     }
 
+    @Test
     public void battleTest() {
+        Army army1 = new Army();
+        Infantry infantry = new Infantry("Archers");
+        army1.addUnit(infantry);
+
+        Army army2 = new Army();
+        Artillery artillery = new Artillery("Catapults");
+        army2.addUnit(artillery);
+
+        assertEquals(1, army1.getNumUnits());
+        assertEquals(1, army2.getNumUnits());
         
+        BattleResolver res = new BattleResolver(army1, army2);
+        res.startBattle();
+
+        // One of the armies lost => all defeated or broken
+        assertTrue((army1.numAvailableUnits() == 0) || (army2.numAvailableUnits() == 0)); 
+
+        // At the end of the battle, status should not be fighting
+        assertNotEquals(BattleStatus.FIGHTING, res.getStatus(), "Battle still being fought, even though it's finished");
+
     }
 
     @BeforeClass
