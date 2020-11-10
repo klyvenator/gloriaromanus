@@ -5,10 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.*;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import unsw.gloriaromanus.*;
-import unsw.gloriaromanus.Enums.Range;
 
+import unsw.gloriaromanus.Model.*;
+import unsw.gloriaromanus.Model.Enums.*;
 
 public class UnitTest{
     
@@ -56,10 +55,8 @@ public class UnitTest{
         assertEquals(panda.getCost(), 500);
         assertEquals(panda.getSpeed(), 10);
         assertEquals(panda instanceof Cavalry , true);
-        
 
     }
-
 }
 
 
