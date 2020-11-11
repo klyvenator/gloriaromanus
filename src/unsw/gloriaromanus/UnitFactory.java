@@ -49,6 +49,9 @@ public class UnitFactory implements Factory{
         switch (json.getString("category")) {
             case "cavalry":
                 newUnit = new Cavalry(json.getString("name"));
+                if (json.has("charge")) {
+                    ((Cavalry)newUnit).setCharge(json.getInt("charge"));
+                }
                 break;
             case "infantry":
                 newUnit = new Infantry(json.getString("name"));
@@ -84,9 +87,6 @@ public class UnitFactory implements Factory{
         }
         if (json.has("attack")) {
             newUnit.setAttack(json.getInt("attack"));
-        }
-        if (json.has("charge")) {
-            newUnit.setCharge(json.getInt("charge"));
         }
         if (json.has("cost")) {
             newUnit.setCost(json.getInt("cost"));
