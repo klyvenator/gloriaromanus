@@ -41,9 +41,9 @@ public class Skirmishes {
 
     public void printEngagementType() {
         System.out.print("It's a ");
-        if (engagement.getClass() == RangedEngagements.class) {
+        if (engagement instanceof RangedEngagements) {
             System.out.print("Ranged Engagement");
-        } else if (engagement.getClass() == MeleeEngagements.class) {
+        } else if (engagement instanceof MeleeEngagements) {
             System.out.print("Melee Engagement");
         }
         System.out.println("!");

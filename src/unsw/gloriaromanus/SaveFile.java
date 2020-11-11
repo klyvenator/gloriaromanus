@@ -106,8 +106,8 @@ public class SaveFile {
             jsonObject.put("cost", u.getCost());
             jsonObject.put("turnstoproduce", u.getTurnsToMake());
             jsonObject.put("Movement Points", u.getMovementPoints());
-            jsonObject.put("Abilities", u.getAbilities());
-            jsonObject.put("Buffs", u.getBuffs());
+            //jsonObject.put("Abilities", u.getAbilities());
+           //jsonObject.put("Buffs", u.getBuffs());
             jsonObject.put("name", u.getName());
             unit.put(u.getName(), jsonObject);
             jArray.put(unit);

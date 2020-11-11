@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 import unsw.gloriaromanus.Enums.BattleStatus;
 import unsw.gloriaromanus.Enums.FightStatus;
+import unsw.gloriaromanus.Skirmishes;
 
 public class BattleResolver {
     private Army armyA;
