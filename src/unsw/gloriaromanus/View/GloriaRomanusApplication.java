@@ -20,9 +20,16 @@ public class GloriaRomanusApplication extends Application {
     StartScreen startScreen = new StartScreen(stage);
     GameMenu gameMenu = new GameMenu(stage,startScreen);
     startScreen.getController().setNewGame(gameMenu);
+
+    // TO DO comment this to run the game
     startScreen.start();
+    // TO DO UNcomment this to run game
+    //startGame(stage);
     
-    /* FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
+
+  }
+  public void startGame(Stage stage) throws IOException{
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
     Parent root = loader.load();
     controller = loader.getController();
     Scene scene = new Scene(root);
@@ -32,8 +39,7 @@ public class GloriaRomanusApplication extends Application {
     stage.setWidth(800);
     stage.setHeight(700);
     stage.setScene(scene);
-    stage.show(); */
-
+    stage.show();
   }
 
   /**
