@@ -49,4 +49,49 @@
             <TextArea fx:id="output_terminal" text="" editable="false"/>
         </VBox>
     </VBox>
+
+    <HBox StackPane.alignment="TOP_RIGHT" styleClass="panel-region" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="23.0" prefWidth="447.0" spacing="10.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label text="Faction"/>
+      <Label prefHeight="17.0" prefWidth="84.0" text="Treasury: 0"/>
+      <Label prefHeight="17.0" prefWidth="88.0" text="Wealth: 0"/>
+      <Label prefHeight="17.0" prefWidth="194.0" text="Goals: Conquer and Wealth Or Gold"/>
+   </children>
+   <padding>
+      <Insets left="5.0" top="2.0" />
+   </padding>
+           <background>
+            <Background>
+                <fills>
+                    <BackgroundFill>
+                        <fill>
+                            <Color opacity="0.8"/>
+                        </fill>
+                    </BackgroundFill>
+                </fills>
+            </Background>
+        </background>
+</HBox>
+
+<VBox StackPane.alignment="BOTTOM_RIGHT" styleClass="panel-region" visible="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="343.0" prefWidth="219.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label text="Province Name" />
+   </children>
+   <padding>
+      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+   </padding>
+           <background>
+            <Background>
+                <fills>
+                    <BackgroundFill>
+                        <fill>
+                            <Color opacity="0.3"/>
+                        </fill>
+                    </BackgroundFill>
+                </fills>
+            </Background>
+        </background>
+</VBox>
+
+
 </StackPane>
