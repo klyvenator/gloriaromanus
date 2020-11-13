@@ -82,7 +82,7 @@ public class SaveFile {
             jsonObject.put("Tax Type", t.getTaxStatus());
             jsonObject.put("Town Wealth", t.getWealth());
             jsonObject.put("name", t.getTownName());
-            units = addUnits(t.getUnits());
+            units = addUnits(t.getArmy().getAllUnits());
             jsonObject.put("Units", units);
             town.put(t.getTownName(), jsonObject);
             jArray.put(town);
