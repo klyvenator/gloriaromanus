@@ -16,19 +16,30 @@ public class PlayGloriaRomanus extends Application {
 
   @Override
   public void start(Stage stage) throws IOException {
-    
+    /*
     FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
     Parent root = loader.load();
     controller = loader.getController();
     Scene scene = new Scene(root);
+    */
 
+    MainMapScreen mapScreen = new MainMapScreen(stage);
+    controller = mapScreen.getController();
+    
+    BattleScreen battleScreen = new BattleScreen(stage, mapScreen);
+    
+    controller.setBattleScreen(battleScreen);
+
+
+    mapScreen.start();
+    /*
     // set up the stage
     stage.setTitle("Gloria Romanus");
     stage.setWidth(800);
     stage.setHeight(700);
     stage.setScene(scene);
     stage.show();
-
+    */
   }
 
   /**
