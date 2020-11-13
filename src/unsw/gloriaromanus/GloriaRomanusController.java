@@ -16,13 +16,18 @@ import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
+import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.VBox;
 
 import com.esri.arcgisruntime.concurrent.ListenableFuture;
 import com.esri.arcgisruntime.data.FeatureTable;
@@ -63,6 +68,27 @@ public class GloriaRomanusController{
   private TextField opponent_province;
   @FXML
   private TextArea output_terminal;
+  @FXML
+  private Label topBarFaction;
+  @FXML
+  private Label topBarGold;
+  @FXML
+  private Label topBarWealth;
+  @FXML
+  private Label pWProvinceName;
+  @FXML
+  private Label pWFactionName;
+  @FXML
+  private ComboBox<String> pWRecruitList;
+  @FXML
+  private ListView<String> pWUnitList;
+  @FXML
+  private VBox provinceWindow;
+
+  private static List<Faction> facList;
+  
+  private StringProperty gold;
+  private StringProperty wealth;
 
   private ArcGISMap map;
 
@@ -273,8 +299,10 @@ public class GloriaRomanusController{
                   }
                   currentlySelectedHumanProvince = f;
                   invading_province.setText(province);
+                  loadProvinceWindow(province);
                 }
                 else{
+                  closeProvinceWindow();
                   if (currentlySelectedEnemyProvince != null){
                     featureLayer.unselectFeature(currentlySelectedEnemyProvince);
                   }
@@ -379,7 +407,7 @@ public class GloriaRomanusController{
     Random rand = new Random();
     // remove content for milestone 3 and jsut read file as normal
     List<String> list = getProvinceList(content);
-    List<Faction> facList = new ArrayList<Faction>();
+    facList = new ArrayList<Faction>();
     for(String f : factions){
       Faction newFac = new Faction(f);
       facList.add(newFac);
@@ -393,6 +421,17 @@ public class GloriaRomanusController{
     return facList;
   }
 
+
+  public void loadProvinceWindow(String province) {
+    pWProvinceName.setText(province);
+    pWFactionName.setText(humanFaction);
+    provinceWindow.setVisible(true);
+  }
+
+  @FXML
+  public void closeProvinceWindow() {
+    provinceWindow.setVisible(false);
+  }
 
 
   /**
