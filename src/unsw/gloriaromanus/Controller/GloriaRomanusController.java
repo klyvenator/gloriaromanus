@@ -187,7 +187,6 @@ public class GloriaRomanusController{
         Town provinceTown;
         for (Town town : provinceToOwningFactionMap.keySet()) {
           if(town.getTownName().equals(provinceName)){
-            System.out.println(town.getTownName());
             provinceTown = town;
             Faction factionObject = provinceToOwningFactionMap.get(provinceTown);
             String faction = factionObject.getFactionName();
