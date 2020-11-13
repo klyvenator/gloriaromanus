@@ -1,6 +1,7 @@
 package unsw.gloriaromanus.Controller;
 
 import unsw.gloriaromanus.Model.*;
+import unsw.gloriaromanus.View.BattleScreen;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -72,6 +73,12 @@ public class GloriaRomanusController{
 
   private Map<String, Integer> provinceToNumberTroopsMap;
 
+  // private Map<String, List<Unit>> provinceToUnitListMap;
+  private Map<String, Army> provinceToArmyMap;
+  // private Map<String, Town> provinceToTownMap;
+
+  private BattleScreen battleScreen;
+
   private String humanFaction;
 
   private Feature currentlySelectedHumanProvince;
@@ -100,6 +107,20 @@ public class GloriaRomanusController{
     initializeProvinceLayers();
   }
 
+  public void setBattleScreen(BattleScreen battleScreen) {
+    this.battleScreen = battleScreen;
+  }
+
+  private void battleStuff() {
+    String humanProvince = (String)currentlySelectedHumanProvince.getAttributes().get("name");
+    String enemyProvince = (String)currentlySelectedEnemyProvince.getAttributes().get("name");
+    
+    battleScreen.start(
+      null,//provinceToArmyMap.get(humanProvince),
+      null//provinceToArmyMap.get(enemyProvince)
+    );
+  }
+
   @FXML
   public void clickedInvadeButton(ActionEvent e) throws IOException {
     if (currentlySelectedHumanProvince != null && currentlySelectedEnemyProvince != null){
@@ -107,6 +128,9 @@ public class GloriaRomanusController{
       String enemyProvince = (String)currentlySelectedEnemyProvince.getAttributes().get("name");
       if (confirmIfProvincesConnected(humanProvince, enemyProvince)){
         // TODO = have better battle resolution than 50% chance of winning
+        
+        battleStuff();
+        
         Random r = new Random();
         int choice = r.nextInt(2);
         if (choice == 0){
