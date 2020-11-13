@@ -67,8 +67,8 @@ public class GloriaRomanusController{
   private TextArea output_terminal;
 
   private ArcGISMap map;
-
-  private Map<String, String> provinceToOwningFactionMap;
+  // changed from Map<String,String>
+  private Map<Town, Faction> provinceToOwningFactionMap;
 
   private Map<String, Integer> provinceToNumberTroopsMap;
 
@@ -79,17 +79,19 @@ public class GloriaRomanusController{
 
   private FeatureLayer featureLayer_provinces;
 
+  private List<String> factionNames = new ArrayList<String>();
+
   @FXML
   private void initialize() throws JsonParseException, JsonMappingException, IOException {
     // TODO = you should rely on an object oriented design to determine ownership
-    provinceToOwningFactionMap = getProvinceToOwningFactionMap();
+
+    provinceToOwningFactionMap = getProvincesOwningToEachFaction(factionNames);
 
     provinceToNumberTroopsMap = new HashMap<String, Integer>();
     Random r = new Random();
-    for (String provinceName : provinceToOwningFactionMap.keySet()) {
-      provinceToNumberTroopsMap.put(provinceName, r.nextInt(500));
-    }
-
+    for (Town town : provinceToOwningFactionMap.keySet()) {
+      provinceToNumberTroopsMap.put(town.getTownName(), r.nextInt(500));
+    } 
     // TODO = load this from a configuration file you create (user should be able to
     // select in loading screen)
     humanFaction = "Rome";
@@ -114,7 +116,8 @@ public class GloriaRomanusController{
           int numTroopsToTransfer = provinceToNumberTroopsMap.get(humanProvince)*2/5;
           provinceToNumberTroopsMap.put(enemyProvince, numTroopsToTransfer);
           provinceToNumberTroopsMap.put(humanProvince, provinceToNumberTroopsMap.get(humanProvince)-numTroopsToTransfer);
-          provinceToOwningFactionMap.put(enemyProvince, humanFaction);
+          // TO DO uncomment
+          //provinceToOwningFactionMap.put(enemyProvince, humanFaction);
           printMessageToTerminal("Won battle!");
         }
         else{
@@ -157,7 +160,6 @@ public class GloriaRomanusController{
         // create province border feature
         featureLayer_provinces = createFeatureLayer(gpkg_provinces);
         map.getOperationalLayers().add(featureLayer_provinces);
-
       } else {
         System.out.println("load failure");
       }
@@ -180,38 +182,45 @@ public class GloriaRomanusController{
         LngLatAlt coor = p.getCoordinates();
         Point curPoint = new Point(coor.getLongitude(), coor.getLatitude(), SpatialReferences.getWgs84());
         PictureMarkerSymbol s = null;
-        String province = (String) f.getProperty("name");
-        String faction = provinceToOwningFactionMap.get(province);
-
-        TextSymbol t = new TextSymbol(10,
-            faction + "\n" + province + "\n" + provinceToNumberTroopsMap.get(province), 0xFFFF0000,
+        // this get's the name of the province from the total List of Provinces
+        String provinceName = (String) f.getProperty("name");
+        Town provinceTown;
+        for (Town town : provinceToOwningFactionMap.keySet()) {
+          if(town.getTownName().equals(provinceName)){
+            provinceTown = town;
+            Faction factionObject = provinceToOwningFactionMap.get(provinceTown);
+            String faction = factionObject.getFactionName();
+            TextSymbol t = new TextSymbol(10,
+            faction + "\n" + provinceTown.getTownName() + "\n", 0xFFFF0000,
             HorizontalAlignment.CENTER, VerticalAlignment.BOTTOM);
 
-        switch (faction) {
-          case "Gaul":
-            // note can instantiate a PictureMarkerSymbol using the JavaFX Image class - so could
-            // construct it with custom-produced BufferedImages stored in Ram
-            // http://jens-na.github.io/2013/11/06/java-how-to-concat-buffered-images/
-            // then you could convert it to JavaFX image https://stackoverflow.com/a/30970114
-
-            // you can pass in a filename to create a PictureMarkerSymbol...
-            s = new PictureMarkerSymbol(new Image((new File("images/Celtic_Druid.png")).toURI().toString()));
-            break;
-          case "Rome":
-            // you can also pass in a javafx Image to create a PictureMarkerSymbol (different to BufferedImage)
-            s = new PictureMarkerSymbol("images/legionary.png");
-            break;
-          // TODO = handle all faction names, and find a better structure...
+            switch (faction) {
+              case "Gaul":
+                // note can instantiate a PictureMarkerSymbol using the JavaFX Image class - so could
+                // construct it with custom-produced BufferedImages stored in Ram
+                // http://jens-na.github.io/2013/11/06/java-how-to-concat-buffered-images/
+                // then you could convert it to JavaFX image https://stackoverflow.com/a/30970114
+    
+                // you can pass in a filename to create a PictureMarkerSymbol...
+                s = new PictureMarkerSymbol(new Image((new File("images/Celtic_Druid.png")).toURI().toString()));
+                break;
+              case "Rome":
+                // you can also pass in a javafx Image to create a PictureMarkerSymbol (different to BufferedImage)
+                s = new PictureMarkerSymbol("images/legionary.png");
+                break;
+              // TODO = handle all faction names, and find a better structure...
+            }
+              t.setHaloColor(0xFFFFFFFF);
+              t.setHaloWidth(2);
+              Graphic gPic = new Graphic(curPoint, s);
+              Graphic gText = new Graphic(curPoint, t);
+              graphicsOverlay.getGraphics().add(gPic);
+              graphicsOverlay.getGraphics().add(gText);
+            }
+          }
+        } else {
+          System.out.println("Non-point geo json object in file");
         }
-        t.setHaloColor(0xFFFFFFFF);
-        t.setHaloWidth(2);
-        Graphic gPic = new Graphic(curPoint, s);
-        Graphic gText = new Graphic(curPoint, t);
-        graphicsOverlay.getGraphics().add(gPic);
-        graphicsOverlay.getGraphics().add(gText);
-      } else {
-        System.out.println("Non-point geo json object in file");
-      }
 
     }
 
@@ -268,7 +277,7 @@ public class GloriaRomanusController{
                 Feature f = features.get(0);
                 String province = (String)f.getAttributes().get("name");
 
-                if (provinceToOwningFactionMap.get(province).equals(humanFaction)){
+                if (getFaction(province).getFactionName().equals(humanFaction)){
                   // province owned by human
                   if (currentlySelectedHumanProvince != null){
                     featureLayer.unselectFeature(currentlySelectedHumanProvince);
@@ -298,22 +307,6 @@ public class GloriaRomanusController{
       }
     });
     return flp;
-  }
-
-  private Map<String, String> getProvinceToOwningFactionMap() throws IOException {
-    String content = Files.readString(Paths.get("src/unsw/gloriaromanus/initial_province_ownership.json"));
-    JSONObject ownership = new JSONObject(content);
-    Map<String, String> m = new HashMap<String, String>();
-    for (String key : ownership.keySet()) {
-      // key will be the faction name
-      JSONArray ja = ownership.getJSONArray(key);
-      // value is province name
-      for (int i = 0; i < ja.length(); i++) {
-        String value = ja.getString(i);
-        m.put(value, key);
-      }
-    }
-    return m;
   }
 
   private ArrayList<String> getHumanProvincesList() throws IOException {
@@ -355,14 +348,23 @@ public class GloriaRomanusController{
     output_terminal.appendText(message+"\n");
   }
 
+  private Map<Town, Faction> getProvincesOwningToEachFaction(List<String> factionNames) throws IOException {
+    List<Faction> factions = allocateTowns(factionNames);
+    
+    Map<Town, Faction> m = new HashMap<Town, Faction>();
+    for (Faction f : factions) {
+      List<Town> towns = f.getTowns();
+      // value is province name
+      for (Town t : towns) {
+        m.put(t, f);
+      }
+    }
+    return m;
+  }
 
-/** TO DO change the String content parse to just read directly for the file in milestone 3 
- * I just did it like this for milestone 2 tests so I could use the Controller functionality 
- */
   // added by jayden - to get a simple list of all the provinces from a json file
-  private static List<String> getProvinceList(String content) throws IOException {
-    // uncomment this for milestone 3
-    //String content = Files.readString(Paths.get("src/unsw/gloriaromanus/Json/list_provinces.json"));
+  private static List<String> getProvinceList() throws IOException {
+    String content = Files.readString(Paths.get("src/unsw/gloriaromanus/Json/list_provinces.json"));
     List<String> list = new ArrayList<String>();
     JSONObject province = new JSONObject(content);
     JSONArray jA = province.getJSONArray("Provinces");
@@ -372,15 +374,14 @@ public class GloriaRomanusController{
     }
     return list;
   }
-  /** TO DO String Content is currently a json escape of initial_provinces.json at the moment
-   *  probably need to change it so it's not parsing the content in and just read the file since 
-   *  I only need to do it once but this works for the backend testing 
-   */
+
   // gets a list of factions and randomly allocates them provinces and creates towns
-  public static List<Faction> allocateTowns(List<String> factions, String content) throws IOException{
+  // the returned list is a list of Factions, that have a list of province towns attached
+  // to each faction
+  public static List<Faction> allocateTowns(List<String> factions) throws IOException{
     Random rand = new Random();
     // remove content for milestone 3 and jsut read file as normal
-    List<String> list = getProvinceList(content);
+    List<String> list = getProvinceList();
     List<Faction> facList = new ArrayList<Faction>();
     for(String f : factions){
       Faction newFac = new Faction(f);
@@ -395,8 +396,22 @@ public class GloriaRomanusController{
     return facList;
   }
 
+  public Faction getFaction(String provinceName) {
+    for (Town t: provinceToOwningFactionMap.keySet()){
+      if (t.getTownName().equals(provinceName)) {
+        return provinceToOwningFactionMap.get(t);
+      }
+    }
+    return null;
+  }
 
-
+  public void setFactionList(List<String> listOfFactionNames){
+    this.factionNames = listOfFactionNames;
+  }
+  public List<String> getFactionList(){
+    List<String> list = new ArrayList<String>();
+    return list;
+  }
   /**
    * Stops and releases all resources used in application.
    */
