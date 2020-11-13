@@ -21,7 +21,19 @@ import java.util.stream.Collectors;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
+import javafx.scene.input.MouseButton;
+import javafx.scene.layout.VBox;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
@@ -80,6 +92,27 @@ public class GloriaRomanusController{
   private FeatureLayer featureLayer_provinces;
 
   private List<String> factionNames = new ArrayList<String>();
+  private UnitFactory unitFactory;
+
+  @FXML
+  private Label topBarFaction;
+  @FXML
+  private Label topBarGold;
+  @FXML
+  private Label topBarWealth;
+  @FXML
+  private Label pWProvinceName;
+  @FXML
+  private Label pWFactionName;
+  @FXML
+  private ComboBox<String> pWRecruitList = new ComboBox<String>();
+  @FXML
+  private ListView<String> pWUnitList = new ListView<String>();
+  @FXML
+  private VBox provinceWindow;
+
+
+
 
   @FXML
   private void initialize() throws JsonParseException, JsonMappingException, IOException {
@@ -100,6 +133,12 @@ public class GloriaRomanusController{
     currentlySelectedEnemyProvince = null;
 
     initializeProvinceLayers();
+
+
+    // Kly's initialise code
+    initialiseProvinceWindow();
+    unitFactory = new UnitFactory();
+
   }
 
   @FXML
@@ -284,8 +323,10 @@ public class GloriaRomanusController{
                   }
                   currentlySelectedHumanProvince = f;
                   invading_province.setText(province);
+                  loadProvinceWindow(province);
                 }
                 else{
+                  closeProvinceWindow();
                   if (currentlySelectedEnemyProvince != null){
                     featureLayer.unselectFeature(currentlySelectedEnemyProvince);
                   }
@@ -405,6 +446,24 @@ public class GloriaRomanusController{
     return null;
   }
 
+  public Faction StringToFaction(String factionName) {
+    for (Faction f: provinceToOwningFactionMap.values()){
+      if (f.getFactionName().equals(factionName)) {
+        return f;
+      }
+    }
+    return null;
+  }
+
+  public Town StringToTown(String province) {
+    for (Town f: provinceToOwningFactionMap.keySet()){
+      if (f.getTownName().equals(province)) {
+        return f;
+      }
+    }
+    return null;
+  }
+
   public void setFactionList(List<String> listOfFactionNames){
     this.factionNames = listOfFactionNames;
   }
@@ -412,6 +471,56 @@ public class GloriaRomanusController{
     List<String> list = new ArrayList<String>();
     return list;
   }
+
+  public void loadProvinceWindow(String province) {
+    clearTownUnitList();
+    pWProvinceName.setText(province);
+    pWFactionName.setText(humanFaction);
+    fillTownUnitList();
+    provinceWindow.setVisible(true);
+  }
+
+  public void fillTownUnitList() {
+    Town town = StringToTown(pWProvinceName.getText());
+    Army a = town.getArmy();
+    for (Unit u: a.getAllUnits()) {
+      pWUnitList.getItems().add(u.toString());
+    }
+  }
+
+  public void clearTownUnitList() {
+    pWUnitList.getItems().clear();
+  }
+
+  @FXML
+  public void closeProvinceWindow() {
+    provinceWindow.setVisible(false);
+  }
+
+  public void initialiseProvinceWindow() {
+    // TODO import from json list of units.
+    String[] units = {"Melee Infantry", "Legionary"};
+    pWRecruitList.getItems().addAll(units);
+    pWUnitList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+  }
+
+  @FXML
+  public void handleRecruitButton() {
+    String unit = pWRecruitList.getValue();
+    Faction faction = StringToFaction(humanFaction);
+    faction.setGold(100000);
+    if (unitFactory.getUnitCost(unit) > faction.getTotalGold()) {
+      Alert alert = new Alert(AlertType.WARNING, "Not enough gold.", ButtonType.OK);
+      alert.showAndWait();
+    } else {
+      clearTownUnitList();
+      Town town = StringToTown(pWProvinceName.getText());
+      town.addUnit(unitFactory.createUnit(unit, faction, town));
+      fillTownUnitList();
+    }
+  }
+
+
   /**
    * Stops and releases all resources used in application.
    */
