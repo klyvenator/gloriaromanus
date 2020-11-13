@@ -277,7 +277,7 @@ public class GloriaRomanusController{
                 Feature f = features.get(0);
                 String province = (String)f.getAttributes().get("name");
 
-                if (provinceToOwningFactionMap.get(province).equals(humanFaction)){
+                if (getFaction(province).getFactionName().equals(humanFaction)){
                   // province owned by human
                   if (currentlySelectedHumanProvince != null){
                     featureLayer.unselectFeature(currentlySelectedHumanProvince);
@@ -394,6 +394,15 @@ public class GloriaRomanusController{
       }
     }
     return facList;
+  }
+
+  public Faction getFaction(String provinceName) {
+    for (Town t: provinceToOwningFactionMap.keySet()){
+      if (t.getTownName().equals(provinceName)) {
+        return provinceToOwningFactionMap.get(t);
+      }
+    }
+    return null;
   }
 
   public void setFactionList(List<String> listOfFactionNames){
