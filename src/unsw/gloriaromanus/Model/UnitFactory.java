@@ -139,4 +139,13 @@ public class UnitFactory implements Factory{
     public List<JSONObject> getBlueprints() {
         return blueprints;
     }
+
+    public int getUnitCost(String name) {
+        for (JSONObject unit: blueprints) {
+            if (name.equals(unit.getString("name"))) {
+                return unit.getInt("cost");
+            } 
+        }
+        return -1;
+    }
 }

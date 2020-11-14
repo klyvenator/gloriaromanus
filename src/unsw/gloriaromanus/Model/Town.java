@@ -2,6 +2,7 @@ package unsw.gloriaromanus.Model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Town {
     
@@ -9,7 +10,7 @@ public class Town {
     public String townName;
     private int wealth;
     private Tax tax;
-    public List<Unit> units;
+    private Map<Unit, Integer> unitsInTraining;
     public Army army;
 
     public Town(Faction faction, String townName){
@@ -88,5 +89,6 @@ public class Town {
     public void updateTaxStatus(String taxType){
         tax.updateTax(taxType);
     }
+
     
 }
