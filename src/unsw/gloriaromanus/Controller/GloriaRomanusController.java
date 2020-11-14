@@ -210,7 +210,7 @@ public class GloriaRomanusController{
     turnCount = 0;
     numPlayers = factionNames.size();
     goal = new Goals(provinceToOwningFactionMap.size());
-    year = 1300;
+    if(year <= 1300){ year = 1300; }
     initialiseTopBar();
 
   }
@@ -746,7 +746,7 @@ public class GloriaRomanusController{
   private void handleSaveGameButton(ActionEvent event){
     String fileName = saveFileName.getText();
     try {
-      new SaveFile(getGameFactionList(), fileName);
+      new SaveFile(getGameFactionList(), fileName, year);
       saveFileName.setVisible(false);
       saveGame.setVisible(false);
       Alert alert = new Alert(AlertType.CONFIRMATION, "Current Game is Saved as "+fileName+".json", ButtonType.OK);
@@ -781,6 +781,9 @@ public class GloriaRomanusController{
   }
   public void setStartScreen(StartScreen startScreen){
     this.startScreen = startScreen;
+  }
+  public void setYear(int gameYear){
+    this.year = gameYear;
   }
   /**
    * Stops and releases all resources used in application.

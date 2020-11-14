@@ -13,9 +13,9 @@ public class SaveFile {
     public File file;
     public List<Faction> factions;
 
-    public SaveFile(List<Faction> factions, String filename) throws IOException {
+    public SaveFile(List<Faction> factions, String filename, int year) throws IOException {
         this.file = createFile(filename);
-        JSONArray jArray = getFileContent(factions);
+        JSONArray jArray = getFileContent(factions, year);
         writeToFile(this.file, jArray);
     }
     public File getFile(){
@@ -50,7 +50,7 @@ public class SaveFile {
     }
     // adds faction and all of the things that are attached to that faction
     // eg Towns, units, wealth, 
-    public JSONArray getFileContent(List<Faction>factions){
+    public JSONArray getFileContent(List<Faction>factions, int year){
         JSONArray jArray = new JSONArray();
 
         for(Faction f : factions){
@@ -69,6 +69,9 @@ public class SaveFile {
             jArray.put(faction);
         }
         //System.out.println(jArray);
+        JSONObject yearObject = new JSONObject();
+        yearObject.put("Current year", year);
+        jArray.put(yearObject);
         return jArray;
     }
     // passes in a list of towns and gets the properties of each town and returns a json array

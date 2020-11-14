@@ -147,7 +147,7 @@ public class GameMenuController {
             finalPlayers.addAll(players);
             // start Game
             //System.out.println(finalPlayers);
-            PlayGloriaRomanus playGame = new PlayGloriaRomanus(stage,finalPlayers, null, startScreen);
+            PlayGloriaRomanus playGame = new PlayGloriaRomanus(stage,finalPlayers, null, startScreen, 0);
             playGame.startGame();
         }
     }
