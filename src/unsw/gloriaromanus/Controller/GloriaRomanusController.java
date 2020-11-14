@@ -1,6 +1,7 @@
 package unsw.gloriaromanus.Controller;
 
 import unsw.gloriaromanus.Model.*;
+import unsw.gloriaromanus.View.*;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
@@ -27,6 +29,8 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -44,6 +48,7 @@ import com.esri.arcgisruntime.data.FeatureTable;
 import com.esri.arcgisruntime.data.GeoPackage;
 import com.esri.arcgisruntime.geometry.Point;
 import com.esri.arcgisruntime.geometry.SpatialReferences;
+import com.esri.arcgisruntime.internal.io.handler.request.ServerContextConcurrentHashMap.HashMapChangedEvent.Action;
 import com.esri.arcgisruntime.layers.FeatureLayer;
 import com.esri.arcgisruntime.loadable.LoadStatus;
 import com.esri.arcgisruntime.mapping.ArcGISMap;
@@ -80,7 +85,7 @@ public class GloriaRomanusController{
   private TextArea output_terminal;
 
   private ArcGISMap map;
-  // changed from Map<String,String>
+
   private Map<Town, Faction> provinceToOwningFactionMap;
 
   private Map<String, Integer> provinceToNumberTroopsMap;
@@ -95,7 +100,14 @@ public class GloriaRomanusController{
   private FeatureLayer featureLayer_provinces;
 
   private List<String> factionNames = new ArrayList<String>();
+
+  private List<Faction> currGameFactionList;
+
   private UnitFactory unitFactory;
+
+  private List<Faction> loadGameFactionList = new ArrayList<Faction>();
+
+  private StartScreen startScreen;
 
   @FXML
   private Label topBarFaction;
@@ -129,14 +141,31 @@ public class GloriaRomanusController{
   private boolean invadeMode;
   private boolean moveMode;
 
-
-
+  // top left options window
+  @FXML
+  private VBox optionsWindow;
+  @FXML 
+  private MenuButton optionsButton;
+  @FXML 
+  private MenuItem saveGameButton;
+  @FXML
+  private MenuItem mainMenuButton;
+  @FXML
+  private TextField saveFileName;
+  @FXML
+  private Button saveGame;
+  @FXML
+  private Button saveGameBackButton;
+  @FXML
+  private Button goToMenuButton;
 
   @FXML
   private void initialize() throws JsonParseException, JsonMappingException, IOException {
     // TODO = you should rely on an object oriented design to determine ownership
-    if( !factionNames.isEmpty() ){
+    if( factionNames != null ){
       provinceToOwningFactionMap = getProvincesOwningToEachFaction(factionNames);
+    }else if( loadGameFactionList != null){
+      provinceToOwningFactionMap =  loadProvincesOwningToEachFaction(loadGameFactionList);
     }
     provinceToNumberTroopsMap = new HashMap<String, Integer>();
     Random r = new Random();
@@ -283,7 +312,6 @@ public class GloriaRomanusController{
               case "Thracian":
                 s = new PictureMarkerSymbol("images/thracian.png");
                 break;
-              // TODO = handle all faction names, and find a better structure...
             }
               t.setHaloColor(0xFFFFFFFF);
               t.setHaloWidth(2);
@@ -442,13 +470,26 @@ public class GloriaRomanusController{
     output_terminal.appendText(message+"\n");
   }
 
+  // takes a string list of faction names, creates the factions and randomly allocates them towns
   private Map<Town, Faction> getProvincesOwningToEachFaction(List<String> factionNames) throws IOException {
-    List<Faction> factions = allocateTowns(factionNames);
+    currGameFactionList = allocateTowns(factionNames);
     
     Map<Town, Faction> m = new HashMap<Town, Faction>();
-    for (Faction f : factions) {
+    for (Faction f : currGameFactionList) {
       List<Town> towns = f.getTowns();
-      // value is province name
+      // sets the Town as key and it's corresponding faction
+      for (Town t : towns) {
+        m.put(t, f);
+      }
+    }
+    return m;
+  }
+  // from save file, loads the faction list and creates the map of a previous game
+  private Map<Town, Faction> loadProvincesOwningToEachFaction(List<Faction> factionList) throws IOException {
+    Map<Town, Faction> m = new HashMap<Town, Faction>();
+    for (Faction f : factionList) {
+      List<Town> towns = f.getTowns();
+      // sets the Town as key and it's corresponding faction
       for (Town t : towns) {
         m.put(t, f);
       }
@@ -480,6 +521,7 @@ public class GloriaRomanusController{
       Faction newFac = new Faction(f);
       facList.add(newFac);
     }
+    // uses the list of provinces and randomly allocates it to the factions chosen by players
     while( !list.isEmpty() ) {
       int randomIndex = rand.nextInt(list.size());
       int randomFactionIndex = rand.nextInt(facList.size());
@@ -523,9 +565,11 @@ public class GloriaRomanusController{
   public void setFactionList(List<String> listOfFactionNames){
     this.factionNames = listOfFactionNames;
   }
-  public List<String> getFactionList(){
-    List<String> list = new ArrayList<String>();
-    return list;
+  public void setLoadGameFactionList(List<Faction> facList){
+    this.loadGameFactionList = facList;
+  }
+  public List<Faction> getGameFactionList(){
+    return currGameFactionList;
   }
 
   public void loadProvinceWindow(String province) {
@@ -602,7 +646,63 @@ public class GloriaRomanusController{
     invadeMode = true;
   }
 
-
+  // after Options is clicked and Save Game selected show text field for input
+  @FXML
+  private void handleSaveGame(ActionEvent event){
+    saveFileName.setVisible(true);
+    saveGame.setVisible(true);
+    saveGameBackButton.setVisible(true);
+  }
+  // if Main menu button is clicked 
+  @FXML
+  private void handleMainMenuButton(ActionEvent event){
+    Alert alert = new Alert(AlertType.WARNING, "All Unsaved Progress Will Be Lost!", ButtonType.OK);
+    alert.showAndWait();
+    goToMenuButton.setVisible(true);
+  }
+  
+  // gets the user input file name for the new save file
+  // saves creates the save file and prints out a confirmation
+  @FXML
+  private void handleSaveGameButton(ActionEvent event){
+    String fileName = saveFileName.getText();
+    try {
+      new SaveFile(getGameFactionList(), fileName);
+      saveFileName.setVisible(false);
+      saveGame.setVisible(false);
+      Alert alert = new Alert(AlertType.CONFIRMATION, "Current Game is Saved as "+fileName+".json", ButtonType.OK);
+      alert.showAndWait();
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+  }
+  @FXML
+  private void handleSaveGameBack(ActionEvent event){
+    saveFileName.setVisible(false);
+    saveGame.setVisible(false);
+    saveGameBackButton.setVisible(false);
+  }
+  @FXML
+  private void handleGoToMenuButton(ActionEvent event){
+    terminate();
+    startScreen.start();
+  }
+  @FXML
+  private void handleExitGame(ActionEvent event){
+    Alert alert = new Alert(AlertType.CONFIRMATION, 
+    "You are about to exit the game all unsaved progress will be lost", 
+    ButtonType.OK, ButtonType.CANCEL);
+    Optional<ButtonType> result = alert.showAndWait();
+    if( result.get() == ButtonType.CANCEL ){ return; }
+    else{
+      terminate();
+      System.exit(0);
+    }
+  }
+  public void setStartScreen(StartScreen startScreen){
+    this.startScreen = startScreen;
+  }
   /**
    * Stops and releases all resources used in application.
    */
