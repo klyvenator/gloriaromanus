@@ -18,7 +18,11 @@ public class FactionTest {
     List<String> givenList = Arrays.asList("faction1","faction2");
     List<String> smallTowns = Arrays.asList("Sydney", "Melbourne", "Brisbane");
 
+<<<<<<< HEAD
 /*     @Test
+=======
+  /*   @Test
+>>>>>>> master
     public void allocateTownsTest() throws IOException {
         // 
         List<Faction> facList = GloriaRomanusController.allocateTowns(givenList, file);
