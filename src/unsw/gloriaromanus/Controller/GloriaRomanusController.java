@@ -202,19 +202,23 @@ public class GloriaRomanusController{
                 // then you could convert it to JavaFX image https://stackoverflow.com/a/30970114
     
                 // you can pass in a filename to create a PictureMarkerSymbol...
-                s = new PictureMarkerSymbol(new Image((new File("images/Celtic_Druid.png")).toURI().toString()));
+                s = new PictureMarkerSymbol("images/barbarian.png");
                 break;
               case "Rome":
                 // you can also pass in a javafx Image to create a PictureMarkerSymbol (different to BufferedImage)
                 s = new PictureMarkerSymbol("images/legionary.png");
                 break;
-              case "Thracian":
-                break;
               case "Celtic Briton":
-                break;
-              case "Egyptian":
+                s = new PictureMarkerSymbol("images/knight.png");
                 break;
               case "Greek":
+                s = new PictureMarkerSymbol("images/greek.png");
+                break;
+              case "Egyptian":
+                s = new PictureMarkerSymbol("images/egyptian.png");
+                break;
+              case "Thracian":
+                s = new PictureMarkerSymbol("images/thracian.png");
                 break;
               // TODO = handle all faction names, and find a better structure...
             }
