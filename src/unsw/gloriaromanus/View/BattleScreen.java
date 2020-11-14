@@ -30,7 +30,8 @@ public class BattleScreen {
     public void start(Army human, Army enemy) {
         controller.setHumanArmy(human);
         controller.setEnemyArmy(enemy);
-        
+        controller.reset();
+
         stage.setTitle(title);
         stage.setScene(scene);
         stage.show();
