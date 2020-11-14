@@ -115,9 +115,19 @@ public class GloriaRomanusController{
     String humanProvince = (String)currentlySelectedHumanProvince.getAttributes().get("name");
     String enemyProvince = (String)currentlySelectedEnemyProvince.getAttributes().get("name");
     
+    // DEBUG
+    Army a = new Army();
+    Army b = new Army();
+
+    Infantry infantry = new Infantry("Archers");
+    a.addUnit(infantry);
+
+    Artillery artillery = new Artillery("Catapults");
+    b.addUnit(artillery);
+
     battleScreen.start(
-      null,//provinceToArmyMap.get(humanProvince),
-      null//provinceToArmyMap.get(enemyProvince)
+      a,//provinceToArmyMap.get(humanProvince),
+      b//provinceToArmyMap.get(enemyProvince)
     );
   }
 
