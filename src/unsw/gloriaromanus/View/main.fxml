@@ -67,27 +67,12 @@
     </VBox>
 
 <!-- TOP BAR-->
-   <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="23.0" prefWidth="402.0" spacing="10.0" styleClass="panel-region" StackPane.alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="23.0" prefWidth="447.0" spacing="10.0" styleClass="panel-region" StackPane.alignment="TOP_RIGHT" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <Label fx:id="topBarFaction" prefHeight="17.0" prefWidth="104.0" text="Faction" textFill="WHITE" />
-            <HBox prefHeight="21.0" prefWidth="88.0">
-               <children>
-              <Label prefHeight="17.0" prefWidth="32.0" text="Gold: " textFill="WHITE" />
-                  <Label fx:id="topBarGold" prefHeight="17.0" prefWidth="49.0" text="0" textFill="WHITE" />
-               </children>
-            </HBox>
-            <HBox prefHeight="21.0" prefWidth="107.0">
-               <children>
-              <Label prefHeight="17.0" prefWidth="88.0" text="Wealth:" textFill="WHITE" />
-                  <Label fx:id="topBarWealth" prefHeight="17.0" prefWidth="109.0" text="0" textFill="WHITE" />
-               </children>
-            </HBox>
-            <HBox prefHeight="21.0" prefWidth="68.0">
-               <children>
-                  <Label text="Year: " textFill="WHITE" />
-                  <Label fx:id="topBarYear" text="2020" textFill="WHITE" />
-               </children>
-            </HBox>
+        <Label fx:id="topBarFaction" text="Faction" />
+        <Label fx:id="topBarGold" prefHeight="17.0" prefWidth="84.0" text="Treasury: 0" />
+        <Label fx:id="topBarWealth" prefHeight="17.0" prefWidth="88.0" text="Wealth: 0" />
+        <Label fx:id="topBarGoal" prefHeight="17.0" prefWidth="194.0" text="Goals: Conquer and Wealth Or Gold" />
     </children>
     <padding>
         <Insets left="5.0" top="2.0" />
@@ -104,6 +89,7 @@
                 </Background>
             </background>
     </HBox>
+
 
 <!--BOTTOM WINDOW (Province Info)-->
 <VBox fx:id="provinceWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="225.0" prefWidth="200.0" styleClass="panel-region" visible="false" StackPane.alignment="BOTTOM_RIGHT" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
@@ -170,30 +156,25 @@
 </VBox>
    <VBox alignment="TOP_RIGHT" fillWidth="false" layoutX="150.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="175.0" prefWidth="150.0" StackPane.alignment="TOP_RIGHT">
       <children>
-         <HBox alignment="BOTTOM_LEFT" prefHeight="100.0" prefWidth="200.0">
-            <children>
-            <Button mnemonicParsing="false" onAction="#handleEndTurnButton" text="End Turn" />
-               <MenuButton fx:id="optionsButton" alignment="TOP_RIGHT" mnemonicParsing="false" opacity="0.65" text="Options">
-                  <items>
-                     <MenuItem fx:id="saveGameButton" mnemonicParsing="false" onAction="#handleSaveGame" text="Save Game" />
-                     <MenuItem fx:id="mainMenuButton" mnemonicParsing="false" onAction="#handleMainMenuButton" text="Main Menu" />
-                     <MenuItem fx:id="exitGame" mnemonicParsing="false" onAction="#handleExitGame" text="Exit Game" />
-                  </items>
-                  <cursor>
-                     <Cursor fx:constant="HAND" />
-                  </cursor>
-                  <effect>
-                     <DropShadow />
-                  </effect>
-                  <opaqueInsets>
-                     <Insets />
-                  </opaqueInsets>
-                  <HBox.margin>
-                     <Insets left="5.0" />
-                  </HBox.margin>
-               </MenuButton>
-            </children>
-         </HBox>
+         <MenuButton fx:id="optionsButton" alignment="TOP_RIGHT" mnemonicParsing="false" opacity="0.65" text="Options">
+            <items>
+               <MenuItem fx:id="saveGameButton" mnemonicParsing="false" onAction="#handleSaveGame" text="Save Game" />
+               <MenuItem fx:id="mainMenuButton" mnemonicParsing="false" onAction="#handleMainMenuButton" text="Main Menu" />
+               <MenuItem fx:id="exitGame" mnemonicParsing="false" onAction="#handleExitGame" text="Exit Game" />
+            </items>
+            <cursor>
+               <Cursor fx:constant="HAND" />
+            </cursor>
+            <effect>
+               <DropShadow />
+            </effect>
+            <opaqueInsets>
+               <Insets />
+            </opaqueInsets>
+            <VBox.margin>
+               <Insets top="25.0" />
+            </VBox.margin>
+         </MenuButton>
          <Button fx:id="goToMenuButton" mnemonicParsing="false" onAction="#handleGoToMenuButton" text="Go to Main Menu" visible="false">
             <cursor>
                <Cursor fx:constant="HAND" />

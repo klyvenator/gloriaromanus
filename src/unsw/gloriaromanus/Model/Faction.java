@@ -3,20 +3,15 @@ package unsw.gloriaromanus.Model;
 import java.util.ArrayList;
 import java.util.List;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-
 public class Faction {
     private String name;
-    private IntegerProperty totalWealth;
-    private IntegerProperty totalGold;
+    private int totalWealth;
+    private int totalGold;
     private List<Town> towns;
 
     public Faction(String name){
-        totalGold = new SimpleIntegerProperty();
-        totalGold.set(5000);
-        totalWealth = new SimpleIntegerProperty();
-        totalWealth.set(5000);
+        this.totalGold = 0;
+        this.totalWealth = 0;
         this.name = name;
         this.towns = new ArrayList<>();
     }
@@ -37,61 +32,28 @@ public class Faction {
             tax += t.wealthAfterTax();
             total += t.getWealth();
         }
-        totalGold.set(totalGold.get() + tax);
-        totalWealth.set(total);
+        this.totalGold += tax;
+        this.totalWealth = total;
     }
     public void updateWealth(){
         calculateTotalWealth();
     }
     public void setGold(int gold){
-        totalGold.set(gold);
+        this.totalGold = gold;
     }
     public void setwealth(int wealth){
-        totalWealth.set(wealth);
+        this.totalWealth = wealth;
     }
     public int getTotalGold(){
-        return totalGold.get();
+        return this.totalGold;
     }
     public int getTotalWealth(){
-        return totalWealth.get();
+        return this.totalWealth;
     }
     public String getFactionName(){
         return this.name;
     }
     public List<Town> getTowns(){
         return this.towns;
-    }
-
-    public void reduceTrainingCount() {
-        List<Unit> removeList = new ArrayList<Unit>();
-        for (Town t: towns) {
-            for(Unit u: t.getUnitsInTraining().keySet()) {
-                Integer i = t.getUnitsInTraining().get(u);
-                i--;
-                if (i == 0) {
-                    removeList.add(u);
-                    t.getArmy().addUnit(u);
-                }
-            }
-            // Avoid concurrency exception
-            for (Unit u2 : removeList) {
-                t.getUnitsInTraining().remove(u2);
-            }
-        }
-
-
-    }
-
-    public IntegerProperty getGoldProperty() {
-        return totalGold;
-    }
-
-    public IntegerProperty getWealthProperty() {
-        return totalWealth;
-    }
-
-    public void endTurnUpdate() {
-        calculateTotalWealth();
-        reduceTrainingCount();
     }
 }

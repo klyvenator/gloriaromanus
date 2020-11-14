@@ -1,7 +1,6 @@
 package unsw.gloriaromanus.Model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,14 +19,12 @@ public class Town {
         this.tax = new Tax(); // set tax rate to low
         this.wealth = 10; // set initial province wealth to 10
         this.army = new Army();
-        unitsInTraining = new HashMap<Unit, Integer>();
     }
     public Town(String townName) {
         this.faction = null;
         this.townName = townName;
         this.tax = new Tax(); // set tax rate to low
         this.wealth = 10; // set initial province wealth to 10
-        unitsInTraining = new HashMap<Unit, Integer>();
     }
     public void setWealth(int wealth){
         this.wealth = wealth;
@@ -91,14 +88,6 @@ public class Town {
     }
     public void updateTaxStatus(String taxType){
         tax.updateTax(taxType);
-    }
-
-    public Map<Unit, Integer> getUnitsInTraining() {
-        return unitsInTraining;
-    }
-
-    public void trainUnit(Unit u) {
-        unitsInTraining.put(u, u.getTurnsToMake());
     }
 
     
