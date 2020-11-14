@@ -47,6 +47,8 @@ public class LoadFileController {
     @FXML
 	private void handleNextButton(ActionEvent event) {
         fileToLoad = chooseFile.getValue();
+        LoadFile newLoadFile = new LoadFile(fileToLoad);
+        List<Faction> facList = newLoadFile.getFactionList();
     }
 
     @FXML
