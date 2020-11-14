@@ -63,16 +63,23 @@ public class Faction {
     }
 
     public void reduceTrainingCount() {
+        List<Unit> removeList = new ArrayList<Unit>();
         for (Town t: towns) {
             for(Unit u: t.getUnitsInTraining().keySet()) {
                 Integer i = t.getUnitsInTraining().get(u);
                 i--;
-                if (i <= 0) {
-                    t.getUnitsInTraining().remove(u);
+                if (i == 0) {
+                    removeList.add(u);
                     t.getArmy().addUnit(u);
                 }
             }
+            // Avoid concurrency exception
+            for (Unit u2 : removeList) {
+                t.getUnitsInTraining().remove(u2);
+            }
         }
+
+
     }
 
     public IntegerProperty getGoldProperty() {

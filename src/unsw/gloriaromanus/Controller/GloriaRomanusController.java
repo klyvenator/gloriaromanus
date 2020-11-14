@@ -127,13 +127,16 @@ public class GloriaRomanusController{
   private Label sWProvinceName;
   @FXML
   private Label sWFactionName;
+  @FXML 
+  private Label topBarYear;
 
   private String targetProvince;
   private boolean invadeMode;
   private boolean moveMode;
   private Goals goal;
-  private StringProperty humanFacGold;
-
+  private int year;
+  private int turnCount;
+  private int numPlayers;
 
 
 
@@ -165,7 +168,12 @@ public class GloriaRomanusController{
     targetProvince = null;
     invadeMode = false;
     moveMode = false;
+    turnCount = 0;
+    numPlayers = factionNames.size();
     goal = new Goals(provinceToOwningFactionMap.size());
+    year = 1300;
+    initialiseTopBar();
+
   }
 /* USE SWINVADEBUTTON INSTEAD.
 
@@ -296,6 +304,13 @@ public class GloriaRomanusController{
     mapView.getGraphicsOverlays().add(graphicsOverlay);
   }
 
+  private void closeWindows() {
+    invadeMode = false;
+    moveMode = false;
+    closeProvinceWindow();
+    secondWindow.setVisible(false);
+  }
+
   private FeatureLayer createFeatureLayer(GeoPackage gpkg_provinces) {
     FeatureTable geoPackageTable_provinces = gpkg_provinces.getGeoPackageFeatureTables().get(0);
 
@@ -313,11 +328,8 @@ public class GloriaRomanusController{
     mapView.setOnMouseClicked(e -> {
       
       if (e.getButton() == MouseButton.SECONDARY) {
-        invadeMode = false;
-        moveMode = false;
-        closeProvinceWindow();
-        secondWindow.setVisible(false);
         // TODO = Turn this into observer.
+        closeWindows();
       }
 
       // was the main button pressed?
@@ -554,7 +566,6 @@ public class GloriaRomanusController{
   public void handleRecruitButton() {
     String unit = pWRecruitList.getValue();
     Faction faction = StringToFaction(humanFaction);
-    faction.setGold(10000);
     if (unitFactory.getUnitCost(unit) > faction.getTotalGold()) {
       Alert alert = new Alert(AlertType.WARNING, "Not enough gold.", ButtonType.OK);
       alert.showAndWait();
@@ -565,7 +576,13 @@ public class GloriaRomanusController{
       } else {
         clearTownUnitList();
         Town town = StringToTown(pWProvinceName.getText());
-        town.addUnit(unitFactory.createUnit(unit, faction, town));
+        Unit unitObject = unitFactory.createUnit(unit, faction, town);
+        faction.setGold(faction.getTotalGold() - unitObject.getCost());
+        if (unitObject.getTurnsToMake() > 0) {
+          town.trainUnit(unitObject);
+        } else {
+          town.addUnit(unitObject);
+        }
         fillTownUnitList();
       }
     }
@@ -595,6 +612,7 @@ public class GloriaRomanusController{
 
   @FXML
   public void handleEndTurnButton() {
+    closeWindows();
     Faction f = StringToFaction(humanFaction);
     f.endTurnUpdate();
     if (goal.checkWin(f)) {
@@ -602,6 +620,12 @@ public class GloriaRomanusController{
       alert.showAndWait(); 
       terminate();
     } else {
+      if (turnCount == numPlayers - 1) {
+        year++;
+        turnCount = 0;
+      } else {
+        turnCount++;
+      }
       setNextFaction();
     }
   }
@@ -620,6 +644,14 @@ public class GloriaRomanusController{
     } catch (Exception indexOutOfBoundsException) {
       humanFaction = factionNames.get(0);
     }
+    initialiseTopBar();
+  }
+
+  public void initialiseTopBar() {
+    topBarGold.textProperty().bind(StringToFaction(humanFaction).getGoldProperty().asString());
+    topBarWealth.textProperty().bind(StringToFaction(humanFaction).getWealthProperty().asString());
+    topBarFaction.setText(humanFaction);
+    topBarYear.setText(Integer.toString(year));
   }
 
   /**
