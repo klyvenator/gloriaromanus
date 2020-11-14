@@ -486,6 +486,7 @@ public class GloriaRomanusController{
   }
   // from save file, loads the faction list and creates the map of a previous game
   private Map<Town, Faction> loadProvincesOwningToEachFaction(List<Faction> factionList) throws IOException {
+    currGameFactionList = factionList;
     Map<Town, Faction> m = new HashMap<Town, Faction>();
     for (Faction f : factionList) {
       List<Town> towns = f.getTowns();
