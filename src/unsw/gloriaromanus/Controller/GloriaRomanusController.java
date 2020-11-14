@@ -18,6 +18,9 @@ import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
@@ -128,6 +131,8 @@ public class GloriaRomanusController{
   private String targetProvince;
   private boolean invadeMode;
   private boolean moveMode;
+  private Goals goal;
+  private StringProperty humanFacGold;
 
 
 
@@ -135,9 +140,9 @@ public class GloriaRomanusController{
   @FXML
   private void initialize() throws JsonParseException, JsonMappingException, IOException {
     // TODO = you should rely on an object oriented design to determine ownership
-    if( !factionNames.isEmpty() ){
-      provinceToOwningFactionMap = getProvincesOwningToEachFaction(factionNames);
-    }
+
+    provinceToOwningFactionMap = getProvincesOwningToEachFaction(factionNames);
+
     provinceToNumberTroopsMap = new HashMap<String, Integer>();
     Random r = new Random();
     for (Town town : provinceToOwningFactionMap.keySet()) {
@@ -160,7 +165,7 @@ public class GloriaRomanusController{
     targetProvince = null;
     invadeMode = false;
     moveMode = false;
-
+    goal = new Goals(provinceToOwningFactionMap.size());
   }
 /* USE SWINVADEBUTTON INSTEAD.
 
@@ -265,23 +270,11 @@ public class GloriaRomanusController{
                 // then you could convert it to JavaFX image https://stackoverflow.com/a/30970114
     
                 // you can pass in a filename to create a PictureMarkerSymbol...
-                s = new PictureMarkerSymbol("images/barbarian.png");
+                s = new PictureMarkerSymbol(new Image((new File("images/Celtic_Druid.png")).toURI().toString()));
                 break;
               case "Rome":
                 // you can also pass in a javafx Image to create a PictureMarkerSymbol (different to BufferedImage)
                 s = new PictureMarkerSymbol("images/legionary.png");
-                break;
-              case "Celtic Briton":
-                s = new PictureMarkerSymbol("images/knight.png");
-                break;
-              case "Greek":
-                s = new PictureMarkerSymbol("images/greek.png");
-                break;
-              case "Egyptian":
-                s = new PictureMarkerSymbol("images/egyptian.png");
-                break;
-              case "Thracian":
-                s = new PictureMarkerSymbol("images/thracian.png");
                 break;
               // TODO = handle all faction names, and find a better structure...
             }
@@ -474,21 +467,18 @@ public class GloriaRomanusController{
   // to each faction
   public static List<Faction> allocateTowns(List<String> factions) throws IOException{
     Random rand = new Random();
+    // remove content for milestone 3 and jsut read file as normal
     List<String> list = getProvinceList();
     List<Faction> facList = new ArrayList<Faction>();
     for(String f : factions){
       Faction newFac = new Faction(f);
       facList.add(newFac);
-    }
-    while( !list.isEmpty() ) {
-      int randomIndex = rand.nextInt(list.size());
-      int randomFactionIndex = rand.nextInt(facList.size());
-      
-      String randomTown = list.get(randomIndex);
-      Faction randomFaction = facList.get(randomFactionIndex);
-
-      randomFaction.addTown(randomFaction, randomTown);
-      list.remove(randomIndex);
+      for (int i = 0; i < list.size(); i++) {
+        int randomIndex = rand.nextInt(list.size());
+        String randomElement = list.get(randomIndex);
+        newFac.addTown(newFac, randomElement);
+        list.remove(randomIndex);
+      }
     }
     return facList;
   }
@@ -564,6 +554,7 @@ public class GloriaRomanusController{
   public void handleRecruitButton() {
     String unit = pWRecruitList.getValue();
     Faction faction = StringToFaction(humanFaction);
+    faction.setGold(10000);
     if (unitFactory.getUnitCost(unit) > faction.getTotalGold()) {
       Alert alert = new Alert(AlertType.WARNING, "Not enough gold.", ButtonType.OK);
       alert.showAndWait();
@@ -594,7 +585,7 @@ public class GloriaRomanusController{
   public void handlesWConfirmButton() {
     Army yourArmy = StringToTown(pWProvinceName.getText()).getArmy();
     Army enemyArmy = StringToTown(targetProvince).getArmy();
-    //INVADE CODE FOR JIBI
+    //INVADE CODE FOR JIBI, AFTER BATTLE HAS FINISHED SET invadeMode=false
 
   }
   @FXML
@@ -602,6 +593,34 @@ public class GloriaRomanusController{
     invadeMode = true;
   }
 
+  @FXML
+  public void handleEndTurnButton() {
+    Faction f = StringToFaction(humanFaction);
+    f.endTurnUpdate();
+    if (goal.checkWin(f)) {
+      Alert alert = new Alert(AlertType.WARNING, "Congrats you have won!", ButtonType.OK);
+      alert.showAndWait(); 
+      terminate();
+    } else {
+      setNextFaction();
+    }
+  }
+
+  public void setNextFaction() {
+    int index = 0;
+    for (String f : factionNames) {
+      if (f.equals(humanFaction)) {
+        index = factionNames.indexOf(f);
+        break;
+      } 
+    }
+    try {
+      index++;
+      humanFaction = factionNames.get(index);
+    } catch (Exception indexOutOfBoundsException) {
+      humanFaction = factionNames.get(0);
+    }
+  }
 
   /**
    * Stops and releases all resources used in application.
@@ -612,4 +631,5 @@ public class GloriaRomanusController{
       mapView.dispose();
     }
   }
+
 }

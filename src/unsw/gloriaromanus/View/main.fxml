@@ -64,12 +64,27 @@
     </VBox>
 
 <!-- TOP BAR-->
-    <HBox StackPane.alignment="TOP_RIGHT" styleClass="panel-region" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="23.0" prefWidth="447.0" spacing="10.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="23.0" prefWidth="402.0" spacing="10.0" styleClass="panel-region" StackPane.alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <Label fx:id="topBarFaction" text="Faction"/>
-        <Label prefHeight="17.0" fx:id="topBarGold" prefWidth="84.0" text="Treasury: 0"/>
-        <Label prefHeight="17.0" fx:id="topBarWealth" prefWidth="88.0" text="Wealth: 0"/>
-        <Label prefHeight="17.0" fx:id="topBarGoal" prefWidth="194.0" text="Goals: Conquer and Wealth Or Gold"/>
+        <Label fx:id="topBarFaction" prefHeight="17.0" prefWidth="104.0" text="Faction" textFill="WHITE" />
+            <HBox prefHeight="21.0" prefWidth="88.0">
+               <children>
+              <Label fx:id="topBarGold" prefHeight="17.0" prefWidth="32.0" text="Gold: " textFill="WHITE" />
+                  <Label prefHeight="17.0" prefWidth="49.0" text="0" textFill="WHITE" />
+               </children>
+            </HBox>
+            <HBox prefHeight="21.0" prefWidth="107.0">
+               <children>
+              <Label fx:id="topBarWealth" prefHeight="17.0" prefWidth="88.0" text="Wealth:" textFill="WHITE" />
+                  <Label prefHeight="17.0" prefWidth="109.0" text="0" textFill="WHITE" />
+               </children>
+            </HBox>
+            <HBox prefHeight="21.0" prefWidth="68.0">
+               <children>
+                  <Label text="Year: " textFill="WHITE" />
+                  <Label text="2020" textFill="WHITE" />
+               </children>
+            </HBox>
     </children>
     <padding>
         <Insets left="5.0" top="2.0" />
@@ -79,7 +94,7 @@
                     <fills>
                         <BackgroundFill>
                             <fill>
-                                <Color opacity="0.8"/>
+                                <Color opacity="0.8" />
                             </fill>
                         </BackgroundFill>
                     </fills>
@@ -87,6 +102,12 @@
             </background>
     </HBox>
 
+<!-- END TURN BUTTON-->
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="56.0" prefWidth="156.0" StackPane.alignment="TOP_RIGHT" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Button mnemonicParsing="false" onAction="#handleEndTurnButton" text="End Turn" />
+   </children>
+</VBox>
 
 <!--BOTTOM WINDOW (Province Info)-->
 <VBox fx:id="provinceWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="380.0" prefWidth="219.0" styleClass="panel-region" visible="false" StackPane.alignment="BOTTOM_RIGHT" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
