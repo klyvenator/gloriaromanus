@@ -84,9 +84,9 @@ public class GloriaRomanusController{
   @FXML
   private void initialize() throws JsonParseException, JsonMappingException, IOException {
     // TODO = you should rely on an object oriented design to determine ownership
-
-    provinceToOwningFactionMap = getProvincesOwningToEachFaction(factionNames);
-
+    if( !factionNames.isEmpty() ){
+      provinceToOwningFactionMap = getProvincesOwningToEachFaction(factionNames);
+    }
     provinceToNumberTroopsMap = new HashMap<String, Integer>();
     Random r = new Random();
     for (Town town : provinceToOwningFactionMap.keySet()) {
@@ -202,11 +202,23 @@ public class GloriaRomanusController{
                 // then you could convert it to JavaFX image https://stackoverflow.com/a/30970114
     
                 // you can pass in a filename to create a PictureMarkerSymbol...
-                s = new PictureMarkerSymbol(new Image((new File("images/Celtic_Druid.png")).toURI().toString()));
+                s = new PictureMarkerSymbol("images/barbarian.png");
                 break;
               case "Rome":
                 // you can also pass in a javafx Image to create a PictureMarkerSymbol (different to BufferedImage)
                 s = new PictureMarkerSymbol("images/legionary.png");
+                break;
+              case "Celtic Briton":
+                s = new PictureMarkerSymbol("images/knight.png");
+                break;
+              case "Greek":
+                s = new PictureMarkerSymbol("images/greek.png");
+                break;
+              case "Egyptian":
+                s = new PictureMarkerSymbol("images/egyptian.png");
+                break;
+              case "Thracian":
+                s = new PictureMarkerSymbol("images/thracian.png");
                 break;
               // TODO = handle all faction names, and find a better structure...
             }
@@ -380,18 +392,21 @@ public class GloriaRomanusController{
   // to each faction
   public static List<Faction> allocateTowns(List<String> factions) throws IOException{
     Random rand = new Random();
-    // remove content for milestone 3 and jsut read file as normal
     List<String> list = getProvinceList();
     List<Faction> facList = new ArrayList<Faction>();
     for(String f : factions){
       Faction newFac = new Faction(f);
       facList.add(newFac);
-      for (int i = 0; i < list.size(); i++) {
-        int randomIndex = rand.nextInt(list.size());
-        String randomElement = list.get(randomIndex);
-        newFac.addTown(newFac, randomElement);
-        list.remove(randomIndex);
-      }
+    }
+    while( !list.isEmpty() ) {
+      int randomIndex = rand.nextInt(list.size());
+      int randomFactionIndex = rand.nextInt(facList.size());
+      
+      String randomTown = list.get(randomIndex);
+      Faction randomFaction = facList.get(randomFactionIndex);
+
+      randomFaction.addTown(randomFaction, randomTown);
+      list.remove(randomIndex);
     }
     return facList;
   }
