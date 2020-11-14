@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import unsw.gloriaromanus.Controller.*;
+import unsw.gloriaromanus.Model.*;
 
 public class PlayGloriaRomanus{
 
@@ -17,11 +18,13 @@ public class PlayGloriaRomanus{
   private Scene scene;
   private Stage stage;
 
-  public PlayGloriaRomanus(Stage stage, List<String> listOfFactionNames) throws IOException {
+  public PlayGloriaRomanus(Stage stage, List<String> listOfFactionNames, List<Faction> facList) throws IOException {
     this.stage = stage;
 
     controller = new GloriaRomanusController();
     controller.setFactionList(listOfFactionNames);
+    controller.setFactionLoadGameFactionList(facList);
+    
     FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
     loader.setController(controller);
 

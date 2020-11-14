@@ -68,8 +68,7 @@ public class LoadFile {
             for(int i = 0; i < towns.length(); i++){
                 jObject = towns.getJSONObject(i);
                 createTown(jObject,fac);
-            }
-            
+            }     
         }
     }
 
