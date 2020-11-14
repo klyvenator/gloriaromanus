@@ -20,6 +20,9 @@ import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
@@ -99,7 +102,7 @@ public class GloriaRomanusController{
 
   private FeatureLayer featureLayer_provinces;
 
-  private List<String> factionNames = new ArrayList<String>();
+  private List<String> factionNames;
 
   private List<Faction> currGameFactionList;
 
@@ -136,12 +139,14 @@ public class GloriaRomanusController{
   private Label sWProvinceName;
   @FXML
   private Label sWFactionName;
+  @FXML 
+  private Label topBarYear;
 
   private String targetProvince;
   private boolean invadeMode;
   private boolean moveMode;
 
-  // top left options window
+  // top right options window
   @FXML
   private VBox optionsWindow;
   @FXML 
@@ -158,6 +163,12 @@ public class GloriaRomanusController{
   private Button saveGameBackButton;
   @FXML
   private Button goToMenuButton;
+  private Goals goal;
+  private int year;
+  private int turnCount;
+  private int numPlayers;
+
+
 
   @FXML
   private void initialize() throws JsonParseException, JsonMappingException, IOException {
@@ -166,6 +177,13 @@ public class GloriaRomanusController{
       provinceToOwningFactionMap = getProvincesOwningToEachFaction(factionNames);
     }else if( loadGameFactionList != null){
       provinceToOwningFactionMap =  loadProvincesOwningToEachFaction(loadGameFactionList);
+    }
+    // this will fix the factionNames issue
+    for (Faction f: provinceToOwningFactionMap.values()){
+      factionNames = new ArrayList<String>();
+      if (!factionNames.contains(f.getFactionName())) {
+        factionNames.add(f.getFactionName());
+      }
     }
     provinceToNumberTroopsMap = new HashMap<String, Integer>();
     Random r = new Random();
@@ -189,6 +207,11 @@ public class GloriaRomanusController{
     targetProvince = null;
     invadeMode = false;
     moveMode = false;
+    turnCount = 0;
+    numPlayers = factionNames.size();
+    goal = new Goals(provinceToOwningFactionMap.size());
+    year = 1300;
+    initialiseTopBar();
 
   }
 /* USE SWINVADEBUTTON INSTEAD.
@@ -331,6 +354,13 @@ public class GloriaRomanusController{
     mapView.getGraphicsOverlays().add(graphicsOverlay);
   }
 
+  private void closeWindows() {
+    invadeMode = false;
+    moveMode = false;
+    closeProvinceWindow();
+    secondWindow.setVisible(false);
+  }
+
   private FeatureLayer createFeatureLayer(GeoPackage gpkg_provinces) {
     FeatureTable geoPackageTable_provinces = gpkg_provinces.getGeoPackageFeatureTables().get(0);
 
@@ -348,11 +378,8 @@ public class GloriaRomanusController{
     mapView.setOnMouseClicked(e -> {
       
       if (e.getButton() == MouseButton.SECONDARY) {
-        invadeMode = false;
-        moveMode = false;
-        closeProvinceWindow();
-        secondWindow.setVisible(false);
         // TODO = Turn this into observer.
+        closeWindows();
       }
 
       // was the main button pressed?
@@ -486,6 +513,7 @@ public class GloriaRomanusController{
   }
   // from save file, loads the faction list and creates the map of a previous game
   private Map<Town, Faction> loadProvincesOwningToEachFaction(List<Faction> factionList) throws IOException {
+    currGameFactionList = factionList;
     Map<Town, Faction> m = new HashMap<Town, Faction>();
     for (Faction f : factionList) {
       List<Town> towns = f.getTowns();
@@ -515,6 +543,7 @@ public class GloriaRomanusController{
   // to each faction
   public static List<Faction> allocateTowns(List<String> factions) throws IOException{
     Random rand = new Random();
+    // remove content for milestone 3 and jsut read file as normal
     List<String> list = getProvinceList();
     List<Faction> facList = new ArrayList<Faction>();
     for(String f : factions){
@@ -618,7 +647,13 @@ public class GloriaRomanusController{
       } else {
         clearTownUnitList();
         Town town = StringToTown(pWProvinceName.getText());
-        town.addUnit(unitFactory.createUnit(unit, faction, town));
+        Unit unitObject = unitFactory.createUnit(unit, faction, town);
+        faction.setGold(faction.getTotalGold() - unitObject.getCost());
+        if (unitObject.getTurnsToMake() > 0) {
+          town.trainUnit(unitObject);
+        } else {
+          town.addUnit(unitObject);
+        }
         fillTownUnitList();
       }
     }
@@ -638,12 +673,56 @@ public class GloriaRomanusController{
   public void handlesWConfirmButton() {
     Army yourArmy = StringToTown(pWProvinceName.getText()).getArmy();
     Army enemyArmy = StringToTown(targetProvince).getArmy();
-    //INVADE CODE FOR JIBI
+    //INVADE CODE FOR JIBI, AFTER BATTLE HAS FINISHED SET invadeMode=false
 
   }
   @FXML
   public void handleInvadeButton() {
     invadeMode = true;
+  }
+
+  @FXML
+  public void handleEndTurnButton() {
+    closeWindows();
+    Faction f = StringToFaction(humanFaction);
+    f.endTurnUpdate();
+    if (goal.checkWin(f)) {
+      Alert alert = new Alert(AlertType.WARNING, "Congrats you have won!", ButtonType.OK);
+      alert.showAndWait(); 
+      terminate();
+    } else {
+      if (turnCount == numPlayers - 1) {
+        year++;
+        turnCount = 0;
+      } else {
+        turnCount++;
+      }
+      setNextFaction();
+    }
+  }
+
+  public void setNextFaction() {
+    int index = 0;
+    for (String f : factionNames) {
+      if (f.equals(humanFaction)) {
+        index = factionNames.indexOf(f);
+        break;
+      } 
+    }
+    try {
+      index++;
+      humanFaction = factionNames.get(index);
+    } catch (Exception indexOutOfBoundsException) {
+      humanFaction = factionNames.get(0);
+    }
+    initialiseTopBar();
+  }
+
+  public void initialiseTopBar() {
+    topBarGold.textProperty().bind(StringToFaction(humanFaction).getGoldProperty().asString());
+    topBarWealth.textProperty().bind(StringToFaction(humanFaction).getWealthProperty().asString());
+    topBarFaction.setText(humanFaction);
+    topBarYear.setText(Integer.toString(year));
   }
 
   // after Options is clicked and Save Game selected show text field for input
@@ -712,4 +791,5 @@ public class GloriaRomanusController{
       mapView.dispose();
     }
   }
+
 }
