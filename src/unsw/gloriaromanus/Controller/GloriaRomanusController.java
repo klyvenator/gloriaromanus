@@ -20,9 +20,7 @@ import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.StringProperty;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
@@ -179,8 +177,8 @@ public class GloriaRomanusController{
       provinceToOwningFactionMap =  loadProvincesOwningToEachFaction(loadGameFactionList);
     }
     // this will fix the factionNames issue
+    factionNames = new ArrayList<String>();
     for (Faction f: provinceToOwningFactionMap.values()){
-      factionNames = new ArrayList<String>();
       if (!factionNames.contains(f.getFactionName())) {
         factionNames.add(f.getFactionName());
       }

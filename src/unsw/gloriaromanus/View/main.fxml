@@ -106,7 +106,7 @@
     </HBox>
 
 <!--BOTTOM WINDOW (Province Info)-->
-<VBox fx:id="provinceWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="225.0" prefWidth="200.0" styleClass="panel-region" visible="false" StackPane.alignment="BOTTOM_RIGHT" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="provinceWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="200.0" styleClass="panel-region" visible="false" StackPane.alignment="BOTTOM_RIGHT" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
             <HBox prefHeight="19.0" prefWidth="219.0">
                <children>
@@ -117,7 +117,7 @@
         <Label fx:id="pWProvinceName" text="Province Name" />
       <HBox prefHeight="19.0" prefWidth="209.0">
          <children>
-            <Label prefHeight="17.0" prefWidth="123.0" text="Province Wealth:  " />
+            <Label prefHeight="17.0" prefWidth="150.0" text="Province Wealth:  " />
             <Label fx:id="pWWealth" prefHeight="17.0" prefWidth="136.0" text="0" />
          </children>
       </HBox>
