@@ -1,23 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-<?import com.esri.arcgisruntime.mapping.view.MapView?>
-<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.Background?>
 <?import javafx.scene.layout.BackgroundFill?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
-<?import javafx.geometry.Insets?>
-<StackPane xmlns:fx="http://javafx.com/fxml"
-           stylesheets="/unsw/gloriaromanus/style.css">
-    <MapView fx:id="mapView"/>
+
+<?import com.esri.arcgisruntime.mapping.view.MapView?>
+
+<StackPane prefHeight="380.0" prefWidth="450.0" stylesheets="/unsw/gloriaromanus/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <MapView fx:id="mapView" />
 
 
 
@@ -38,38 +41,38 @@
             </Background>
         </background>
       <children>
-         <Label text="YOUR PROVINCE" fx:id="sWOwnershipLabel" />
-         <Label text="Province Name" fx:id="sWProvinceName" />
+         <Label fx:id="sWOwnershipLabel" text="YOUR PROVINCE" />
+         <Label fx:id="sWProvinceName" text="Province Name" />
         <HBox prefHeight="23.0" prefWidth="199.0">
             <children>
                <Label text="Owned by: " />
-               <Label text="FactionName" fx:id="sWFactionName" />
+               <Label fx:id="sWFactionName" text="FactionName" />
             </children>
          </HBox>
          <HBox prefHeight="11.0" prefWidth="253.0">
             <children>
                <Label text="Tax Rate: " />
-               <Label prefHeight="17.0" prefWidth="136.0" fx:id="sWTaxRate" text="LOW" />
+               <Label fx:id="sWTaxRate" prefHeight="17.0" prefWidth="136.0" text="LOW" />
             </children>
          </HBox>
          <HBox prefHeight="23.0" prefWidth="199.0">
             <children>
                <Label text="Province Wealth: " />
-               <Label text="0" fx:id="sWProvinceWealth"/>
+               <Label fx:id="sWProvinceWealth" text="0" />
             </children>
          </HBox>
          <ListView prefHeight="200.0" prefWidth="200.0" />
-         <Button mnemonicParsing="false" fx:id="sWConfirmButton"  onAction="#handlesWConfirmButton" text="Confirm invade" />
+         <Button fx:id="sWConfirmButton" mnemonicParsing="false" onAction="#handlesWConfirmButton" text="Confirm invade" />
       </children>
     </VBox>
 
 <!-- TOP BAR-->
-    <HBox StackPane.alignment="TOP_RIGHT" styleClass="panel-region" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="23.0" prefWidth="447.0" spacing="10.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="23.0" prefWidth="447.0" spacing="10.0" styleClass="panel-region" StackPane.alignment="TOP_RIGHT" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <Label fx:id="topBarFaction" text="Faction"/>
-        <Label prefHeight="17.0" fx:id="topBarGold" prefWidth="84.0" text="Treasury: 0"/>
-        <Label prefHeight="17.0" fx:id="topBarWealth" prefWidth="88.0" text="Wealth: 0"/>
-        <Label prefHeight="17.0" fx:id="topBarGoal" prefWidth="194.0" text="Goals: Conquer and Wealth Or Gold"/>
+        <Label fx:id="topBarFaction" text="Faction" />
+        <Label fx:id="topBarGold" prefHeight="17.0" prefWidth="84.0" text="Treasury: 0" />
+        <Label fx:id="topBarWealth" prefHeight="17.0" prefWidth="88.0" text="Wealth: 0" />
+        <Label fx:id="topBarGoal" prefHeight="17.0" prefWidth="194.0" text="Goals: Conquer and Wealth Or Gold" />
     </children>
     <padding>
         <Insets left="5.0" top="2.0" />
@@ -79,7 +82,7 @@
                     <fills>
                         <BackgroundFill>
                             <fill>
-                                <Color opacity="0.8"/>
+                                <Color opacity="0.8" />
                             </fill>
                         </BackgroundFill>
                     </fills>
@@ -89,7 +92,7 @@
 
 
 <!--BOTTOM WINDOW (Province Info)-->
-<VBox fx:id="provinceWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="380.0" prefWidth="219.0" styleClass="panel-region" visible="false" StackPane.alignment="BOTTOM_RIGHT" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="provinceWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="225.0" prefWidth="200.0" styleClass="panel-region" visible="false" StackPane.alignment="BOTTOM_RIGHT" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
             <HBox prefHeight="19.0" prefWidth="219.0">
                <children>
@@ -147,7 +150,78 @@
                     </fills>
                 </Background>
             </background>
+      <StackPane.margin>
+         <Insets bottom="5.0" />
+      </StackPane.margin>
 </VBox>
+   <VBox alignment="TOP_RIGHT" fillWidth="false" layoutX="150.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="175.0" prefWidth="150.0" StackPane.alignment="TOP_RIGHT">
+      <children>
+         <MenuButton fx:id="optionsButton" alignment="TOP_RIGHT" mnemonicParsing="false" opacity="0.65" text="Options">
+            <items>
+               <MenuItem fx:id="saveGameButton" mnemonicParsing="false" onAction="#handleSaveGame" text="Save Game" />
+               <MenuItem fx:id="mainMenuButton" mnemonicParsing="false" onAction="#handleMainMenuButton" text="Main Menu" />
+               <MenuItem fx:id="exitGame" mnemonicParsing="false" onAction="#handleExitGame" text="Exit Game" />
+            </items>
+            <cursor>
+               <Cursor fx:constant="HAND" />
+            </cursor>
+            <effect>
+               <DropShadow />
+            </effect>
+            <opaqueInsets>
+               <Insets />
+            </opaqueInsets>
+            <VBox.margin>
+               <Insets top="25.0" />
+            </VBox.margin>
+         </MenuButton>
+         <Button fx:id="goToMenuButton" mnemonicParsing="false" onAction="#handleGoToMenuButton" text="Go to Main Menu" visible="false">
+            <cursor>
+               <Cursor fx:constant="HAND" />
+            </cursor>
+            <effect>
+               <DropShadow />
+            </effect>
+            <VBox.margin>
+               <Insets top="5.0" />
+            </VBox.margin>
+         </Button>
+         <TextField fx:id="saveFileName" minHeight="-Infinity" minWidth="-Infinity" promptText="New Save File Name" visible="false">
+            <VBox.margin>
+               <Insets bottom="5.0" left="5.0" top="5.0" />
+            </VBox.margin>
+         </TextField>
+         <HBox prefHeight="100.0" prefWidth="200.0">
+            <children>
+               <Button fx:id="saveGame" alignment="CENTER" mnemonicParsing="false" onAction="#handleSaveGameButton" text="Save Game" visible="false">
+                  <cursor>
+                     <Cursor fx:constant="HAND" />
+                  </cursor>
+                  <effect>
+                     <DropShadow />
+                  </effect>
+                  <HBox.margin>
+                     <Insets right="5.0" />
+                  </HBox.margin>
+               </Button>
+               <Button fx:id="saveGameBackButton" mnemonicParsing="false" onAction="#handleSaveGameBack" text="Back" visible="false">
+                  <cursor>
+                     <Cursor fx:constant="HAND" />
+                  </cursor>
+                  <effect>
+                     <DropShadow />
+                  </effect>
+               </Button>
+            </children>
+            <VBox.margin>
+               <Insets left="6.0" />
+            </VBox.margin>
+         </HBox>
+      </children>
+      <StackPane.margin>
+         <Insets right="10.0" />
+      </StackPane.margin>
+   </VBox>
 
    
 </StackPane>
