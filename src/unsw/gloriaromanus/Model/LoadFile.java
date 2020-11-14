@@ -16,6 +16,7 @@ import java.util.List;
 public class LoadFile {
     public String filename;
     public List<Faction> factionList;
+    public int gameYear;
 
     public LoadFile(String filename){
         this.filename = filename;
@@ -24,6 +25,12 @@ public class LoadFile {
     }
     public void setFactionList(List<Faction> factionList) {
         this.factionList = factionList;
+    }
+    public void setGameYear(int year) {
+        this.gameYear = year;
+    }
+    public int getGameYear(){
+        return this.gameYear;
     }
     public void addToFactions(Faction faction){
         this.factionList.add(faction);
@@ -47,7 +54,11 @@ public class LoadFile {
         for(int i = 0; i < jArray.length(); i++){
             // gets the faction object
             jObject = jArray.getJSONObject(i);
-            createFaction(jObject);
+            if( !jObject.isNull("Current year") ){
+                setGameYear(jObject.getInt("Current year"));
+            }else{ 
+                createFaction(jObject);
+            }
         }
         
     }

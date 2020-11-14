@@ -49,8 +49,9 @@ public class LoadFileController {
     private void handleNextButton(ActionEvent event) throws IOException {
         fileToLoad = chooseFile.getValue();
         LoadFile newLoadFile = new LoadFile(fileToLoad);
+        int year = newLoadFile.getGameYear();
         List<Faction> facList = newLoadFile.getFactionList();
-        PlayGloriaRomanus playGame = new PlayGloriaRomanus(stage, null, facList, startScreen);
+        PlayGloriaRomanus playGame = new PlayGloriaRomanus(stage, null, facList, startScreen, year);
         playGame.startGame();
     }
 
