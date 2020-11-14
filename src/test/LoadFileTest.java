@@ -26,8 +26,8 @@ public class LoadFileTest {
         assertEquals("Sydney", towns.get(0).getTownName());
         assertEquals("Melbourne", towns.get(1).getTownName());
         assertEquals("Brisbane", towns.get(2).getTownName());
-        List<Unit> sydUnits = towns.get(0).getUnits();
-        List<Unit> melbUnits = towns.get(1).getUnits();
+        List<Unit> sydUnits = towns.get(0).getArmy().getAllUnits();
+        List<Unit> melbUnits = towns.get(1).getArmy().getAllUnits();
         //sydney only has Melee Infantry and Melb only has Elephant
         assertEquals("Melee Infantry", sydUnits.get(0).getName());
         assertEquals("Elephant", melbUnits.get(0).getName()); 

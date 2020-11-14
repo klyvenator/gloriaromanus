@@ -208,6 +208,14 @@ public class GloriaRomanusController{
                 // you can also pass in a javafx Image to create a PictureMarkerSymbol (different to BufferedImage)
                 s = new PictureMarkerSymbol("images/legionary.png");
                 break;
+              case "Thracian":
+                break;
+              case "Celtic Briton":
+                break;
+              case "Egyptian":
+                break;
+              case "Greek":
+                break;
               // TODO = handle all faction names, and find a better structure...
             }
               t.setHaloColor(0xFFFFFFFF);
