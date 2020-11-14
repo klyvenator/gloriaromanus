@@ -69,20 +69,20 @@
         <Label fx:id="topBarFaction" prefHeight="17.0" prefWidth="104.0" text="Faction" textFill="WHITE" />
             <HBox prefHeight="21.0" prefWidth="88.0">
                <children>
-              <Label fx:id="topBarGold" prefHeight="17.0" prefWidth="32.0" text="Gold: " textFill="WHITE" />
-                  <Label prefHeight="17.0" prefWidth="49.0" text="0" textFill="WHITE" />
+              <Label prefHeight="17.0" prefWidth="32.0" text="Gold: " textFill="WHITE" />
+                  <Label fx:id="topBarGold" prefHeight="17.0" prefWidth="49.0" text="0" textFill="WHITE" />
                </children>
             </HBox>
             <HBox prefHeight="21.0" prefWidth="107.0">
                <children>
-              <Label fx:id="topBarWealth" prefHeight="17.0" prefWidth="88.0" text="Wealth:" textFill="WHITE" />
-                  <Label prefHeight="17.0" prefWidth="109.0" text="0" textFill="WHITE" />
+              <Label prefHeight="17.0" prefWidth="88.0" text="Wealth:" textFill="WHITE" />
+                  <Label fx:id="topBarWealth" prefHeight="17.0" prefWidth="109.0" text="0" textFill="WHITE" />
                </children>
             </HBox>
             <HBox prefHeight="21.0" prefWidth="68.0">
                <children>
                   <Label text="Year: " textFill="WHITE" />
-                  <Label text="2020" textFill="WHITE" />
+                  <Label fx:id="topBarYear" text="2020" textFill="WHITE" />
                </children>
             </HBox>
     </children>

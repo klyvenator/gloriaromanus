@@ -3,15 +3,20 @@ package unsw.gloriaromanus.Model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+
 public class Faction {
     private String name;
-    private int totalWealth;
-    private int totalGold;
+    private IntegerProperty totalWealth;
+    private IntegerProperty totalGold;
     private List<Town> towns;
 
     public Faction(String name){
-        this.totalGold = 0;
-        this.totalWealth = 0;
+        totalGold = new SimpleIntegerProperty();
+        totalGold.set(5000);
+        totalWealth = new SimpleIntegerProperty();
+        totalWealth.set(5000);
         this.name = name;
         this.towns = new ArrayList<>();
     }
@@ -32,23 +37,23 @@ public class Faction {
             tax += t.wealthAfterTax();
             total += t.getWealth();
         }
-        this.totalGold += tax;
-        this.totalWealth = total;
+        totalGold.set(totalGold.get() + tax);
+        totalWealth.set(total);
     }
     public void updateWealth(){
         calculateTotalWealth();
     }
     public void setGold(int gold){
-        this.totalGold = gold;
+        totalGold.set(gold);
     }
     public void setwealth(int wealth){
-        this.totalWealth = wealth;
+        totalWealth.set(wealth);
     }
     public int getTotalGold(){
-        return this.totalGold;
+        return totalGold.get();
     }
     public int getTotalWealth(){
-        return this.totalWealth;
+        return totalWealth.get();
     }
     public String getFactionName(){
         return this.name;
@@ -68,6 +73,14 @@ public class Faction {
                 }
             }
         }
+    }
+
+    public IntegerProperty getGoldProperty() {
+        return totalGold;
+    }
+
+    public IntegerProperty getWealthProperty() {
+        return totalWealth;
     }
 
     public void endTurnUpdate() {
