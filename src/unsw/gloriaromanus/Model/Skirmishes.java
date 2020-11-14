@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+import javafx.scene.control.TextArea;
 import unsw.gloriaromanus.Model.Enums.Range;
 import unsw.gloriaromanus.Model.Enums.FightStatus;
 
@@ -15,6 +16,7 @@ public class Skirmishes {
     private static final int maxEngagements = 200;
     private Engagements engagement;
     private FightStatus status;
+    private TextArea terminal;
 
     private Skirmishes() {
         unitA = null;
@@ -30,28 +32,40 @@ public class Skirmishes {
         this.unitB = b;
     }
 
+    public Skirmishes(Unit a, Unit b, TextArea terminal) {
+        this(a, b);
+        this.terminal = terminal;
+    }
+
     public FightStatus getStatus() {
         return status;
     }
 
+    private void writeToTerminal(String msg) {
+        if (terminal != null) {
+            terminal.appendText(msg + "\n");
+        }
+    }
+
     public void printAfterEngagementMessage(int firstBeforeSize, int secondBeforeSize) {
-        System.out.println("Unit A dealt " + (secondBeforeSize - unitB.getNumTroops()) + " damage!");
-        System.out.println("Unit B dealt " + (firstBeforeSize - unitA.getNumTroops()) + " damage!");
+        writeToTerminal("Unit A dealt " + (secondBeforeSize - unitB.getNumTroops()) + " damage!");
+        writeToTerminal("Unit B dealt " + (firstBeforeSize - unitA.getNumTroops()) + " damage!");
     }
 
     public void printEngagementType() {
-        System.out.print("It's a ");
+        String msg = "It's a ";
         if (engagement.getClass() == RangedEngagements.class) {
-            System.out.print("Ranged Engagement");
+            msg += "Ranged Engagement";
         } else if (engagement.getClass() == MeleeEngagements.class) {
-            System.out.print("Melee Engagement");
+            msg += "Melee Engagement";
         }
-        System.out.println("!");
+        msg += "!";
+        writeToTerminal(msg);
     }
 
     public void printUnitsHealth() {
-        System.out.println("UnitA: " + unitA.getNumTroops());
-        System.out.println("UnitB: " + unitB.getNumTroops());
+        writeToTerminal("UnitA: " + unitA.getNumTroops());
+        writeToTerminal("UnitB: " + unitB.getNumTroops());
     }
 
     public boolean bothUnitsAlive() {
@@ -203,7 +217,13 @@ public class Skirmishes {
 
         while (routing.getNumTroops() > 0) {
             
-            System.out.println("unit is trying to route...");
+            String unitName = null;
+            if (routing == unitA) {
+                unitName = "Unit A";
+            } else {
+                unitName = "Unit B";
+            }
+            writeToTerminal(unitName + " is trying to route...");
             
             if (attemptToFlee(routing, pursuing)) {
                 decideStatus();
@@ -256,14 +276,14 @@ public class Skirmishes {
             unitA.activateAbility();
             unitB.activateAbility();
 
-            System.out.println("Units health before engagement:");
+            writeToTerminal("Units health before engagement:");
             printUnitsHealth();
 
             winner = engagement.engage(unitA, unitB);
 
             printAfterEngagementMessage(firstBeforeSize, secondBeforeSize);
 
-            System.out.println("Units health after engagement:");
+            writeToTerminal("Units health after engagement:");
             printUnitsHealth();
 
             unitA.cancelAbility();
