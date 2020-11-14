@@ -80,7 +80,7 @@ public class GloriaRomanusController{
   private TextArea output_terminal;
 
   private ArcGISMap map;
-  // changed from Map<String,String>
+
   private Map<Town, Faction> provinceToOwningFactionMap;
 
   private Map<String, Integer> provinceToNumberTroopsMap;
@@ -448,7 +448,7 @@ public class GloriaRomanusController{
     Map<Town, Faction> m = new HashMap<Town, Faction>();
     for (Faction f : factions) {
       List<Town> towns = f.getTowns();
-      // value is province name
+      // sets the Town as key and it's corresponding faction
       for (Town t : towns) {
         m.put(t, f);
       }
@@ -480,6 +480,7 @@ public class GloriaRomanusController{
       Faction newFac = new Faction(f);
       facList.add(newFac);
     }
+    // uses the list of provinces and randomly allocates it to the factions chosen by players
     while( !list.isEmpty() ) {
       int randomIndex = rand.nextInt(list.size());
       int randomFactionIndex = rand.nextInt(facList.size());
