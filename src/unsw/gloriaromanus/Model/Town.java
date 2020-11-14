@@ -97,5 +97,9 @@ public class Town {
         return unitsInTraining;
     }
 
+    public void trainUnit(Unit u) {
+        unitsInTraining.put(u, u.getTurnsToMake());
+    }
+
     
 }
