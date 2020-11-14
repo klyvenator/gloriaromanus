@@ -9,8 +9,8 @@ import org.json.JSONObject;
 import org.junit.BeforeClass;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import unsw.gloriaromanus.*;
-import unsw.gloriaromanus.Enums.*;
+import unsw.gloriaromanus.Model.*;
+import unsw.gloriaromanus.Model.Enums.*;
 
 
 public class ArmyTest{
