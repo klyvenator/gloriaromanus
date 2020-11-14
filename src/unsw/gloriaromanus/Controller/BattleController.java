@@ -44,6 +44,9 @@ public class BattleController {
     @FXML
     private Circle humanUnit;
 
+    @FXML
+    private Button startBattleButton;
+
     public BattleController(MainMapScreen mainMap) {
         this.mainMap = mainMap;
         this.attackerArmy = null;
@@ -59,7 +62,10 @@ public class BattleController {
         output.setText("Enter text");
         // input.textProperty().bindBidirectional(output.textProperty());
         conn.bindBidirectional(humanUnit.radiusProperty());
-        startBattle();
+    }
+
+    public void reset() {
+        battleMessages.clear();
     }
 
     @FXML
@@ -84,8 +90,12 @@ public class BattleController {
         this.defenderArmy = enemy;
     }
 
-    private void startBattle() {
-        BattleResolver resolver = new BattleResolver(attackerArmy, defenderArmy);
+    @FXML
+    private void startBattle(ActionEvent event) {
         battleMessages.appendText("Starting battle!\n");
+        BattleResolver resolver = new BattleResolver(attackerArmy, defenderArmy, battleMessages);
+        resolver.startBattle();
+        battleMessages.appendText("Battle finished!\n");
     }
+
 }
