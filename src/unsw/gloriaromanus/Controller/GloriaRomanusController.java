@@ -577,7 +577,10 @@ public class GloriaRomanusController{
 
   @FXML
   public void handlesWConfirmButton() {
-    //INVADE CODE
+    Army yourArmy = StringToTown(pWProvinceName.getText()).getArmy();
+    Army enemyArmy = StringToTown(targetProvince).getArmy();
+    //INVADE CODE FOR JIBI
+
   }
   @FXML
   public void handleInvadeButton() {
