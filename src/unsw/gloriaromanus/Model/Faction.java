@@ -56,4 +56,22 @@ public class Faction {
     public List<Town> getTowns(){
         return this.towns;
     }
+
+    public void reduceTrainingCount() {
+        for (Town t: towns) {
+            for(Unit u: t.getUnitsInTraining().keySet()) {
+                Integer i = t.getUnitsInTraining().get(u);
+                i--;
+                if (i <= 0) {
+                    t.getUnitsInTraining().remove(u);
+                    t.getArmy().addUnit(u);
+                }
+            }
+        }
+    }
+
+    public void endTurnUpdate() {
+        calculateTotalWealth();
+        reduceTrainingCount();
+    }
 }
