@@ -5,12 +5,16 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.*;
-import org.json.JSONObject;
 import org.junit.BeforeClass;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import unsw.gloriaromanus.*;
-import unsw.gloriaromanus.Enums.*;
+import unsw.gloriaromanus.Model.BattleResolver;
+import unsw.gloriaromanus.Model.Unit;
+import unsw.gloriaromanus.Model.Army;
+import unsw.gloriaromanus.Model.Cavalry;
+import unsw.gloriaromanus.Model.Infantry;
+import unsw.gloriaromanus.Model.Artillery;
+import unsw.gloriaromanus.Model.Enums.*;
 
 
 public class ArmyTest{
