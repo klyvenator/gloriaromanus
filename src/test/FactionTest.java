@@ -18,7 +18,7 @@ public class FactionTest {
     List<String> givenList = Arrays.asList("faction1","faction2");
     List<String> smallTowns = Arrays.asList("Sydney", "Melbourne", "Brisbane");
 
-    @Test
+/*     @Test
     public void allocateTownsTest() throws IOException {
         // 
         List<Faction> facList = GloriaRomanusController.allocateTowns(givenList, file);
@@ -28,7 +28,7 @@ public class FactionTest {
         for(int i = 0; i < facList.size(); i++ ){
             assertEquals(givenList.get(i), facList.get(i).getFactionName());
         }
-    }
+    } */
 
     @Test
     public void checkWealthOfFactions(){
