@@ -19,7 +19,7 @@
 
 <?import com.esri.arcgisruntime.mapping.view.MapView?>
 
-<StackPane stylesheets="/unsw/gloriaromanus/style.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1">
+<StackPane prefHeight="380.0" prefWidth="450.0" stylesheets="/unsw/gloriaromanus/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <MapView fx:id="mapView" />
 
 
@@ -92,7 +92,7 @@
 
 
 <!--BOTTOM WINDOW (Province Info)-->
-<VBox fx:id="provinceWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="380.0" prefWidth="219.0" styleClass="panel-region" visible="false" StackPane.alignment="BOTTOM_RIGHT" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="provinceWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="225.0" prefWidth="200.0" styleClass="panel-region" visible="false" StackPane.alignment="BOTTOM_RIGHT" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
             <HBox prefHeight="19.0" prefWidth="219.0">
                <children>
@@ -150,50 +150,59 @@
                     </fills>
                 </Background>
             </background>
+      <StackPane.margin>
+         <Insets bottom="5.0" />
+      </StackPane.margin>
 </VBox>
-   <VBox fx:id="optionsWindow" StackPane.alignment="TOP_LEFT">
+   <VBox alignment="TOP_RIGHT" fillWidth="false" layoutX="150.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="175.0" prefWidth="150.0" StackPane.alignment="TOP_RIGHT">
       <children>
-         <MenuButton fx:id="optionsButton" alignment="TOP_LEFT" mnemonicParsing="false" opacity="0.65" text="Options">
-           <items>
-             <MenuItem fx:id="saveGameButton" mnemonicParsing="false" onAction="#handleSaveGame" text="Save Game" />
-             <MenuItem fx:id="mainMenuButton" mnemonicParsing="false" onAction="#handleMainMenuButton" text="Main Menu" />
+         <MenuButton fx:id="optionsButton" alignment="TOP_RIGHT" mnemonicParsing="false" opacity="0.65" text="Options">
+            <items>
+               <MenuItem fx:id="saveGameButton" mnemonicParsing="false" onAction="#handleSaveGame" text="Save Game" />
+               <MenuItem fx:id="mainMenuButton" mnemonicParsing="false" onAction="#handleMainMenuButton" text="Main Menu" />
                <MenuItem fx:id="exitGame" mnemonicParsing="false" onAction="#handleExitGame" text="Exit Game" />
-           </items>
+            </items>
             <cursor>
                <Cursor fx:constant="HAND" />
             </cursor>
             <effect>
                <DropShadow />
             </effect>
+            <opaqueInsets>
+               <Insets />
+            </opaqueInsets>
+            <VBox.margin>
+               <Insets top="25.0" />
+            </VBox.margin>
          </MenuButton>
          <Button fx:id="goToMenuButton" mnemonicParsing="false" onAction="#handleGoToMenuButton" text="Go to Main Menu" visible="false">
-            <VBox.margin>
-               <Insets top="5.0" />
-            </VBox.margin>
             <cursor>
                <Cursor fx:constant="HAND" />
             </cursor>
             <effect>
                <DropShadow />
             </effect>
-         </Button>
-         <TextField fx:id="saveFileName" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="100.0" promptText="New Save File Name" visible="false">
             <VBox.margin>
                <Insets top="5.0" />
+            </VBox.margin>
+         </Button>
+         <TextField fx:id="saveFileName" minHeight="-Infinity" minWidth="-Infinity" promptText="New Save File Name" visible="false">
+            <VBox.margin>
+               <Insets bottom="5.0" left="5.0" top="5.0" />
             </VBox.margin>
          </TextField>
-         <HBox>
-            <VBox.margin>
-               <Insets top="5.0" />
-            </VBox.margin>
+         <HBox prefHeight="100.0" prefWidth="200.0">
             <children>
-               <Button fx:id="saveGame" mnemonicParsing="false" onAction="#handleSaveGameButton" text="Save Game" visible="false">
+               <Button fx:id="saveGame" alignment="CENTER" mnemonicParsing="false" onAction="#handleSaveGameButton" text="Save Game" visible="false">
                   <cursor>
                      <Cursor fx:constant="HAND" />
                   </cursor>
                   <effect>
                      <DropShadow />
                   </effect>
+                  <HBox.margin>
+                     <Insets right="5.0" />
+                  </HBox.margin>
                </Button>
                <Button fx:id="saveGameBackButton" mnemonicParsing="false" onAction="#handleSaveGameBack" text="Back" visible="false">
                   <cursor>
@@ -202,13 +211,16 @@
                   <effect>
                      <DropShadow />
                   </effect>
-                  <HBox.margin>
-                     <Insets left="5.0" />
-                  </HBox.margin>
                </Button>
             </children>
+            <VBox.margin>
+               <Insets left="6.0" />
+            </VBox.margin>
          </HBox>
       </children>
+      <StackPane.margin>
+         <Insets right="10.0" />
+      </StackPane.margin>
    </VBox>
 
    
