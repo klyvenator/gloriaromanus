@@ -1,6 +1,7 @@
 package unsw.gloriaromanus.Controller;
 
 import unsw.gloriaromanus.Model.*;
+import unsw.gloriaromanus.View.*;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,7 +22,22 @@ import java.util.stream.Collectors;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
+import javafx.scene.input.MouseButton;
+import javafx.scene.layout.VBox;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
@@ -31,6 +47,7 @@ import com.esri.arcgisruntime.data.FeatureTable;
 import com.esri.arcgisruntime.data.GeoPackage;
 import com.esri.arcgisruntime.geometry.Point;
 import com.esri.arcgisruntime.geometry.SpatialReferences;
+import com.esri.arcgisruntime.internal.io.handler.request.ServerContextConcurrentHashMap.HashMapChangedEvent.Action;
 import com.esri.arcgisruntime.layers.FeatureLayer;
 import com.esri.arcgisruntime.loadable.LoadStatus;
 import com.esri.arcgisruntime.mapping.ArcGISMap;
@@ -67,7 +84,7 @@ public class GloriaRomanusController{
   private TextArea output_terminal;
 
   private ArcGISMap map;
-  // changed from Map<String,String>
+
   private Map<Town, Faction> provinceToOwningFactionMap;
 
   private Map<String, Integer> provinceToNumberTroopsMap;
@@ -76,18 +93,78 @@ public class GloriaRomanusController{
 
   private Feature currentlySelectedHumanProvince;
   private Feature currentlySelectedEnemyProvince;
+  private Feature currentlySelectedProvince;
+
 
   private FeatureLayer featureLayer_provinces;
 
   private List<String> factionNames = new ArrayList<String>();
 
+  private List<Faction> currGameFactionList;
+
+  private UnitFactory unitFactory;
+
   private List<Faction> loadGameFactionList = new ArrayList<Faction>();
+
+  private StartScreen startScreen;
+
+  @FXML
+  private Label topBarFaction;
+  @FXML
+  private Label topBarGold;
+  @FXML
+  private Label topBarWealth;
+  @FXML
+  private Label pWProvinceName;
+  @FXML
+  private ComboBox<String> pWRecruitList = new ComboBox<String>();
+  @FXML
+  private ListView<String> pWUnitList = new ListView<String>();
+  @FXML
+  private VBox provinceWindow;
+
+
+  // Secondary Window variables
+  @FXML
+  private VBox secondWindow;
+  @FXML
+  private Button sWConfirmButton;
+  @FXML
+  private Label sWOwnershipLabel;
+  @FXML
+  private Label sWProvinceName;
+  @FXML
+  private Label sWFactionName;
+
+  private String targetProvince;
+  private boolean invadeMode;
+  private boolean moveMode;
+
+  // top left options window
+  @FXML
+  private VBox optionsWindow;
+  @FXML 
+  private MenuButton optionsButton;
+  @FXML 
+  private MenuItem saveGameButton;
+  @FXML
+  private MenuItem mainMenuButton;
+  @FXML
+  private TextField saveFileName;
+  @FXML
+  private Button saveGame;
+  @FXML
+  private Button saveGameBackButton;
+  @FXML
+  private Button goToMenuButton;
 
   @FXML
   private void initialize() throws JsonParseException, JsonMappingException, IOException {
     // TODO = you should rely on an object oriented design to determine ownership
-    if(!factionNames.isEmpty()){
+    if( factionNames != null ){
       provinceToOwningFactionMap = getProvincesOwningToEachFaction(factionNames);
+    }else if( loadGameFactionList != null){
+      provinceToOwningFactionMap =  loadProvincesOwningToEachFaction(loadGameFactionList);
     }
     provinceToNumberTroopsMap = new HashMap<String, Integer>();
     Random r = new Random();
@@ -102,7 +179,18 @@ public class GloriaRomanusController{
     currentlySelectedEnemyProvince = null;
 
     initializeProvinceLayers();
+
+
+    // Kly's initialise code
+    initialiseProvinceWindow();
+    unitFactory = new UnitFactory();
+    currentlySelectedProvince = null;
+    targetProvince = null;
+    invadeMode = false;
+    moveMode = false;
+
   }
+/* USE SWINVADEBUTTON INSTEAD.
 
   @FXML
   public void clickedInvadeButton(ActionEvent e) throws IOException {
@@ -137,6 +225,7 @@ public class GloriaRomanusController{
 
     }
   }
+  */
 
   /**
    * run this initially to update province owner, change feature in each
@@ -256,6 +345,15 @@ public class GloriaRomanusController{
     // https://developers.arcgis.com/java/latest/guide/identify-features.htm
     // listen to the mouse clicked event on the map view
     mapView.setOnMouseClicked(e -> {
+      
+      if (e.getButton() == MouseButton.SECONDARY) {
+        invadeMode = false;
+        moveMode = false;
+        closeProvinceWindow();
+        secondWindow.setVisible(false);
+        // TODO = Turn this into observer.
+      }
+
       // was the main button pressed?
       if (e.getButton() == MouseButton.PRIMARY) {
         // get the screen point where the user clicked or tapped
@@ -290,23 +388,33 @@ public class GloriaRomanusController{
                 Feature f = features.get(0);
                 String province = (String)f.getAttributes().get("name");
 
-                if (getFaction(province).getFactionName().equals(humanFaction)){
-                  // province owned by human
-                  if (currentlySelectedHumanProvince != null){
-                    featureLayer.unselectFeature(currentlySelectedHumanProvince);
+                if (invadeMode) {
+                 if ((getFaction(province).getFactionName().equals(humanFaction))) {
+                    Alert alert = new Alert(AlertType.WARNING, "Please select an enemy faction", ButtonType.OK);
+                    alert.showAndWait(); 
+                  } else {
+                    targetProvince = province;
+                    openInvadeWindow();
                   }
-                  currentlySelectedHumanProvince = f;
-                  invading_province.setText(province);
-                }
-                else{
-                  if (currentlySelectedEnemyProvince != null){
-                    featureLayer.unselectFeature(currentlySelectedEnemyProvince);
-                  }
-                  currentlySelectedEnemyProvince = f;
-                  opponent_province.setText(province);
-                }
+                } else if (moveMode) {
+                  //openmoveWindow();
+                } else {
 
-                featureLayer.selectFeature(f);                
+                  if (currentlySelectedProvince != null){
+                    featureLayer.unselectFeature(currentlySelectedProvince);
+                  }
+
+                  if (getFaction(province).getFactionName().equals(humanFaction)){
+                    // province owned by human
+                    currentlySelectedProvince = f;
+                    loadProvinceWindow(province);
+                  }
+                  else{
+                    currentlySelectedProvince = f;
+                  }
+  
+                  featureLayer.selectFeature(f);     
+                }
               }
 
               
@@ -361,13 +469,26 @@ public class GloriaRomanusController{
     output_terminal.appendText(message+"\n");
   }
 
+  // takes a string list of faction names, creates the factions and randomly allocates them towns
   private Map<Town, Faction> getProvincesOwningToEachFaction(List<String> factionNames) throws IOException {
-    List<Faction> factions = allocateTowns(factionNames);
+    currGameFactionList = allocateTowns(factionNames);
     
     Map<Town, Faction> m = new HashMap<Town, Faction>();
-    for (Faction f : factions) {
+    for (Faction f : currGameFactionList) {
       List<Town> towns = f.getTowns();
-      // value is province name
+      // sets the Town as key and it's corresponding faction
+      for (Town t : towns) {
+        m.put(t, f);
+      }
+    }
+    return m;
+  }
+  // from save file, loads the faction list and creates the map of a previous game
+  private Map<Town, Faction> loadProvincesOwningToEachFaction(List<Faction> factionList) throws IOException {
+    Map<Town, Faction> m = new HashMap<Town, Faction>();
+    for (Faction f : factionList) {
+      List<Town> towns = f.getTowns();
+      // sets the Town as key and it's corresponding faction
       for (Town t : towns) {
         m.put(t, f);
       }
@@ -399,6 +520,7 @@ public class GloriaRomanusController{
       Faction newFac = new Faction(f);
       facList.add(newFac);
     }
+    // uses the list of provinces and randomly allocates it to the factions chosen by players
     while( !list.isEmpty() ) {
       int randomIndex = rand.nextInt(list.size());
       int randomFactionIndex = rand.nextInt(facList.size());
@@ -421,15 +543,152 @@ public class GloriaRomanusController{
     return null;
   }
 
+  public Faction StringToFaction(String factionName) {
+    for (Faction f: provinceToOwningFactionMap.values()){
+      if (f.getFactionName().equals(factionName)) {
+        return f;
+      }
+    }
+    return null;
+  }
+
+  public Town StringToTown(String province) {
+    for (Town f: provinceToOwningFactionMap.keySet()){
+      if (f.getTownName().equals(province)) {
+        return f;
+      }
+    }
+    return null;
+  }
+
   public void setFactionList(List<String> listOfFactionNames){
     this.factionNames = listOfFactionNames;
   }
-  public void setFactionLoadGameFactionList(List<Faction> facList){
+  public void setLoadGameFactionList(List<Faction> facList){
     this.loadGameFactionList = facList;
   }
-  public List<String> getFactionList(){
-    List<String> list = new ArrayList<String>();
-    return list;
+  public List<Faction> getGameFactionList(){
+    return currGameFactionList;
+  }
+
+  public void loadProvinceWindow(String province) {
+    clearTownUnitList();
+    pWProvinceName.setText(province);
+    fillTownUnitList();
+    provinceWindow.setVisible(true);
+  }
+
+  public void fillTownUnitList() {
+    Town town = StringToTown(pWProvinceName.getText());
+    Army a = town.getArmy();
+    for (Unit u: a.getAllUnits()) {
+      pWUnitList.getItems().add(u.toString());
+    }
+  }
+
+  public void clearTownUnitList() {
+    pWUnitList.getItems().clear();
+  }
+
+  @FXML
+  public void closeProvinceWindow() {
+    provinceWindow.setVisible(false);
+  }
+
+  public void initialiseProvinceWindow() {
+    // TODO import from json list of units.
+    String[] units = {"Select unit", "Melee Infantry", "Legionary"};
+    pWRecruitList.getItems().addAll(units);
+    pWRecruitList.getSelectionModel().selectFirst();
+    pWUnitList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+  }
+
+  @FXML
+  public void handleRecruitButton() {
+    String unit = pWRecruitList.getValue();
+    Faction faction = StringToFaction(humanFaction);
+    if (unitFactory.getUnitCost(unit) > faction.getTotalGold()) {
+      Alert alert = new Alert(AlertType.WARNING, "Not enough gold.", ButtonType.OK);
+      alert.showAndWait();
+    } else {
+      if (unit.equals("Select unit")) {
+        Alert alert = new Alert(AlertType.WARNING, "Please select a valid unit", ButtonType.OK);
+        alert.showAndWait();    
+      } else {
+        clearTownUnitList();
+        Town town = StringToTown(pWProvinceName.getText());
+        town.addUnit(unitFactory.createUnit(unit, faction, town));
+        fillTownUnitList();
+      }
+    }
+  }
+
+
+
+  public void openInvadeWindow() {
+    sWOwnershipLabel.setText("ENEMY PROVINCE");
+    sWProvinceName.setText(targetProvince);
+    sWFactionName.setText(getFaction(targetProvince).getFactionName());
+    secondWindow.setVisible(true);
+
+  }
+
+  @FXML
+  public void handlesWConfirmButton() {
+    Army yourArmy = StringToTown(pWProvinceName.getText()).getArmy();
+    Army enemyArmy = StringToTown(targetProvince).getArmy();
+    //INVADE CODE FOR JIBI
+
+  }
+  @FXML
+  public void handleInvadeButton() {
+    invadeMode = true;
+  }
+
+  // after Options is clicked and Save Game selected show text field for input
+  @FXML
+  private void handleSaveGame(ActionEvent event){
+    saveFileName.setVisible(true);
+    saveGame.setVisible(true);
+    saveGameBackButton.setVisible(true);
+  }
+  // if Main menu button is clicked 
+  @FXML
+  private void handleMainMenuButton(ActionEvent event){
+    Alert alert = new Alert(AlertType.WARNING, "All Unsaved Progress Will Be Lost!", ButtonType.OK);
+    alert.showAndWait();
+    goToMenuButton.setVisible(true);
+  }
+  
+  // gets the user input file name for the new save file
+  // saves creates the save file and prints out a confirmation
+  @FXML
+  private void handleSaveGameButton(ActionEvent event){
+    String fileName = saveFileName.getText();
+    try {
+      new SaveFile(getGameFactionList(), fileName);
+      saveFileName.setVisible(false);
+      saveGame.setVisible(false);
+      Alert alert = new Alert(AlertType.CONFIRMATION, "Current Game is Saved as "+fileName+".json", ButtonType.OK);
+      alert.showAndWait();
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+  }
+  @FXML
+  private void handleSaveGameBack(ActionEvent event){
+    saveFileName.setVisible(false);
+    saveGame.setVisible(false);
+    saveGameBackButton.setVisible(false);
+  }
+  @FXML
+  private void handleGoToMenuButton(ActionEvent event){
+    terminate();
+    startScreen.start();
+  }
+  public void setStartScreen(StartScreen startScreen){
+    this.startScreen = startScreen;
   }
   /**
    * Stops and releases all resources used in application.

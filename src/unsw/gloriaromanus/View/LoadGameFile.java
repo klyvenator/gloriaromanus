@@ -24,7 +24,8 @@ public class LoadGameFile {
 
         Parent root = loader.load();
         scene = new Scene(root);
-		controller.setStartScreen(startScreen);
+        controller.setStartScreen(startScreen);
+        controller.setStage(stage);
     }
 
     public void start() {

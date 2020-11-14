@@ -33,9 +33,8 @@ public class SaveFile {
           }
     }
     public static File createFile(String filename) throws IOException {
-        // uncomment this for milestone 3 won't work for testing 
-        //File temp = new File("src/unsw/gloriaromanus/SaveFiles/"+filename+".json");
-        File temp = new File(filename+".json");
+        File temp = new File("src/unsw/gloriaromanus/SaveFiles/"+filename+".json");
+        //File temp = new File(filename+".json");
         try {
             if (temp.createNewFile()) {
                 System.out.println("File created: " + temp.getName());
@@ -69,7 +68,7 @@ public class SaveFile {
             faction.put(f.getFactionName(), jsonObject);
             jArray.put(faction);
         }
-        System.out.println(jArray);
+        //System.out.println(jArray);
         return jArray;
     }
     // passes in a list of towns and gets the properties of each town and returns a json array
@@ -106,7 +105,7 @@ public class SaveFile {
             jsonObject.put("cost", u.getCost());
             jsonObject.put("turnstoproduce", u.getTurnsToMake());
             jsonObject.put("Movement Points", u.getMovementPoints());
-            //jsonObject.put("Abilities", u.getAbilities());
+            jsonObject.put("Abilities", u.getAbility());
             //jsonObject.put("Buffs", u.getBuffs());
             jsonObject.put("name", u.getName());
             unit.put(u.getName(), jsonObject);

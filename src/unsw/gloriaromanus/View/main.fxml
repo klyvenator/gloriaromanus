@@ -1,52 +1,214 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-<?import com.esri.arcgisruntime.mapping.view.MapView?>
-<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.Background?>
 <?import javafx.scene.layout.BackgroundFill?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
-<?import javafx.geometry.Insets?>
-<StackPane xmlns:fx="http://javafx.com/fxml"
-           stylesheets="/unsw/gloriaromanus/style.css">
-    <MapView fx:id="mapView"/>
-    <VBox StackPane.alignment="TOP_LEFT" spacing="10" maxWidth="250" styleClass="panel-region">
+
+<?import com.esri.arcgisruntime.mapping.view.MapView?>
+
+<StackPane stylesheets="/unsw/gloriaromanus/style.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1">
+    <MapView fx:id="mapView" />
+
+
+
+<!-- TOP LEFT WINDOW (INVADE OR MOVE)-->
+<VBox fx:id="secondWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="311.0" prefWidth="219.0" styleClass="panel-region" visible="false" StackPane.alignment="TOP_LEFT" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
         <padding>
-            <Insets topRightBottomLeft="10"/>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
         </padding>
         <background>
             <Background>
                 <fills>
                     <BackgroundFill>
                         <fill>
-                            <Color opacity="0.3"/>
+                            <Color opacity="0.3" />
                         </fill>
                     </BackgroundFill>
                 </fills>
             </Background>
         </background>
-        <HBox>
-            <VBox>
-                <Label text="Your province"/>
-                <TextField fx:id="invading_province" text="" editable="false"/>
-            </VBox>
-            <VBox>
-                <Label text="Enemy province"/>
-                <TextField fx:id="opponent_province" text="" editable="false"/>
-            </VBox>
-        </HBox>
-        <Button text="Invade" onAction="#clickedInvadeButton"/>
-        <VBox>
-            <Label text="Output from interactions"/>
-            <TextArea fx:id="output_terminal" text="" editable="false"/>
-        </VBox>
+      <children>
+         <Label fx:id="sWOwnershipLabel" text="YOUR PROVINCE" />
+         <Label fx:id="sWProvinceName" text="Province Name" />
+        <HBox prefHeight="23.0" prefWidth="199.0">
+            <children>
+               <Label text="Owned by: " />
+               <Label fx:id="sWFactionName" text="FactionName" />
+            </children>
+         </HBox>
+         <HBox prefHeight="11.0" prefWidth="253.0">
+            <children>
+               <Label text="Tax Rate: " />
+               <Label fx:id="sWTaxRate" prefHeight="17.0" prefWidth="136.0" text="LOW" />
+            </children>
+         </HBox>
+         <HBox prefHeight="23.0" prefWidth="199.0">
+            <children>
+               <Label text="Province Wealth: " />
+               <Label fx:id="sWProvinceWealth" text="0" />
+            </children>
+         </HBox>
+         <ListView prefHeight="200.0" prefWidth="200.0" />
+         <Button fx:id="sWConfirmButton" mnemonicParsing="false" onAction="#handlesWConfirmButton" text="Confirm invade" />
+      </children>
     </VBox>
+
+<!-- TOP BAR-->
+    <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="23.0" prefWidth="447.0" spacing="10.0" styleClass="panel-region" StackPane.alignment="TOP_RIGHT" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <Label fx:id="topBarFaction" text="Faction" />
+        <Label fx:id="topBarGold" prefHeight="17.0" prefWidth="84.0" text="Treasury: 0" />
+        <Label fx:id="topBarWealth" prefHeight="17.0" prefWidth="88.0" text="Wealth: 0" />
+        <Label fx:id="topBarGoal" prefHeight="17.0" prefWidth="194.0" text="Goals: Conquer and Wealth Or Gold" />
+    </children>
+    <padding>
+        <Insets left="5.0" top="2.0" />
+    </padding>
+            <background>
+                <Background>
+                    <fills>
+                        <BackgroundFill>
+                            <fill>
+                                <Color opacity="0.8" />
+                            </fill>
+                        </BackgroundFill>
+                    </fills>
+                </Background>
+            </background>
+    </HBox>
+
+
+<!--BOTTOM WINDOW (Province Info)-->
+<VBox fx:id="provinceWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="380.0" prefWidth="219.0" styleClass="panel-region" visible="false" StackPane.alignment="BOTTOM_RIGHT" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+            <HBox prefHeight="19.0" prefWidth="219.0">
+               <children>
+                  <Label prefHeight="17.0" prefWidth="197.0" text="YOUR PROVINCE" />
+                  <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="19.0" text="x" />
+               </children>
+            </HBox>
+        <Label fx:id="pWProvinceName" text="Province Name" />
+      <HBox prefHeight="19.0" prefWidth="209.0">
+         <children>
+            <Label prefHeight="17.0" prefWidth="123.0" text="Province Wealth:  " />
+            <Label fx:id="pWWealth" prefHeight="17.0" prefWidth="136.0" text="0" />
+         </children>
+      </HBox>
+      <VBox prefHeight="77.0" prefWidth="209.0" spacing="5.0">
+         <children>
+                  <ComboBox fx:id="pWTaxRate" prefHeight="27.0" prefWidth="212.0" />
+            <ComboBox fx:id="pWRecruitList" prefHeight="25.0" prefWidth="221.0" />
+            <Button fx:id="pWRecruitButton" mnemonicParsing="false" onAction="#handleRecruitButton" text="Recruit" />
+         </children>
+         <padding>
+            <Insets bottom="5.0" top="10.0" />
+         </padding>
+      </VBox>
+      <ListView fx:id="pWUnitList" prefHeight="148.0" prefWidth="209.0" />
+            <HBox prefHeight="33.0" prefWidth="209.0">
+               <children>
+                  <VBox prefHeight="44.0" prefWidth="105.0">
+                     <children>
+                        <Button mnemonicParsing="false" text="Move" />
+                     </children>
+                  </VBox>
+                  <VBox alignment="TOP_RIGHT" prefHeight="44.0" prefWidth="107.0">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#handleInvadeButton" text="Invade" />
+                     </children>
+                  </VBox>
+               </children>
+               <padding>
+                  <Insets top="5.0" />
+               </padding>
+            </HBox>
+    </children>
+    <padding>
+        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+    </padding>
+            <background>
+                <Background>
+                    <fills>
+                        <BackgroundFill>
+                            <fill>
+                                <Color opacity="0.5" />
+                            </fill>
+                        </BackgroundFill>
+                    </fills>
+                </Background>
+            </background>
+</VBox>
+   <VBox fx:id="optionsWindow" StackPane.alignment="TOP_LEFT">
+      <children>
+         <MenuButton fx:id="optionsButton" alignment="TOP_LEFT" mnemonicParsing="false" opacity="0.65" text="Options">
+           <items>
+             <MenuItem fx:id="saveGameButton" mnemonicParsing="false" onAction="#handleSaveGame" text="Save Game" />
+             <MenuItem fx:id="mainMenuButton" mnemonicParsing="false" onAction="#handleMainMenuButton" text="Main Menu" />
+           </items>
+            <cursor>
+               <Cursor fx:constant="HAND" />
+            </cursor>
+            <effect>
+               <DropShadow />
+            </effect>
+         </MenuButton>
+         <Button fx:id="goToMenuButton" mnemonicParsing="false" onAction="#handleGoToMenuButton" text="Go to Main Menu" visible="false">
+            <VBox.margin>
+               <Insets top="5.0" />
+            </VBox.margin>
+            <cursor>
+               <Cursor fx:constant="HAND" />
+            </cursor>
+            <effect>
+               <DropShadow />
+            </effect>
+         </Button>
+         <TextField fx:id="saveFileName" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="100.0" promptText="New Save File Name" visible="false">
+            <VBox.margin>
+               <Insets top="5.0" />
+            </VBox.margin>
+         </TextField>
+         <HBox>
+            <VBox.margin>
+               <Insets top="5.0" />
+            </VBox.margin>
+            <children>
+               <Button fx:id="saveGame" mnemonicParsing="false" onAction="#handleSaveGameButton" text="Save Game" visible="false">
+                  <cursor>
+                     <Cursor fx:constant="HAND" />
+                  </cursor>
+                  <effect>
+                     <DropShadow />
+                  </effect>
+               </Button>
+               <Button fx:id="saveGameBackButton" mnemonicParsing="false" onAction="#handleSaveGameBack" text="Back" visible="false">
+                  <cursor>
+                     <Cursor fx:constant="HAND" />
+                  </cursor>
+                  <effect>
+                     <DropShadow />
+                  </effect>
+                  <HBox.margin>
+                     <Insets left="5.0" />
+                  </HBox.margin>
+               </Button>
+            </children>
+         </HBox>
+      </children>
+   </VBox>
+
+   
 </StackPane>

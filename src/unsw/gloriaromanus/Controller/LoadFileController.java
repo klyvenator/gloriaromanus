@@ -1,6 +1,7 @@
 package unsw.gloriaromanus.Controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,13 +11,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-
+import javafx.stage.Stage;
 import unsw.gloriaromanus.View.*;
 import unsw.gloriaromanus.Model.*;
 
 public class LoadFileController {
 
     private StartScreen startScreen;
+    private Stage stage;
     private File folder = new File("src/unsw/gloriaromanus/SaveFiles");
     private List<String> fileNames;
     private String fileToLoad;
@@ -29,10 +31,9 @@ public class LoadFileController {
 
     @FXML
     private Button nextButton;
-    
+
     @FXML
     private Button backButton;
-
 
     @FXML
     private ComboBox<String> chooseFile = new ComboBox<String>();
@@ -45,10 +46,12 @@ public class LoadFileController {
     }
 
     @FXML
-	private void handleNextButton(ActionEvent event) {
+    private void handleNextButton(ActionEvent event) throws IOException {
         fileToLoad = chooseFile.getValue();
         LoadFile newLoadFile = new LoadFile(fileToLoad);
         List<Faction> facList = newLoadFile.getFactionList();
+        PlayGloriaRomanus playGame = new PlayGloriaRomanus(stage, null, facList, startScreen);
+        playGame.startGame();
     }
 
     @FXML
@@ -71,5 +74,9 @@ public class LoadFileController {
             fileNames.add(fileEntry.getName());
         }
         chooseFile.getItems().addAll(fileNames);
+    }
+
+    public void setStage(Stage stage){
+        this.stage = stage;
     }
 }

@@ -18,13 +18,13 @@ public class PlayGloriaRomanus{
   private Scene scene;
   private Stage stage;
 
-  public PlayGloriaRomanus(Stage stage, List<String> listOfFactionNames, List<Faction> facList) throws IOException {
+  public PlayGloriaRomanus(Stage stage, List<String> listOfFactionNames, List<Faction> facList, StartScreen startScreen) throws IOException {
     this.stage = stage;
 
     controller = new GloriaRomanusController();
     controller.setFactionList(listOfFactionNames);
-    controller.setFactionLoadGameFactionList(facList);
-    
+    controller.setLoadGameFactionList(facList);
+    controller.setStartScreen(startScreen);
     FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
     loader.setController(controller);
 
