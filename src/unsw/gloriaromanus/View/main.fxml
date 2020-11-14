@@ -157,6 +157,7 @@
            <items>
              <MenuItem fx:id="saveGameButton" mnemonicParsing="false" onAction="#handleSaveGame" text="Save Game" />
              <MenuItem fx:id="mainMenuButton" mnemonicParsing="false" onAction="#handleMainMenuButton" text="Main Menu" />
+               <MenuItem fx:id="exitGame" mnemonicParsing="false" onAction="#handleExitGame" text="Exit Game" />
            </items>
             <cursor>
                <Cursor fx:constant="HAND" />

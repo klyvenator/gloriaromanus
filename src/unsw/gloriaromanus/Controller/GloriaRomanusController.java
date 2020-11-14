@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
@@ -686,6 +687,18 @@ public class GloriaRomanusController{
   private void handleGoToMenuButton(ActionEvent event){
     terminate();
     startScreen.start();
+  }
+  @FXML
+  private void handleExitGame(ActionEvent event){
+    Alert alert = new Alert(AlertType.CONFIRMATION, 
+    "You are about to exit the game all unsaved progress will be lost", 
+    ButtonType.OK, ButtonType.CANCEL);
+    Optional<ButtonType> result = alert.showAndWait();
+    if( result.get() == ButtonType.CANCEL ){ return; }
+    else{
+      terminate();
+      System.exit(0);
+    }
   }
   public void setStartScreen(StartScreen startScreen){
     this.startScreen = startScreen;
