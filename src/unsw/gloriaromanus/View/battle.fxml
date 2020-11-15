@@ -5,7 +5,6 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Circle?>
-<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
@@ -20,20 +19,18 @@
             <Font name="Algerian" size="27.0" />
          </font></Label>
       <TextArea fx:id="battleMessages" layoutX="52.0" layoutY="386.0" prefHeight="262.0" prefWidth="707.0" />
-      <Label fx:id="humanFaction" layoutX="52.0" layoutY="8.0" prefHeight="43.0" prefWidth="152.0" text="invader">
+      <Label fx:id="humanFaction" layoutX="71.0" layoutY="295.0" prefHeight="43.0" prefWidth="152.0" text="invader">
          <font>
             <Font name="Berlin Sans FB" size="18.0" />
          </font></Label>
       <Circle fx:id="humanUnit" fill="DODGERBLUE" layoutX="122.0" layoutY="218.0" radius="51.0" stroke="BLACK" strokeType="INSIDE" />
       <Button fx:id="startBattleButton" layoutX="285.0" layoutY="239.0" mnemonicParsing="false" onAction="#startBattleAction" prefHeight="78.0" prefWidth="199.0" text="Start Battle!" />
-      <Label fx:id="enemyFaction" layoutX="634.0" layoutY="15.0" prefHeight="30.0" prefWidth="158.0" text="defender" textAlignment="RIGHT">
+      <Label fx:id="enemyFaction" layoutX="628.0" layoutY="283.0" prefHeight="68.0" prefWidth="102.0" text="defender" textAlignment="RIGHT" wrapText="true">
          <font>
             <Font name="Berlin Sans FB" size="18.0" />
          </font></Label>
       <Circle fx:id="enemyUnit" fill="#eb4949" layoutX="679.0" layoutY="218.0" radius="51.0" stroke="BLACK" strokeType="INSIDE" />
-      <Rectangle fx:id="humanHealth" arcHeight="5.0" arcWidth="5.0" fill="#62e864" height="21.0" layoutX="255.0" layoutY="142.0" stroke="BLACK" strokeType="INSIDE" width="100.0" />
-      <Rectangle fx:id="enemyHealth" arcHeight="5.0" arcWidth="5.0" fill="#62e864" height="21.0" layoutX="473.0" layoutY="142.0" stroke="BLACK" strokeType="INSIDE" width="100.0" />
-      <Label fx:id="armyHuman" layoutX="255.0" layoutY="175.0" prefHeight="43.0" prefWidth="114.0" text="humanLives" />
-      <Label fx:id="armyEnemy" layoutX="480.0" layoutY="175.0" prefHeight="43.0" prefWidth="102.0" text="enemyLives" />
+      <Label fx:id="armyHuman" layoutX="257.0" layoutY="138.0" prefHeight="43.0" prefWidth="114.0" text="humanLives" />
+      <Label fx:id="armyEnemy" layoutX="484.0" layoutY="138.0" prefHeight="43.0" prefWidth="102.0" text="enemyLives" />
    </children>
 </Pane>
