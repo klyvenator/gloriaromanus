@@ -7,6 +7,7 @@ import java.util.Random;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ChangeListener;
+//import sun.security.action.GetBooleanAction;
 import unsw.gloriaromanus.Model.Enums.Range;
 
 /**
@@ -32,6 +33,7 @@ public abstract class Unit {
     private int cost = 100;
     private int turnsToMake = 1;
     private int movementPoints;
+    private int movesLeft;
     
     private Town currentlyOn;
     private Army army;
@@ -437,5 +439,15 @@ public abstract class Unit {
             broken = false;
         }
 
+    }
+
+    public void resetMoves() {
+        movesLeft = movementPoints;
+    }
+    public void setMovesLeft(int movesLeft) {
+        this.movesLeft = movesLeft;
+    }
+    public int getMovesLeft() {
+        return movesLeft;
     }
 }

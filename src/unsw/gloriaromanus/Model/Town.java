@@ -117,6 +117,7 @@ public class Town {
         for (Unit u: a.getAllUnits()) {
             army.removeUnit(u);
         }
+        System.out.println(townName + " " + army.getAllUnits());
     }
 
     
