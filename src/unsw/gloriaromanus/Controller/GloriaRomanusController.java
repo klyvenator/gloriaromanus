@@ -713,7 +713,58 @@ public class GloriaRomanusController{
 
   public void initialiseProvinceWindow() {
     // TODO import from json list of units.
+    List<String> unitsList = new ArrayList<String>();
+    String jsonString = null;
+        try {
+            jsonString = Files.readString(Paths.get("src/unsw/gloriaromanus/Json/Units.json"));
+        } catch (IOException e) {
+            System.out.println(e);
+            System.exit(1);
+        } 
+       JSONObject json = new JSONObject(jsonString);
+        for (String key: json.keySet()) {
+          unitsList.add(key);
+        }
+      switch (humanFaction) {
+        case "Gaul":
+          unitsList.remove("Legionary");
+          unitsList.remove("Beserker");
+          unitsList.remove("Chariot");
+          unitsList.remove("Elephant");
+          break;
+        case "Rome":
+          unitsList.remove("Druid");
+          unitsList.remove("Beserker");
+          unitsList.remove("Chariot");
+          unitsList.remove("Elephant");
+          break;
+        case "Celtic Briton":
+          unitsList.remove("Legionary");
+          unitsList.remove("Druid");
+          unitsList.remove("Chariot");
+          unitsList.remove("Elephant");
+          break;
+        case "Greek":
+          unitsList.remove("Legionary");
+          unitsList.remove("Beserker");
+          unitsList.remove("Druid");
+          unitsList.remove("Elephant");
+          break;
+        case "Egyptian":
+          unitsList.remove("Legionary");
+          unitsList.remove("Beserker");
+          unitsList.remove("Chariot");
+          unitsList.remove("Druid");
+          break;
+        case "Thracian":
+          unitsList.remove("Legionary");
+          unitsList.remove("Beserker");
+          unitsList.remove("Chariot");
+          unitsList.remove("Elephant");
+          break;
+      }
     String[] units = {"Select unit", "Melee Infantry", "Legionary"};
+    pWRecruitList.getItems().clear();
     pWRecruitList.getItems().addAll(units);
     pWRecruitList.getSelectionModel().selectFirst();
     pWUnitList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -897,6 +948,7 @@ public class GloriaRomanusController{
       humanFaction = factionNames.get(0);
     }
     initialiseTopBar();
+    initialiseProvinceWindow();
   }
 
   public void initialiseTopBar() {
