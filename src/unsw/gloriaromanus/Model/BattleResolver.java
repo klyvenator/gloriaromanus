@@ -2,6 +2,9 @@ package unsw.gloriaromanus.Model;
 
 import java.util.concurrent.TimeUnit;
 
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.control.TextArea;
 import unsw.gloriaromanus.Model.Enums.BattleStatus;
 import unsw.gloriaromanus.Model.Enums.FightStatus;
@@ -9,6 +12,10 @@ import unsw.gloriaromanus.Model.Enums.FightStatus;
 public class BattleResolver {
     private Army armyA; // attacker
     private Army armyB; // defender
+    private IntegerProperty armyAsize;
+    private IntegerProperty armyBsize;
+    private DoubleProperty unitAbinding;
+    private DoubleProperty unitBbinding;
     private Town invaderProvince;
     private Town defenderProvince;
     private BattleStatus status;
@@ -17,6 +24,10 @@ public class BattleResolver {
     private BattleResolver() {
         armyA = null;
         armyB = null;
+        armyAsize = new SimpleIntegerProperty();
+        armyBsize = new SimpleIntegerProperty();
+        unitAbinding = null;
+        unitBbinding = null;
         invaderProvince = null;
         defenderProvince = null;
         status = BattleStatus.FIGHTING;
@@ -27,6 +38,8 @@ public class BattleResolver {
         this();
         this.armyA = a;
         this.armyB = b;
+        armyAsize.setValue(a.numAvailableUnits());
+        armyBsize.setValue(b.numAvailableUnits());
     }
 
     public BattleResolver(Army a, Army b, TextArea terminal) {
@@ -46,6 +59,29 @@ public class BattleResolver {
 
     public BattleStatus getStatus() {
         return status;
+    }
+
+    public void updateArmyNumAvailableUnits() {
+        armyA.updateNumAvailableUnits();
+        armyB.updateNumAvailableUnits();
+    }
+
+    public void setArmyBindings(DoubleProperty p1, DoubleProperty p2) {
+        p1.bind(armyAsize);
+        p2.bind(armyBsize);
+    }
+
+    public void removeArmyBindings() {
+        armyAsize = new SimpleIntegerProperty();
+        armyAsize.setValue(armyA.numAvailableUnits());
+
+        armyBsize = new SimpleIntegerProperty();
+        armyBsize.setValue(armyB.numAvailableUnits());
+    }
+
+    public void setUnitBindings(DoubleProperty p1, DoubleProperty p2) {
+        unitAbinding = p1;
+        unitBbinding = p2;
     }
 
     private void writeToTerminal(String msg) {
@@ -119,12 +155,21 @@ public class BattleResolver {
             
             skirmish.activateSkirmishAbilities();
 
+            skirmish.setUnitBindings(unitAbinding, unitBbinding);
+
+            // TODO skirmish.setUnitBindings(..., ...)
             // TODO Print Unit.toString() to print out unit name in confrontation
             skirmish.startEngagements();
+            
+            skirmish.removeUnitBindings(unitAbinding, unitBbinding);
+
+            // TODO skirmish.removeUnitBindings()
             
             skirmish.cancelSkirmishAbilities();
         
             printEndSkirmishMessage(skirmish);
+
+            updateArmyNumAvailableUnits();
 
             // Wait after each skirmish
             try {TimeUnit.SECONDS.sleep(2);}
