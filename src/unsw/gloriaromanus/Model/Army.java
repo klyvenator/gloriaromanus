@@ -4,13 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ChangeListener;
+
 public class Army {
     private List<Unit> units;
     private Town currentlyOn;
+    private IntegerProperty numAvailableUnits;
 
     public Army() {
         units = new ArrayList<Unit>();
         currentlyOn = null;
+        numAvailableUnits = new SimpleIntegerProperty(0);
     }
 
     public Army(Town currentlyOn) {
@@ -20,6 +26,15 @@ public class Army {
 
     public void addUnit(Unit unit) {
         units.add(unit);
+        numAvailableUnits.set(numAvailableUnits.get() + 1);
+    }
+
+    public void addNumAvailableUnitsListener(ChangeListener<? super Number> listener) {
+        numAvailableUnits.addListener(listener);
+    }
+
+    public void removeNumAvailableUnitsListener(ChangeListener<? super Number> listener) {
+        numAvailableUnits.removeListener(listener);
     }
 
     public void removeUnit(Unit u) {
@@ -36,10 +51,16 @@ public class Army {
         return units;
     }
 
+    public IntegerProperty getAvailableUnitsProperty() {
+        return numAvailableUnits;
+    }
+
     public void setAllUnbroken() {
         for (Unit unit : units) {
             unit.setBroken(false);
         }
+
+        numAvailableUnits.set(getNumUnits());
     }
 
     public void activateArmyAbilities() {
@@ -76,6 +97,13 @@ public class Army {
 
     public int numAvailableUnits() {
         
+        return numAvailableUnits.get();
+        /*
+        
+        */
+    }
+
+    public void updateNumAvailableUnits() {
         int num = 0;
         for (Unit unit : units) {
             if (
@@ -85,9 +113,9 @@ public class Army {
                 num++;
             }
         }
-        return num;
+        numAvailableUnits.set(num);
     }
-
+    
     /**
      * Returns a list of available units
      * A unit is avaialble if it is:

@@ -47,7 +47,7 @@ public class SaveFileTest {
         // delete file before use for sanity reasons
         File temp = new File("testSave.json"); 
         temp.delete();
-        saveFile = new SaveFile(facList, "testSave", 0);
+        saveFile = new SaveFile(facList, "testSave");
         // store contents of file to a string 
         File newFile = saveFile.getFile();
         String created = Files.readString(Paths.get(newFile.getName()));
