@@ -728,9 +728,27 @@ public class GloriaRomanusController{
 
   @FXML
   public void handlesWConfirmButton() {
-    Army yourArmy = StringToTown(pWProvinceName.getText()).getArmy();
-    Army enemyArmy = StringToTown(targetProvince).getArmy();
-    //INVADE CODE FOR JIBI, AFTER BATTLE HAS FINISHED SET invadeMode=false
+    Town yourProvince = StringToTown(pWProvinceName.getText());
+    Army yourArmy = yourProvince.getArmy();
+    if (invadeMode) {
+      Town enemyProvince = StringToTown(targetProvince);
+      Army enemyArmy = enemyProvince.getArmy();
+      //INVADE CODE FOR JIBI, AFTER BATTLE HAS FINISHED SET invadeMode=false   
+    } else if (moveMode) {
+      // Movement Code
+      Town destinationProvince = StringToTown(targetProvince);
+      if (yourArmy.canMoveTo(destinationProvince)) {
+        destinationProvince.addArmy(yourArmy);
+        yourProvince.removeArmy(yourArmy);
+        clearTownUnitList(sWUnitList);
+        fillTownUnitList(targetProvince, sWUnitList);
+        moveMode = false;
+      } else {
+        Alert alert = new Alert(AlertType.WARNING, "Not enough movement points", ButtonType.OK);
+        alert.showAndWait(); 
+      }
+    }
+
 
   }
   @FXML
@@ -745,6 +763,9 @@ public class GloriaRomanusController{
 
   @FXML
   public void handlePWTaxRate() {
+    if (pWTaxRate == null) {
+      return;
+    }
     switch(pWTaxRate.getValue().toString()) {
       case "Low Tax Rate":
         StringToTown(pWProvinceName.getText()).updateTaxStatus("Low");
