@@ -30,6 +30,7 @@ public class StartScreen{
     }
     
     public void start() {
+        musicUtils.playSound("openingTheme.mp3");
         stage.setTitle(title);
         stage.setScene(scene);
         stage.show();

@@ -3,6 +3,7 @@ package unsw.gloriaromanus.Controller;
 import unsw.gloriaromanus.Model.*;
 import unsw.gloriaromanus.View.BattleScreen;
 import unsw.gloriaromanus.View.StartScreen;
+import unsw.gloriaromanus.View.musicUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -948,6 +949,7 @@ public class GloriaRomanusController{
   // closes the map and returns to main menu
   @FXML
   private void handleGoToMenuButton(ActionEvent event){
+    musicUtils.stopSound();
     terminate();
     startScreen.start();
   }
