@@ -1,7 +1,5 @@
 package unsw.gloriaromanus.Model;
 
-import java.util.List;
-
 import unsw.gloriaromanus.Model.Enums.Condition;
 
 public class LeafEvaluator implements ComponentEvaluator {
