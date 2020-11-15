@@ -22,9 +22,9 @@ public class RangedEngagements extends Engagements {
 
         double part2;
         try { 
-            part2 = attacker.getAttack() / defender.getDefenseRanged();
+            part2 = 1.0 * attacker.getAttack() / defender.getDefenseRanged();
         } catch (ArithmeticException e) {
-            part2 = attacker.getAttack() / MIN_DEFENSE;
+            part2 = 1.0 * attacker.getAttack() / MIN_DEFENSE;
         }
 
         Random r = new Random();
