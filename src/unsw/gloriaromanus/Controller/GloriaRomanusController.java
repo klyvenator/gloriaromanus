@@ -460,7 +460,7 @@ public class GloriaRomanusController{
               List<Feature> features = identifyLayerResult.getElements().stream().map(f -> (Feature) f).collect(Collectors.toList());
 
               if (features.size() > 1){
-                printMessageToTerminal("Have more than 1 element - you might have clicked on boundary!");
+                //printMessageToTerminal("Have more than 1 element - you might have clicked on boundary!");
               }
               else if (features.size() == 1){
                 // note maybe best to track whether selected...
