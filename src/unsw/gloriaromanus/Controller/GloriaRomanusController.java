@@ -828,42 +828,35 @@ public class GloriaRomanusController{
     Army yourArmy = yourProvince.getArmy();
 
     if (invadeMode) {
-      Town enemyProvince = StringToTown(targetProvince);
-      Army enemyArmy = enemyProvince.getArmy();
-      Infantry infantry1 = new Infantry("Archers");
-      yourArmy.addUnit(infantry1);
+      if (!connected(humanProvince, targetProvince)) {
+        Alert alert = new Alert(AlertType.WARNING, "Only adjacent provinces can war! Please move your army.", ButtonType.OK);
+        alert.showAndWait();
+      } else {
+        Town enemyProvince = StringToTown(targetProvince);
+        Army enemyArmy = enemyProvince.getArmy();
+        Faction current = provinceToOwningFactionMap.get(StringToTown(humanProvince));
+        Faction enemy = provinceToOwningFactionMap.get(StringToTown(targetProvince));
     
-      Infantry infantry2 = new Infantry("Archers Again");
-      yourArmy.addUnit(infantry2);
-      
-      Infantry infantry3 = new Infantry("Archers three");
-      yourArmy.addUnit(infantry3);
-      
-      Artillery artillery1 = new Artillery("Catapults");
-      enemyArmy.addUnit(artillery1);
-      
-      Artillery artillery2 = new Artillery("Catapults lol");
-      enemyArmy.addUnit(artillery2);
-  
-      Artillery artillery3 = new Artillery("Catapults again");
-      enemyArmy.addUnit(artillery3);
-  
-      Faction current = provinceToOwningFactionMap.get(StringToTown(humanProvince));
-      Faction enemy = provinceToOwningFactionMap.get(StringToTown(targetProvince));
-  
-      battleScreen.start(
-        yourArmy, enemyArmy,
-        humanProvince, targetProvince,
-        current, enemy
-      );
-  
+        battleScreen.start(
+          yourArmy, enemyArmy,
+          humanProvince, targetProvince,
+          current, enemy
+        );
+
+        if (enemy.getTowns().size() == 0) {
+          factionNames.remove(enemy.getFactionName());
+          numPlayers--;
+          Alert alert = new Alert(AlertType.WARNING, enemy.getFactionName() + " has lost!", ButtonType.OK);
+          alert.showAndWait(); 
+        }
+      }
       invadeMode = false;
       closeWindows();
       
     } else if (moveMode) {
       // Movement Code
       Town destinationProvince = StringToTown(targetProvince);
-      if (yourArmy.canMoveTo(destinationProvince)) {
+      if (yourArmy.canMoveTo(destinationProvince, provinceToOwningFactionMap)) {
         yourArmy.move(destinationProvince);
         reloadTownUnitList(sWUnitList, targetProvince);
         reloadTownUnitList(pWUnitList, humanProvince);
@@ -876,6 +869,12 @@ public class GloriaRomanusController{
 
   }
 
+  private boolean connected(String province1, String province2) throws IOException {
+    String content = Files.readString(Paths.get("src/unsw/gloriaromanus/province_adjacency_matrix_fully_connected.json"));
+    JSONObject provinceAdjacencyMatrix = new JSONObject(content);
+    return provinceAdjacencyMatrix.getJSONObject(province1).getBoolean(province2);
+  }
+
   public void reloadTownUnitList(ListView<String> list, String province) {
     clearTownUnitList(list);
     fillTownUnitList(province, list);
@@ -884,12 +883,20 @@ public class GloriaRomanusController{
 
   @FXML
   public void handleInvadeButton() {
-    invadeMode = true;
+    Town t = StringToTown(pWProvinceName.getText());
+    if (t.getArmy().getAllUnits().size() == 0) {
+      Alert alert = new Alert(AlertType.WARNING, "You need an army to invade.", ButtonType.OK);
+      alert.showAndWait(); 
+    } else {
+      invadeMode = true;
+      moveMode = false;
+    }
   }
 
   @FXML
   public void handleMoveButton() {
     moveMode = true;
+    invadeMode = false;
   }
 
   @FXML
