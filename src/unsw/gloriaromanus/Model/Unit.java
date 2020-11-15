@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import unsw.gloriaromanus.Model.Enums.Range;
 
 /**
@@ -19,7 +21,8 @@ public abstract class Unit {
     private String name;
     private String category;
     private Range type = Range.MELEE;  // range of the unit
-    private int numTroops = 100;  // the number of troops in this unit (should reduce based on depletion)
+    private IntegerProperty numTroopsProperty;
+    // private int numTroops = 100;  // the number of troops in this unit (should reduce based on depletion)
     private int attack = 10;  // can be either missile or melee attack to simplify. Could improve implementation by differentiating!
     private DefenseStat defense;   // armour defense
     private int morale = 10;  // resistance to fleeing
@@ -43,12 +46,13 @@ public abstract class Unit {
 
         this.army = null;
 
+        this.numTroopsProperty = new SimpleIntegerProperty(100);
         broken = false;
     }
 
     @Override
     public String toString() {
-        return name + " - " + numTroops;
+        return name + " - " + numTroopsProperty.get();
     }
 
     /*
@@ -59,11 +63,15 @@ public abstract class Unit {
         return name;
     }
 
-    public int getNumTroops(){
-        return numTroops;
+    public int getNumTroops() {
+        return numTroopsProperty.get();
     }
+    public IntegerProperty getNumTroopsProperty() {
+        return numTroopsProperty;
+    }
+
     public void setNumTroops(int numTroops) {
-        this.numTroops = numTroops;
+        this.numTroopsProperty.set(numTroops);
     }
 
     public Range getType() {
