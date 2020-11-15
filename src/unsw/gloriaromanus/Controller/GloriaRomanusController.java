@@ -1,6 +1,7 @@
 package unsw.gloriaromanus.Controller;
 
 import unsw.gloriaromanus.Model.*;
+import unsw.gloriaromanus.Model.Enums.BattleStatus;
 import unsw.gloriaromanus.View.BattleScreen;
 import unsw.gloriaromanus.View.StartScreen;
 import unsw.gloriaromanus.View.musicUtils;
@@ -186,7 +187,7 @@ public class GloriaRomanusController{
   private int turnCount;
   private int numPlayers;
 
-
+  private BattleResolver resolver;
 
   @FXML
   private void initialize() throws JsonParseException, JsonMappingException, IOException {
@@ -790,10 +791,15 @@ public class GloriaRomanusController{
         faction.setGold(faction.getTotalGold() - unitObject.getCost());
         if (unitObject.getTurnsToMake() > 0) {
           town.trainUnit(unitObject);
+          Alert alert = new Alert(AlertType.INFORMATION, unitObject.getName() + " will take " + unitObject.getTurnsToMake() + "turns to make.", ButtonType.OK);
+          alert.showAndWait(); 
         } else {
+          Alert alert = new Alert(AlertType.INFORMATION, unitObject.getName() + "has been recruited!", ButtonType.OK);
+          alert.showAndWait(); 
           town.addUnit(unitObject);
         }
         fillTownUnitList(pWProvinceName.getText(), pWUnitList);
+        
       }
     }
   }
@@ -844,6 +850,19 @@ public class GloriaRomanusController{
           current, enemy
         );
 
+        resolver = battleScreen.getController().getBattleResolver();
+
+        if (resolver.getStatus() == BattleStatus.WIN_A) {
+          Alert alert = new Alert(AlertType.INFORMATION, current.getFactionName() + " has won!", ButtonType.OK);
+          alert.showAndWait(); 
+        } else if (resolver.getStatus() == BattleStatus.WIN_A) {
+          Alert alert = new Alert(AlertType.INFORMATION, enemy.getFactionName() + " has won!", ButtonType.OK);
+          alert.showAndWait(); 
+        } else {
+          Alert alert = new Alert(AlertType.WARNING, "Battle still ongoing?", ButtonType.OK);
+          alert.showAndWait(); 
+        }
+        
         if (enemy.getTowns().size() == 0) {
           factionNames.remove(enemy.getFactionName());
           numPlayers--;
@@ -851,6 +870,7 @@ public class GloriaRomanusController{
           alert.showAndWait(); 
         }
       }
+
       invadeMode = false;
       closeWindows();
       

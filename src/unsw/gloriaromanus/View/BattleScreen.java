@@ -48,5 +48,15 @@ public class BattleScreen {
         stage.setScene(scene);
         stage.show();
     }
+
+    public BattleController getController() {
+        return controller;
+    }
+
+    public void setController(BattleController controller) {
+        this.controller = controller;
+    }
+
+    
     
 }
