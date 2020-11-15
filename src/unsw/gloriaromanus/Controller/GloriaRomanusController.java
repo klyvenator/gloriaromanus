@@ -3,6 +3,7 @@ package unsw.gloriaromanus.Controller;
 import unsw.gloriaromanus.Model.*;
 import unsw.gloriaromanus.View.BattleScreen;
 import unsw.gloriaromanus.View.StartScreen;
+import unsw.gloriaromanus.View.musicUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -712,7 +713,59 @@ public class GloriaRomanusController{
 
   public void initialiseProvinceWindow() {
     // TODO import from json list of units.
-    String[] units = {"Select unit", "Melee Infantry", "Legionary"};
+    List<String> unitsList = new ArrayList<String>();
+    String jsonString = null;
+        try {
+            jsonString = Files.readString(Paths.get("src/unsw/gloriaromanus/Json/Units.json"));
+        } catch (IOException e) {
+            System.out.println(e);
+            System.exit(1);
+        } 
+       JSONObject json = new JSONObject(jsonString);
+        for (String key: json.keySet()) {
+          unitsList.add(key);
+        }
+      switch (humanFaction) {
+        case "Gaul":
+          unitsList.remove("Legionary");
+          unitsList.remove("Beserker");
+          unitsList.remove("Chariot");
+          unitsList.remove("Elephant");
+          break;
+        case "Rome":
+          unitsList.remove("Druid");
+          unitsList.remove("Beserker");
+          unitsList.remove("Chariot");
+          unitsList.remove("Elephant");
+          break;
+        case "Celtic Briton":
+          unitsList.remove("Legionary");
+          unitsList.remove("Druid");
+          unitsList.remove("Chariot");
+          unitsList.remove("Elephant");
+          break;
+        case "Greek":
+          unitsList.remove("Legionary");
+          unitsList.remove("Beserker");
+          unitsList.remove("Druid");
+          unitsList.remove("Elephant");
+          break;
+        case "Egyptian":
+          unitsList.remove("Legionary");
+          unitsList.remove("Beserker");
+          unitsList.remove("Chariot");
+          unitsList.remove("Druid");
+          break;
+        case "Thracian":
+          unitsList.remove("Legionary");
+          unitsList.remove("Beserker");
+          unitsList.remove("Chariot");
+          unitsList.remove("Elephant");
+          break;
+      }
+    String[] units = new String[unitsList.size()];
+    units = unitsList.toArray(units);
+    pWRecruitList.getItems().clear();
     pWRecruitList.getItems().addAll(units);
     pWRecruitList.getSelectionModel().selectFirst();
     pWUnitList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -896,6 +949,7 @@ public class GloriaRomanusController{
       humanFaction = factionNames.get(0);
     }
     initialiseTopBar();
+    initialiseProvinceWindow();
   }
 
   public void initialiseTopBar() {
@@ -944,17 +998,21 @@ public class GloriaRomanusController{
       e.printStackTrace();
     }
   }
+  // if the back button is pressed hide the menu buttons and go back to playing
   @FXML
   private void handleSaveGameBack(ActionEvent event){
     saveFileName.setVisible(false);
     saveGame.setVisible(false);
     saveGameBackButton.setVisible(false);
   }
+  // closes the map and returns to main menu
   @FXML
   private void handleGoToMenuButton(ActionEvent event){
+    musicUtils.stopSound();
     terminate();
     startScreen.start();
   }
+  // confirms player wants to exit and safely closes application
   @FXML
   private void handleExitGame(ActionEvent event){
     Alert alert = new Alert(AlertType.CONFIRMATION, 

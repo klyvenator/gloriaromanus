@@ -72,26 +72,6 @@ public class GameMenuController {
     }
 
     @FXML
-    private void handleP1faction(ActionEvent event) {
-        players.add(chooseFaction1.getValue());
-    }
-
-    @FXML
-    private void handleP2faction(ActionEvent event) {
-        players.add(chooseFaction2.getValue());
-    }
-
-    @FXML
-    private void handleP3faction(ActionEvent event) {
-        players.add(chooseFaction3.getValue());
-    }
-
-    @FXML
-    private void handleP4faction(ActionEvent event) {
-        players.add(chooseFaction4.getValue());
-    }
-
-    @FXML
     private void handle2players(ActionEvent event) {
         if (numPlayers != 2) {
             setData();
@@ -134,13 +114,18 @@ public class GameMenuController {
 
     @FXML
     private void handleNextButton(ActionEvent event) throws IOException {
+        if( !chooseFaction1.getSelectionModel().isEmpty() ){ players.add(chooseFaction1.getValue()); }
+        if( !chooseFaction2.getSelectionModel().isEmpty() ){ players.add(chooseFaction2.getValue()); }
+        if( !chooseFaction3.getSelectionModel().isEmpty() ){ players.add(chooseFaction3.getValue()); }
+        if( !chooseFaction4.getSelectionModel().isEmpty() ){ players.add(chooseFaction4.getValue()); }
+
         if(players.isEmpty()){
             System.out.println("empty list please add factions");
         }else{
             for(String s : players){
                 if(Collections.frequency(players, s) != 1){
                     alert.showAndWait();
-                    removeContent();
+                    setData();
                 }
             }
             finalPlayers = new ArrayList<String>();

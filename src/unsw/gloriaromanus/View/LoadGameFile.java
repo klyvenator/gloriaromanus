@@ -29,6 +29,7 @@ public class LoadGameFile {
     }
 
     public void start() {
+        controller.setData();
         stage.setTitle(title);
         stage.setScene(scene);
         stage.show();
