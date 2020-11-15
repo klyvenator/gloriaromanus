@@ -22,6 +22,10 @@ public class Army {
         units.add(unit);
     }
 
+    public void removeUnit(Unit u) {
+        units.remove(u);
+    }
+
     // Getters and Setters
 
     public int getNumUnits() {
@@ -130,5 +134,8 @@ public class Army {
         return availableUnits.get(r.nextInt(availableUnits.size()));
     }
 
+    public boolean canMoveTo(Town t) {
+        return true;
+    }
 
 }
