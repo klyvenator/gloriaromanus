@@ -104,5 +104,17 @@ public class Town {
         unitsInTraining.put(u, u.getTurnsToMake());
     }
 
+    public void addArmy(Army reinforcements) {
+        for (Unit u: reinforcements.getAllUnits()) {
+            army.addUnit(u);
+        }
+    }
+
+    public void removeArmy(Army a) {
+        for (Unit u: a.getAllUnits()) {
+            a.removeUnit(u);
+        }
+    }
+
     
 }
