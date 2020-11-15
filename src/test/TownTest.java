@@ -11,7 +11,7 @@ import unsw.gloriaromanus.Model.*;
 public class TownTest {
     public Faction fac = new Faction("Bogans");
     public Town t = fac.addTown(fac,"Australia");
-     @Test
+      @Test
     public void townOwner(){
         assertEquals("Bogans", t.getFaction());
         // TownName or province should be "Australia"

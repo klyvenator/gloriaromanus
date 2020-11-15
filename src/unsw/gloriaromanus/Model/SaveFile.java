@@ -13,9 +13,9 @@ public class SaveFile {
     public File file;
     public List<Faction> factions;
 
-    public SaveFile(List<Faction> factions, String filename) throws IOException {
+    public SaveFile(List<Faction> factions, String filename, int year) throws IOException {
         this.file = createFile(filename);
-        JSONArray jArray = getFileContent(factions);
+        JSONArray jArray = getFileContent(factions, year);
         writeToFile(this.file, jArray);
     }
     public File getFile(){
@@ -33,9 +33,8 @@ public class SaveFile {
           }
     }
     public static File createFile(String filename) throws IOException {
-        // uncomment this for milestone 3 won't work for testing 
-        //File temp = new File("src/unsw/gloriaromanus/SaveFiles/"+filename+".json");
-        File temp = new File(filename+".json");
+        File temp = new File("src/unsw/gloriaromanus/SaveFiles/"+filename+".json");
+        //File temp = new File(filename+".json");
         try {
             if (temp.createNewFile()) {
                 System.out.println("File created: " + temp.getName());
@@ -51,7 +50,7 @@ public class SaveFile {
     }
     // adds faction and all of the things that are attached to that faction
     // eg Towns, units, wealth, 
-    public JSONArray getFileContent(List<Faction>factions){
+    public JSONArray getFileContent(List<Faction>factions, int year){
         JSONArray jArray = new JSONArray();
 
         for(Faction f : factions){
@@ -69,7 +68,10 @@ public class SaveFile {
             faction.put(f.getFactionName(), jsonObject);
             jArray.put(faction);
         }
-        System.out.println(jArray);
+        //System.out.println(jArray);
+        JSONObject yearObject = new JSONObject();
+        yearObject.put("Current year", year);
+        jArray.put(yearObject);
         return jArray;
     }
     // passes in a list of towns and gets the properties of each town and returns a json array
@@ -106,7 +108,7 @@ public class SaveFile {
             jsonObject.put("cost", u.getCost());
             jsonObject.put("turnstoproduce", u.getTurnsToMake());
             jsonObject.put("Movement Points", u.getMovementPoints());
-            //jsonObject.put("Abilities", u.getAbilities());
+            jsonObject.put("Abilities", u.getAbility());
             //jsonObject.put("Buffs", u.getBuffs());
             jsonObject.put("name", u.getName());
             unit.put(u.getName(), jsonObject);
