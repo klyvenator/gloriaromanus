@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.scene.control.TextArea;
 import unsw.gloriaromanus.Model.Enums.Range;
 import unsw.gloriaromanus.Model.Enums.FightStatus;
@@ -50,6 +51,16 @@ public class Skirmishes {
     public void removeUnitBindings(DoubleProperty p1, DoubleProperty p2) {
         p1.unbindBidirectional(unitA.getNumTroopsProperty());
         p2.unbindBidirectional(unitB.getNumTroopsProperty());
+    }
+
+    public void setNumTroopsListeners(ChangeListener<? super Number> listener1, ChangeListener<? super Number> listener2) {
+        unitA.addNumTroopsListener(listener1);
+        unitB.addNumTroopsListener(listener2);
+    }
+
+    public void removeNumTroopsListeners(ChangeListener<? super Number> listener1, ChangeListener<? super Number> listener2) {
+        unitA.removeNumTroopsListener(listener1);
+        unitB.removeNumTroopsListener(listener2);
     }
 
     private void writeToTerminal(String msg) {
