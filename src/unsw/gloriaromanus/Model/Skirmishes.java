@@ -106,22 +106,14 @@ public class Skirmishes {
         return unitA.isBroken() || unitB.isBroken();
     }
 
-    public void activateSkirmishAbilities() {
-        if (unitA.isAbilityType("skirmish")) {
-            unitA.activateAbility();
-        }
-        if (unitB.isAbilityType("skirmish")) {
-            unitB.activateAbility();
-        }
+    public void activateUnitAbilities() {
+        if (unitA != null) {unitA.activateAbility(UnitTarget.class);}
+        if (unitB != null) {unitB.activateAbility(UnitTarget.class);}
     }
 
-    public void cancelSkirmishAbilities() {
-        if (unitA.isAbilityType("skirmish")) {
-            unitA.cancelAbility();
-        }
-        if (unitB.isAbilityType("skirmish")) {
-            unitB.cancelAbility();
-        }
+    public void cancelUnitAbilities() {
+        if (unitA != null) {unitA.cancelAbility(UnitTarget.class);}
+        if (unitB != null) {unitB.cancelAbility(UnitTarget.class);}
     }
 
     // TODO Add this calculation at initialisation time
@@ -295,9 +287,6 @@ public class Skirmishes {
             firstBeforeSize = unitA.getNumTroops();
             secondBeforeSize = unitB.getNumTroops();
 
-            unitA.activateAbility();
-            unitB.activateAbility();
-
             writeToTerminal("Units health before engagement:");
             printUnitsHealth();
 
@@ -307,10 +296,6 @@ public class Skirmishes {
 
             writeToTerminal("Units health after engagement:");
             printUnitsHealth();
-
-            unitA.cancelAbility();
-            unitB.cancelAbility();
-
             /*
                 Cases:
                 1. One unit won, other defeated
