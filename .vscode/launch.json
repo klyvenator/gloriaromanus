@@ -10,7 +10,8 @@
             "name": "CodeLens (Launch) - GloriaRomanusApplication",
             "request": "launch",
             "mainClass": "unsw.gloriaromanus.View.GloriaRomanusApplication",
-            "projectName": "m17b-jk_group_811299fc"
+            "projectName": "m17b-jk_group_811299fc",
+            "vmArgs": "--module-path \"./lib\" --add-modules javafx.controls,javafx.fxml"
         },
         {
             "type": "java",
@@ -32,7 +33,7 @@
             "name": "CodeLens (Launch) - GloriaRomanusLauncher",
             "request": "launch",
             "mainClass": "unsw.gloriaromanus.GloriaRomanusLauncher",
-            "vmArgs": "--module-path \"./lib\" --add-modules javafx.controls,javafx.fxml,javafx.media,javafx.web"
+            "vmArgs": "--module-path \"./lib\" --add-modules javafx.controls,javafx.fxml"
         }
     ]
 }

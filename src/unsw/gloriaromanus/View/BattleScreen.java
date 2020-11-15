@@ -16,7 +16,7 @@ public class BattleScreen {
     private String title;
     private BattleController controller;
 
-    public BattleScreen(Stage stage, MainMapScreen mainMap) throws IOException {
+    public BattleScreen(Stage stage, PlayGloriaRomanus mainMap) throws IOException {
         this.stage = stage;
         this.title = "*** Battle Mode ***";
         controller = new BattleController(mainMap);
@@ -27,10 +27,12 @@ public class BattleScreen {
         scene = new Scene(root);
     }
 
-    public void start(Army human, Army enemy) {
+    public void start(Army human, Army enemy, String humanProvince, String targetProvince) {
         controller.setHumanArmy(human);
         controller.setEnemyArmy(enemy);
         controller.reset();
+        controller.setProvinceNames(humanProvince, targetProvince);
+        controller.setArmyBindings();
 
         stage.setTitle(title);
         stage.setScene(scene);

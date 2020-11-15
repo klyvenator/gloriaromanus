@@ -28,6 +28,7 @@ public class GameMenu{
         Parent root = loader.load();
         scene = new Scene(root);
 		controller.setData();
+		controller.setStage(stage);
 		controller.setStartScreen(startScreen);
 	}
 	
