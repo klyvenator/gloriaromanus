@@ -17,6 +17,7 @@ public class PlayGloriaRomanus{
   private static GloriaRomanusController controller;
   private Scene scene;
   private Stage stage;
+  private String title;
 
   public PlayGloriaRomanus(Stage stage, List<String> listOfFactionNames, List<Faction> facList, StartScreen startScreen, int year) throws IOException {
     this.stage = stage;
@@ -33,6 +34,7 @@ public class PlayGloriaRomanus{
     //System.out.print("hello world" + listOfFactionNames);
     scene = new Scene(root);
   }
+
   public void startGame() throws IOException{
     // set up the stage
     stage.setTitle("Gloria Romanus");
@@ -45,16 +47,9 @@ public class PlayGloriaRomanus{
   public void stop() {
     controller.terminate();
   }
+
   public GloriaRomanusController getController(){
     return controller;
   }
-  /**
-   * Opens and runs application.
-   *
-   * @param args arguments passed to this application
-   */
-  public static void main(String[] args) {
-
-    Application.launch(args);
-  }
+  
 }

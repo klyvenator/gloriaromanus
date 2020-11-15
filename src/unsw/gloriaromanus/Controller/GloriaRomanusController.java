@@ -1,7 +1,11 @@
 package unsw.gloriaromanus.Controller;
 
 import unsw.gloriaromanus.Model.*;
+<<<<<<< src/unsw/gloriaromanus/Controller/GloriaRomanusController.java
+import unsw.gloriaromanus.View.BattleScreen;
+=======
 import unsw.gloriaromanus.View.*;
+>>>>>>> src/unsw/gloriaromanus/Controller/GloriaRomanusController.java
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -90,6 +94,12 @@ public class GloriaRomanusController{
   private Map<Town, Faction> provinceToOwningFactionMap;
 
   private Map<String, Integer> provinceToNumberTroopsMap;
+
+  // private Map<String, List<Unit>> provinceToUnitListMap;
+  private Map<String, Army> provinceToArmyMap;
+  // private Map<String, Town> provinceToTownMap;
+
+  private BattleScreen battleScreen;
 
   private String humanFaction;
 
@@ -225,7 +235,37 @@ public class GloriaRomanusController{
     initialiseTopBar();
 
   }
+  
+  public void setBattleScreen(BattleScreen battleScreen) {
+    this.battleScreen = battleScreen;
+  }
+
+  private void battleStuff() {
+    String humanProvince = (String)currentlySelectedHumanProvince.getAttributes().get("name");
+    String enemyProvince = (String)currentlySelectedEnemyProvince.getAttributes().get("name");
+    
+    // DEBUG
+    Army a = new Army();
+    Army b = new Army();
+  
+    Infantry infantry = new Infantry("Archers");
+    a.addUnit(infantry);
+  
+    Artillery artillery = new Artillery("Catapults");
+    b.addUnit(artillery);
+  
+    battleScreen.start(
+      a,//provinceToArmyMap.get(humanProvince),
+      b,//provinceToArmyMap.get(enemyProvince)
+      "attacker",
+      "home",
+      null,
+      null
+    );
+  }
+
 /* USE SWINVADEBUTTON INSTEAD.
+
 
   @FXML
   public void clickedInvadeButton(ActionEvent e) throws IOException {
@@ -234,6 +274,9 @@ public class GloriaRomanusController{
       String enemyProvince = (String)currentlySelectedEnemyProvince.getAttributes().get("name");
       if (confirmIfProvincesConnected(humanProvince, enemyProvince)){
         // TODO = have better battle resolution than 50% chance of winning
+        
+        battleStuff();
+        
         Random r = new Random();
         int choice = r.nextInt(2);
         if (choice == 0){
@@ -575,7 +618,9 @@ public class GloriaRomanusController{
       String randomTown = list.get(randomIndex);
       Faction randomFaction = facList.get(randomFactionIndex);
 
-      randomFaction.addTown(randomFaction, randomTown);
+      Town randTown = randomFaction.addTown(randomFaction, randomTown);
+      randTown.setArmy(new Army(randTown));
+
       list.remove(randomIndex);
     }
     return facList;
@@ -728,9 +773,40 @@ public class GloriaRomanusController{
 
   @FXML
   public void handlesWConfirmButton() {
-    Army yourArmy = StringToTown(pWProvinceName.getText()).getArmy();
+    String humanProvince = pWProvinceName.getText();
+    Army yourArmy = StringToTown(humanProvince).getArmy();
     Army enemyArmy = StringToTown(targetProvince).getArmy();
+<<<<<<< src/unsw/gloriaromanus/Controller/GloriaRomanusController.java
+    //INVADE CODE FOR JIBI
+    Infantry infantry1 = new Infantry("Archers");
+    yourArmy.addUnit(infantry1);
+  
+    Infantry infantry2 = new Infantry("Archers Again");
+    yourArmy.addUnit(infantry2);
+    
+    Infantry infantry3 = new Infantry("Archers three");
+    yourArmy.addUnit(infantry3);
+    
+    Artillery artillery1 = new Artillery("Catapults");
+    enemyArmy.addUnit(artillery1);
+    
+    Artillery artillery2 = new Artillery("Catapults lol");
+    enemyArmy.addUnit(artillery2);
+
+    Artillery artillery3 = new Artillery("Catapults again");
+    enemyArmy.addUnit(artillery3);
+
+    Faction current = provinceToOwningFactionMap.get(StringToTown(humanProvince));
+    Faction enemy = provinceToOwningFactionMap.get(StringToTown(targetProvince));
+
+    battleScreen.start(
+      yourArmy, enemyArmy,
+      humanProvince, targetProvince,
+      current, enemy
+    );
+=======
     //INVADE CODE FOR JIBI, AFTER BATTLE HAS FINISHED SET invadeMode=false
+>>>>>>> src/unsw/gloriaromanus/Controller/GloriaRomanusController.java
 
   }
   @FXML
