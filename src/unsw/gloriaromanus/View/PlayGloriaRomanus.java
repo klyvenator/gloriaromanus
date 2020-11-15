@@ -1,6 +1,7 @@
 package unsw.gloriaromanus.View;
 
 import java.io.IOException;
+import java.util.List;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -10,53 +11,41 @@ import javafx.stage.Stage;
 
 import unsw.gloriaromanus.Controller.*;
 
-public class PlayGloriaRomanus extends Application {
+public class PlayGloriaRomanus{
 
   private static GloriaRomanusController controller;
+  private Scene scene;
+  private Stage stage;
+  private String title;
 
-  @Override
-  public void start(Stage stage) throws IOException {
-    /*
+  public PlayGloriaRomanus(Stage stage, List<String> listOfFactionNames) throws IOException {
+    this.stage = stage;
+
+    controller = new GloriaRomanusController();
+    controller.setFactionList(listOfFactionNames);
     FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
+    loader.setController(controller);
+
     Parent root = loader.load();
-    controller = loader.getController();
-    Scene scene = new Scene(root);
-    */
+    //System.out.print("hello world" + listOfFactionNames);
+    scene = new Scene(root);
+  }
 
-    MainMapScreen mapScreen = new MainMapScreen(stage);
-    controller = mapScreen.getController();
-    
-    BattleScreen battleScreen = new BattleScreen(stage, mapScreen);
-    
-    controller.setBattleScreen(battleScreen);
-
-
-    mapScreen.start();
-    /*
+  public void startGame() throws IOException{
     // set up the stage
     stage.setTitle("Gloria Romanus");
     stage.setWidth(800);
     stage.setHeight(700);
     stage.setScene(scene);
     stage.show();
-    */
   }
 
-  /**
-   * Stops and releases all resources used in application.
-   */
-  @Override
   public void stop() {
     controller.terminate();
   }
 
-  /**
-   * Opens and runs application.
-   *
-   * @param args arguments passed to this application
-   */
-  public static void main(String[] args) {
-
-    Application.launch(args);
+  public GloriaRomanusController getController(){
+    return controller;
   }
+  
 }

@@ -19,7 +19,7 @@ public class TownTest {
         // wealth is initially set to 10 gold
         assertEquals(10, t.getWealth());
         // no units were added so it'll just be empty
-        assertNotNull(t.getUnits());
+        assertNotNull(t.getArmy().getAllUnits());
     }
 
     @Test

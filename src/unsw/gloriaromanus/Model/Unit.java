@@ -46,6 +46,11 @@ public abstract class Unit {
         broken = false;
     }
 
+    @Override
+    public String toString() {
+        return name + " - " + numTroops;
+    }
+
     /*
         Getters and Setters
     */
