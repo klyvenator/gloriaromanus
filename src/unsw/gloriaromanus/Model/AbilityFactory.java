@@ -22,7 +22,7 @@ public class AbilityFactory implements Factory{
     public void initialise(){
         String jsonString = null;
         try {
-            jsonString = Files.readString(Paths.get("src/unsw/gloriaromanus/Json/Abilities.json"));
+            jsonString = Files.readString(Paths.get("src/unsw/gloriaromanus/Json/abilities2.json"));
         } catch (IOException e) {
             System.out.println(e);
             System.exit(1);
@@ -30,62 +30,46 @@ public class AbilityFactory implements Factory{
 
         JSONObject json = new JSONObject(jsonString);
         for (String key: json.keySet()) {
-            if (!json.getJSONObject(key).has("type")) {
-                System.out.println("Ability must have a type");
-                System.exit(1);
+            JSONObject abilityInfo = json.getJSONObject(key);
+            if (
+                abilityInfo.has("target") &&
+                abilityInfo.has("unitName") &&
+                abilityInfo.has("buffs")
+            ) {
+                abilityInfo.put("name", key);
+                blueprints.add(abilityInfo);
             }
-            json.getJSONObject(key).put("name", key);
-            blueprints.add(json.getJSONObject(key));
         }
     }
 
     private JSONObject getBlueprint(String name) {
         for (JSONObject blueprint : blueprints) {
-            if (blueprint.getString("name").equals("name")) {
+            if (blueprint.getString("name").equals(name)) {
                 return blueprint;
             }
         }
         return null;
     }
 
-    public Ability deserialise(String name) {
+    public AbilityContainer deserialise(String name) {
         JSONObject blueprint = getBlueprint(name);
         return deserialise(blueprint);
     }
 
     // Deserialises a single unit contained in a json object and returns a Unit.
-    public Ability deserialise(JSONObject blueprint) {
+    public AbilityContainer deserialise(JSONObject blueprint) {
 
         if (blueprint == null) {
             return null;
         }
 
-        // for now
-        return null;
+        return new AbilityContainer(
+            blueprint.getString("name"),
+            blueprint.getString("target"),
+            blueprint.getJSONObject("buffs")
+        );
 
         /*
-        Ability ability = null;
-        String type = blueprint.getString("type");
-        String name = blueprint.getString("name");
-
-        switch (type) {
-            case "faction":
-                ability = new FactionAbility(name);
-                break;
-            case "army":
-                ability = new ArmyAbility(name);    
-                break;
-            case "skirmish":
-                ability = new SkirmishAbility(name);    
-                break;
-            case "engagement":
-                ability = new EngagementAbility(name);    
-                break;
-            case "unit":
-                ability = new UnitAbility(name);    
-                break;
-        }
-
         // Example
         if (json.has("number")) {
             newUnit.setNumTroops(json.getInt("number"));

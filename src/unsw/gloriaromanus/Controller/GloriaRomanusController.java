@@ -210,8 +210,8 @@ public class GloriaRomanusController{
     } 
     // TODO = load this from a configuration file you create (user should be able to
     // select in loading screen)
-    //humanFaction = "Rome";
-    humanFaction = factionNames.get(1); // gets the head of the factionNames list whatever it is
+    humanFaction = factionNames.get(r.nextInt(factionNames.size()));
+
     currentlySelectedHumanProvince = null;
     currentlySelectedEnemyProvince = null;
 
@@ -770,7 +770,7 @@ public class GloriaRomanusController{
   }
 
   @FXML
-  public void handlesWConfirmButton() {
+  public void handlesWConfirmButton() throws IOException{
     String humanProvince = pWProvinceName.getText();
     Town yourProvince = StringToTown(humanProvince);
     Army yourArmy = yourProvince.getArmy();
@@ -812,10 +812,9 @@ public class GloriaRomanusController{
       // Movement Code
       Town destinationProvince = StringToTown(targetProvince);
       if (yourArmy.canMoveTo(destinationProvince)) {
-        destinationProvince.addArmy(yourArmy);
-        yourProvince.removeArmy(yourArmy);
-        clearTownUnitList(sWUnitList);
-        fillTownUnitList(targetProvince, sWUnitList);
+        yourArmy.move(destinationProvince);
+        reloadTownUnitList(sWUnitList, targetProvince);
+        reloadTownUnitList(pWUnitList, humanProvince);
         moveMode = false;
       } else {
         Alert alert = new Alert(AlertType.WARNING, "Not enough movement points", ButtonType.OK);
@@ -824,6 +823,13 @@ public class GloriaRomanusController{
     }
 
   }
+
+  public void reloadTownUnitList(ListView<String> list, String province) {
+    clearTownUnitList(list);
+    fillTownUnitList(province, list);
+  }
+
+
   @FXML
   public void handleInvadeButton() {
     invadeMode = true;
