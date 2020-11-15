@@ -147,15 +147,10 @@ public class GameMenuController {
             finalPlayers.addAll(players);
             // start Game
             //System.out.println(finalPlayers);
-<<<<<<< src/unsw/gloriaromanus/Controller/GameMenuController.java
-            play = new PlayGloriaRomanus(stage,finalPlayers);
+            play = new PlayGloriaRomanus(stage,finalPlayers, null, startScreen, 0);
             BattleScreen battleScreen = new BattleScreen(stage, play);
             play.getController().setBattleScreen(battleScreen);
             play.startGame();
-=======
-            PlayGloriaRomanus playGame = new PlayGloriaRomanus(stage,finalPlayers, null, startScreen, 0);
-            playGame.startGame();
->>>>>>> src/unsw/gloriaromanus/Controller/GameMenuController.java
         }
     }
     public void setStartScreen(StartScreen startScreen){

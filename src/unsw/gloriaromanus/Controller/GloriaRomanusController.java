@@ -1,11 +1,8 @@
 package unsw.gloriaromanus.Controller;
 
 import unsw.gloriaromanus.Model.*;
-<<<<<<< src/unsw/gloriaromanus/Controller/GloriaRomanusController.java
 import unsw.gloriaromanus.View.BattleScreen;
-=======
-import unsw.gloriaromanus.View.*;
->>>>>>> src/unsw/gloriaromanus/Controller/GloriaRomanusController.java
+import unsw.gloriaromanus.View.StartScreen;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -776,7 +773,6 @@ public class GloriaRomanusController{
     String humanProvince = pWProvinceName.getText();
     Army yourArmy = StringToTown(humanProvince).getArmy();
     Army enemyArmy = StringToTown(targetProvince).getArmy();
-<<<<<<< src/unsw/gloriaromanus/Controller/GloriaRomanusController.java
     //INVADE CODE FOR JIBI
     Infantry infantry1 = new Infantry("Archers");
     yourArmy.addUnit(infantry1);
@@ -804,9 +800,6 @@ public class GloriaRomanusController{
       humanProvince, targetProvince,
       current, enemy
     );
-=======
-    //INVADE CODE FOR JIBI, AFTER BATTLE HAS FINISHED SET invadeMode=false
->>>>>>> src/unsw/gloriaromanus/Controller/GloriaRomanusController.java
 
   }
   @FXML
