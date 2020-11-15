@@ -119,11 +119,17 @@ public class GloriaRomanusController{
   @FXML
   private Label pWProvinceName;
   @FXML
+  private Label pWProvinceWealth;
+  @FXML
   private ComboBox<String> pWRecruitList = new ComboBox<String>();
   @FXML
   private ListView<String> pWUnitList = new ListView<String>();
   @FXML
   private VBox provinceWindow;
+  @FXML
+  private ComboBox<String> pWTaxRate;
+  @FXML
+  private ListView<String> sWUnitList;
 
 
   // Secondary Window variables
@@ -136,9 +142,15 @@ public class GloriaRomanusController{
   @FXML
   private Label sWProvinceName;
   @FXML
+  private Label sWProvinceWealth;
+  @FXML
   private Label sWFactionName;
   @FXML 
   private Label topBarYear;
+  @FXML
+  private VBox goalsWindow;
+  @FXML
+  private Label gWConditions;
 
   private String targetProvince;
   private boolean invadeMode;
@@ -208,6 +220,7 @@ public class GloriaRomanusController{
     turnCount = 0;
     numPlayers = factionNames.size();
     goal = new Goals(provinceToOwningFactionMap.size());
+    gWConditions.setText(goal.toString());
     if(year <= 1300){ year = 1300; }
     initialiseTopBar();
 
@@ -423,7 +436,13 @@ public class GloriaRomanusController{
                     openInvadeWindow();
                   }
                 } else if (moveMode) {
-                  //openmoveWindow();
+                  if ((getFaction(province).getFactionName().equals(humanFaction))) {
+                    targetProvince = province;
+                    openMoveWindow();
+                  } else {
+                    Alert alert = new Alert(AlertType.WARNING, "Please select own faction", ButtonType.OK);
+                    alert.showAndWait(); 
+                  }
                 } else {
 
                   if (currentlySelectedProvince != null){
@@ -599,23 +618,49 @@ public class GloriaRomanusController{
     return currGameFactionList;
   }
 
+
   public void loadProvinceWindow(String province) {
-    clearTownUnitList();
+    clearTownUnitList(pWUnitList);
     pWProvinceName.setText(province);
-    fillTownUnitList();
+    pWProvinceWealth.setText(Integer.toString(StringToTown(province).getWealth()));
+    fillTownUnitList(province, pWUnitList);
+    pWTaxRate.getItems().clear();
+    pWTaxRate.getItems().add("Low Tax Rate");
+    pWTaxRate.getItems().add("Normal Tax Rate");
+    pWTaxRate.getItems().add("High Tax Rate");
+    pWTaxRate.getItems().add("Very High Tax Rate");
+    Town town = StringToTown(province);
+    switch(town.getTaxStatus()) {
+      case "Low":
+        pWTaxRate.getSelectionModel().select(0);
+        break;
+      case "Normal":
+        pWTaxRate.getSelectionModel().select(1);
+        break;
+      case "High":
+        pWTaxRate.getSelectionModel().select(2);
+        break;
+      case "Very high":
+        pWTaxRate.getSelectionModel().select(3);
+        break;
+    }
     provinceWindow.setVisible(true);
   }
 
-  public void fillTownUnitList() {
-    Town town = StringToTown(pWProvinceName.getText());
+  public void fillTownUnitList(String province, ListView<String> list) {
+    Town town = StringToTown(province);
     Army a = town.getArmy();
-    for (Unit u: a.getAllUnits()) {
-      pWUnitList.getItems().add(u.toString());
+    if (a.getAllUnits().size() == 0) {
+      list.getItems().add("No soldiers in this town");
+    } else {
+      for (Unit u: a.getAllUnits()) {
+        list.getItems().add(u.toString());
+      }
     }
   }
 
-  public void clearTownUnitList() {
-    pWUnitList.getItems().clear();
+  public void clearTownUnitList(ListView<String> list) {
+    list.getItems().clear();
   }
 
   @FXML
@@ -643,7 +688,7 @@ public class GloriaRomanusController{
         Alert alert = new Alert(AlertType.WARNING, "Please select a valid unit", ButtonType.OK);
         alert.showAndWait();    
       } else {
-        clearTownUnitList();
+        clearTownUnitList(pWUnitList);
         Town town = StringToTown(pWProvinceName.getText());
         Unit unitObject = unitFactory.createUnit(unit, faction, town);
         faction.setGold(faction.getTotalGold() - unitObject.getCost());
@@ -652,7 +697,7 @@ public class GloriaRomanusController{
         } else {
           town.addUnit(unitObject);
         }
-        fillTownUnitList();
+        fillTownUnitList(pWProvinceName.getText(), pWUnitList);
       }
     }
   }
@@ -662,9 +707,23 @@ public class GloriaRomanusController{
   public void openInvadeWindow() {
     sWOwnershipLabel.setText("ENEMY PROVINCE");
     sWProvinceName.setText(targetProvince);
+    sWProvinceWealth.setText(Integer.toString(StringToTown(targetProvince).getWealth()));
     sWFactionName.setText(getFaction(targetProvince).getFactionName());
+    sWConfirmButton.setText("Confirm Invade");
+    clearTownUnitList(sWUnitList);
+    fillTownUnitList(targetProvince, sWUnitList);
     secondWindow.setVisible(true);
+  }
 
+  public void openMoveWindow() {
+    sWOwnershipLabel.setText("YOUR PROVINCE");
+    sWProvinceName.setText(targetProvince);
+    sWProvinceWealth.setText(Integer.toString(StringToTown(targetProvince).getWealth()));
+    sWFactionName.setText(getFaction(targetProvince).getFactionName());
+    sWConfirmButton.setText("Confirm Move");
+    clearTownUnitList(sWUnitList);
+    fillTownUnitList(targetProvince, sWUnitList);
+    secondWindow.setVisible(true);
   }
 
   @FXML
@@ -677,6 +736,29 @@ public class GloriaRomanusController{
   @FXML
   public void handleInvadeButton() {
     invadeMode = true;
+  }
+
+  @FXML
+  public void handleMoveButton() {
+    moveMode = true;
+  }
+
+  @FXML
+  public void handlePWTaxRate() {
+    switch(pWTaxRate.getValue().toString()) {
+      case "Low Tax Rate":
+        StringToTown(pWProvinceName.getText()).updateTaxStatus("Low");
+        break;
+      case "Normal Tax Rate":
+        StringToTown(pWProvinceName.getText()).updateTaxStatus("Normal");
+        break;
+      case "High Tax Rate":
+        StringToTown(pWProvinceName.getText()).updateTaxStatus("High");
+        break;
+      case "Very High Tax Rate":
+        StringToTown(pWProvinceName.getText()).updateTaxStatus("Very high");
+        break;
+    }
   }
 
   @FXML
@@ -721,6 +803,14 @@ public class GloriaRomanusController{
     topBarWealth.textProperty().bind(StringToFaction(humanFaction).getWealthProperty().asString());
     topBarFaction.setText(humanFaction);
     topBarYear.setText(Integer.toString(year));
+  }
+  @FXML
+  public void handleGoalsButton() {
+    if(goalsWindow.isVisible()) {
+      goalsWindow.setVisible(false);
+    } else {
+      goalsWindow.setVisible(true);
+    }
   }
 
   // after Options is clicked and Save Game selected show text field for input

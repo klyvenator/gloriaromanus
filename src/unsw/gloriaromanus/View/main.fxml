@@ -22,7 +22,39 @@
 <StackPane prefHeight="380.0" prefWidth="450.0" stylesheets="/unsw/gloriaromanus/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <MapView fx:id="mapView" />
 
-
+<!-- BOTTOM LEFT WINDOW (GOALS)-->
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="185.0" prefWidth="245.0" styleClass="panel-region" StackPane.alignment="BOTTOM_LEFT" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+    </padding>
+      <StackPane.margin>
+         <Insets bottom="5.0" />
+      </StackPane.margin>
+      <children>
+         <VBox fx:id="goalsWindow" prefHeight="149.0" prefWidth="230.0">
+            <children>
+               <Label text="Victory Conditions" />
+               <Label fx:id="gWConditions" text="WEALTH &amp; WHATEVER" />
+            </children>
+                        <background>
+                <Background>
+                    <fills>
+                        <BackgroundFill>
+                            <fill>
+                                <Color opacity="0.5" />
+                            </fill>
+                        </BackgroundFill>
+                    </fills>
+                </Background>
+            </background>
+            <padding>
+               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </padding>
+      </VBox>
+         <Button mnemonicParsing="false" onAction="#handleGoalsButton" text="Goals" />
+      </children>
+</VBox>
+       
 
 <!-- TOP LEFT WINDOW (INVADE OR MOVE)-->
 <VBox fx:id="secondWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="311.0" prefWidth="219.0" styleClass="panel-region" visible="false" StackPane.alignment="TOP_LEFT" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
@@ -61,7 +93,7 @@
                <Label fx:id="sWProvinceWealth" text="0" />
             </children>
          </HBox>
-         <ListView prefHeight="200.0" prefWidth="200.0" />
+         <ListView fx:id="sWUnitList" prefHeight="200.0" prefWidth="200.0" />
          <Button fx:id="sWConfirmButton" mnemonicParsing="false" onAction="#handlesWConfirmButton" text="Confirm invade" />
       </children>
     </VBox>
@@ -111,19 +143,19 @@
             <HBox prefHeight="19.0" prefWidth="219.0">
                <children>
                   <Label prefHeight="17.0" prefWidth="197.0" text="YOUR PROVINCE" />
-                  <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="19.0" text="x" />
+                  <Button mnemonicParsing="false" onAction="#closeProvinceWindow" prefHeight="27.0" prefWidth="19.0" text="x" />
                </children>
             </HBox>
         <Label fx:id="pWProvinceName" text="Province Name" />
       <HBox prefHeight="19.0" prefWidth="209.0">
          <children>
-            <Label prefHeight="17.0" prefWidth="150.0" text="Province Wealth:  " />
-            <Label fx:id="pWWealth" prefHeight="17.0" prefWidth="136.0" text="0" />
+            <Label prefHeight="17.0" prefWidth="150.0" text="Province Wealth: " />
+            <Label fx:id="pWProvinceWealth" prefHeight="17.0" prefWidth="136.0" text="0" />
          </children>
       </HBox>
       <VBox prefHeight="77.0" prefWidth="209.0" spacing="5.0">
          <children>
-                  <ComboBox fx:id="pWTaxRate" prefHeight="27.0" prefWidth="212.0" />
+                  <ComboBox fx:id="pWTaxRate" onAction="#handlePWTaxRate" prefHeight="27.0" prefWidth="212.0" />
             <ComboBox fx:id="pWRecruitList" prefHeight="25.0" prefWidth="221.0" />
             <Button fx:id="pWRecruitButton" mnemonicParsing="false" onAction="#handleRecruitButton" text="Recruit" />
          </children>
@@ -136,7 +168,7 @@
                <children>
                   <VBox prefHeight="44.0" prefWidth="105.0">
                      <children>
-                        <Button mnemonicParsing="false" text="Move" />
+                        <Button mnemonicParsing="false" onAction="#handleMoveButton" text="Move" />
                      </children>
                   </VBox>
                   <VBox alignment="TOP_RIGHT" prefHeight="44.0" prefWidth="107.0">
