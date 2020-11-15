@@ -1,0 +1,27 @@
+{
+    "berserkerRage": {
+        "target": "unit",
+        "unitName": ["Beserker"],
+        "buffs": {
+            "morale": "+999",
+            "attack": "x2",
+            "armour": "+0",
+            "shield": "+0"
+        }
+    },
+    "heroicCharge": {
+        "target": "unit",
+        "unitName": ["Melee Cavalry", "Chariot"],
+        "buffs": {
+            "charge": "x2",
+            "morale": "x1/2"
+        }
+    },
+    "druidFervour": {
+        "target": "army",
+        "unitName": ["Druid"],
+        "buffs": {
+            "morale": "+1"
+        }
+    }
+}
