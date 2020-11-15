@@ -801,6 +801,9 @@ public class GloriaRomanusController{
       current, enemy
     );
 
+    invadeMode = false;
+    closeWindows();
+
   }
   @FXML
   public void handleInvadeButton() {
@@ -814,19 +817,23 @@ public class GloriaRomanusController{
 
   @FXML
   public void handlePWTaxRate() {
-    switch(pWTaxRate.getValue().toString()) {
-      case "Low Tax Rate":
-        StringToTown(pWProvinceName.getText()).updateTaxStatus("Low");
-        break;
-      case "Normal Tax Rate":
-        StringToTown(pWProvinceName.getText()).updateTaxStatus("Normal");
-        break;
-      case "High Tax Rate":
-        StringToTown(pWProvinceName.getText()).updateTaxStatus("High");
-        break;
-      case "Very High Tax Rate":
-        StringToTown(pWProvinceName.getText()).updateTaxStatus("Very high");
-        break;
+    try {
+      switch(pWTaxRate.getValue().toString()) {
+        case "Low Tax Rate":
+          StringToTown(pWProvinceName.getText()).updateTaxStatus("Low");
+          break;
+        case "Normal Tax Rate":
+          StringToTown(pWProvinceName.getText()).updateTaxStatus("Normal");
+          break;
+        case "High Tax Rate":
+          StringToTown(pWProvinceName.getText()).updateTaxStatus("High");
+          break;
+        case "Very High Tax Rate":
+          StringToTown(pWProvinceName.getText()).updateTaxStatus("Very high");
+          break;
+      }
+    } catch (Exception nullPointerException) {
+      return;
     }
   }
 
