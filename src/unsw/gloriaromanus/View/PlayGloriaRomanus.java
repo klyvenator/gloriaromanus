@@ -1,5 +1,6 @@
 package unsw.gloriaromanus.View;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -36,6 +37,8 @@ public class PlayGloriaRomanus{
   }
 
   public void startGame() throws IOException{
+    musicUtils.stopSound();
+    musicUtils.playSound("haloTheme.mp3");
     // set up the stage
     stage.setTitle("Gloria Romanus");
     stage.setWidth(800);

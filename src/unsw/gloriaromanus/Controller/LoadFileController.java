@@ -42,7 +42,6 @@ public class LoadFileController {
     public void initialize() {
         titleImage.setImage(new Image((new File("images/Title.png")).toURI().toString()));
         romanImage.setImage(new Image((new File("images/ExampleLegion.png")).toURI().toString()));
-        setData();
     }
 
     @FXML
@@ -69,7 +68,7 @@ public class LoadFileController {
         this.startScreen = startScreen;
     }
 
-    private void setData(){
+    public void setData(){
         fileNames = new ArrayList<String>();
         for (File fileEntry : folder.listFiles()) {
             fileNames.add(fileEntry.getName());
