@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
 
@@ -182,22 +184,39 @@ public class Army {
         return false;
     }
 
-    public int findShortestDistance(int shortest, JSONObject matrix, String root, String dest) {
+    public int findShortestDistance(int shortest, JSONObject matrix, String root, String dest) throws IOException {
         Queue<String> queue = new LinkedList<String>();
-        String s = null;
-        shortest++;
-        for (String province: matrix.getJSONObject(root).keySet()) {
-            queue.add(province);
+
+        Map<String, Boolean> visited = new HashMap<String, Boolean>();
+        for (String province: matrix.keySet()) {
+            visited.put(province, false);
         }
-        s = queue.peek();
-        queue.remove();
         
+        queue.add(root);
+        for (String province: matrix.getJSONObject(root).keySet()) {
+            if (connected(province, root)) {
+                queue.add(province);
+            }
+        }
+        visited.replace(root, true);
+        String s = null;
         while (!queue.isEmpty()) {
+            s = queue.peek();
+            queue.remove();
             if (s.equals(dest)) {
                 return shortest;
             }
             else {
-                findShortestDistance(shortest, matrix, root, dest);
+                if (!visited.get(s)) {
+                    visited.replace(s, true);
+                    for (String province : matrix.getJSONObject(s).keySet()) {
+                        if (connected(province, s)) {
+                            queue.add(province);
+                        }
+                    }
+
+                }
+                shortest++;
             }
         }
 
@@ -214,7 +233,7 @@ public class Army {
         return lowest;
     }
 
-    private boolean confirmIfProvincesConnected(String province1, String province2) throws IOException {
+    private boolean connected(String province1, String province2) throws IOException {
         String content = Files.readString(Paths.get("src/unsw/gloriaromanus/province_adjacency_matrix_fully_connected.json"));
         JSONObject provinceAdjacencyMatrix = new JSONObject(content);
         return provinceAdjacencyMatrix.getJSONObject(province1).getBoolean(province2);
@@ -224,6 +243,10 @@ public class Army {
         t.addArmy(this);
         currentlyOn.removeArmy(this);
         currentlyOn = t;
+    }
+
+    public static void main(String[] args) {
+
     }
 
 }
