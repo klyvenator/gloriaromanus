@@ -1,7 +1,11 @@
 package unsw.gloriaromanus.Controller;
 
 import unsw.gloriaromanus.Model.*;
+<<<<<<< src/unsw/gloriaromanus/Controller/GloriaRomanusController.java
 import unsw.gloriaromanus.View.BattleScreen;
+=======
+import unsw.gloriaromanus.View.*;
+>>>>>>> src/unsw/gloriaromanus/Controller/GloriaRomanusController.java
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,9 +19,11 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
+
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -28,6 +34,8 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -45,6 +53,7 @@ import com.esri.arcgisruntime.data.FeatureTable;
 import com.esri.arcgisruntime.data.GeoPackage;
 import com.esri.arcgisruntime.geometry.Point;
 import com.esri.arcgisruntime.geometry.SpatialReferences;
+import com.esri.arcgisruntime.internal.io.handler.request.ServerContextConcurrentHashMap.HashMapChangedEvent.Action;
 import com.esri.arcgisruntime.layers.FeatureLayer;
 import com.esri.arcgisruntime.loadable.LoadStatus;
 import com.esri.arcgisruntime.mapping.ArcGISMap;
@@ -81,7 +90,7 @@ public class GloriaRomanusController{
   private TextArea output_terminal;
 
   private ArcGISMap map;
-  // changed from Map<String,String>
+
   private Map<Town, Faction> provinceToOwningFactionMap;
 
   private Map<String, Integer> provinceToNumberTroopsMap;
@@ -101,8 +110,15 @@ public class GloriaRomanusController{
 
   private FeatureLayer featureLayer_provinces;
 
-  private List<String> factionNames = new ArrayList<String>();
+  private List<String> factionNames;
+
+  private List<Faction> currGameFactionList;
+
   private UnitFactory unitFactory;
+
+  private List<Faction> loadGameFactionList = new ArrayList<Faction>();
+
+  private StartScreen startScreen;
 
   @FXML
   private Label topBarFaction;
@@ -113,11 +129,17 @@ public class GloriaRomanusController{
   @FXML
   private Label pWProvinceName;
   @FXML
+  private Label pWProvinceWealth;
+  @FXML
   private ComboBox<String> pWRecruitList = new ComboBox<String>();
   @FXML
   private ListView<String> pWUnitList = new ListView<String>();
   @FXML
   private VBox provinceWindow;
+  @FXML
+  private ComboBox<String> pWTaxRate;
+  @FXML
+  private ListView<String> sWUnitList;
 
 
   // Secondary Window variables
@@ -130,20 +152,58 @@ public class GloriaRomanusController{
   @FXML
   private Label sWProvinceName;
   @FXML
+  private Label sWProvinceWealth;
+  @FXML
   private Label sWFactionName;
+  @FXML 
+  private Label topBarYear;
+  @FXML
+  private VBox goalsWindow;
+  @FXML
+  private Label gWConditions;
 
   private String targetProvince;
   private boolean invadeMode;
   private boolean moveMode;
 
+  // top right options window
+  @FXML
+  private VBox optionsWindow;
+  @FXML 
+  private MenuButton optionsButton;
+  @FXML 
+  private MenuItem saveGameButton;
+  @FXML
+  private MenuItem mainMenuButton;
+  @FXML
+  private TextField saveFileName;
+  @FXML
+  private Button saveGame;
+  @FXML
+  private Button saveGameBackButton;
+  @FXML
+  private Button goToMenuButton;
+  private Goals goal;
+  private int year;
+  private int turnCount;
+  private int numPlayers;
 
 
 
   @FXML
   private void initialize() throws JsonParseException, JsonMappingException, IOException {
     // TODO = you should rely on an object oriented design to determine ownership
-    if( !factionNames.isEmpty() ){
+    if( factionNames != null ){
       provinceToOwningFactionMap = getProvincesOwningToEachFaction(factionNames);
+    }else if( loadGameFactionList != null){
+      provinceToOwningFactionMap =  loadProvincesOwningToEachFaction(loadGameFactionList);
+    }
+    // this will fix the factionNames issue
+    factionNames = new ArrayList<String>();
+    for (Faction f: provinceToOwningFactionMap.values()){
+      if (!factionNames.contains(f.getFactionName())) {
+        factionNames.add(f.getFactionName());
+      }
     }
     provinceToNumberTroopsMap = new HashMap<String, Integer>();
     Random r = new Random();
@@ -167,6 +227,12 @@ public class GloriaRomanusController{
     targetProvince = null;
     invadeMode = false;
     moveMode = false;
+    turnCount = 0;
+    numPlayers = factionNames.size();
+    goal = new Goals(provinceToOwningFactionMap.size());
+    gWConditions.setText(goal.toString());
+    if(year <= 1300){ year = 1300; }
+    initialiseTopBar();
 
   }
   
@@ -323,7 +389,6 @@ public class GloriaRomanusController{
               case "Thracian":
                 s = new PictureMarkerSymbol("images/thracian.png");
                 break;
-              // TODO = handle all faction names, and find a better structure...
             }
               t.setHaloColor(0xFFFFFFFF);
               t.setHaloWidth(2);
@@ -343,6 +408,13 @@ public class GloriaRomanusController{
     mapView.getGraphicsOverlays().add(graphicsOverlay);
   }
 
+  private void closeWindows() {
+    invadeMode = false;
+    moveMode = false;
+    closeProvinceWindow();
+    secondWindow.setVisible(false);
+  }
+
   private FeatureLayer createFeatureLayer(GeoPackage gpkg_provinces) {
     FeatureTable geoPackageTable_provinces = gpkg_provinces.getGeoPackageFeatureTables().get(0);
 
@@ -360,11 +432,8 @@ public class GloriaRomanusController{
     mapView.setOnMouseClicked(e -> {
       
       if (e.getButton() == MouseButton.SECONDARY) {
-        invadeMode = false;
-        moveMode = false;
-        closeProvinceWindow();
-        secondWindow.setVisible(false);
         // TODO = Turn this into observer.
+        closeWindows();
       }
 
       // was the main button pressed?
@@ -410,7 +479,13 @@ public class GloriaRomanusController{
                     openInvadeWindow();
                   }
                 } else if (moveMode) {
-                  //openmoveWindow();
+                  if ((getFaction(province).getFactionName().equals(humanFaction))) {
+                    targetProvince = province;
+                    openMoveWindow();
+                  } else {
+                    Alert alert = new Alert(AlertType.WARNING, "Please select own faction", ButtonType.OK);
+                    alert.showAndWait(); 
+                  }
                 } else {
 
                   if (currentlySelectedProvince != null){
@@ -482,13 +557,27 @@ public class GloriaRomanusController{
     output_terminal.appendText(message+"\n");
   }
 
+  // takes a string list of faction names, creates the factions and randomly allocates them towns
   private Map<Town, Faction> getProvincesOwningToEachFaction(List<String> factionNames) throws IOException {
-    List<Faction> factions = allocateTowns(factionNames);
+    currGameFactionList = allocateTowns(factionNames);
     
     Map<Town, Faction> m = new HashMap<Town, Faction>();
-    for (Faction f : factions) {
+    for (Faction f : currGameFactionList) {
       List<Town> towns = f.getTowns();
-      // value is province name
+      // sets the Town as key and it's corresponding faction
+      for (Town t : towns) {
+        m.put(t, f);
+      }
+    }
+    return m;
+  }
+  // from save file, loads the faction list and creates the map of a previous game
+  private Map<Town, Faction> loadProvincesOwningToEachFaction(List<Faction> factionList) throws IOException {
+    currGameFactionList = factionList;
+    Map<Town, Faction> m = new HashMap<Town, Faction>();
+    for (Faction f : factionList) {
+      List<Town> towns = f.getTowns();
+      // sets the Town as key and it's corresponding faction
       for (Town t : towns) {
         m.put(t, f);
       }
@@ -514,12 +603,14 @@ public class GloriaRomanusController{
   // to each faction
   public static List<Faction> allocateTowns(List<String> factions) throws IOException{
     Random rand = new Random();
+    // remove content for milestone 3 and jsut read file as normal
     List<String> list = getProvinceList();
     List<Faction> facList = new ArrayList<Faction>();
     for(String f : factions){
       Faction newFac = new Faction(f);
       facList.add(newFac);
     }
+    // uses the list of provinces and randomly allocates it to the factions chosen by players
     while( !list.isEmpty() ) {
       int randomIndex = rand.nextInt(list.size());
       int randomFactionIndex = rand.nextInt(facList.size());
@@ -565,28 +656,56 @@ public class GloriaRomanusController{
   public void setFactionList(List<String> listOfFactionNames){
     this.factionNames = listOfFactionNames;
   }
-  public List<String> getFactionList(){
-    List<String> list = new ArrayList<String>();
-    return list;
+  public void setLoadGameFactionList(List<Faction> facList){
+    this.loadGameFactionList = facList;
+  }
+  public List<Faction> getGameFactionList(){
+    return currGameFactionList;
   }
 
+
   public void loadProvinceWindow(String province) {
-    clearTownUnitList();
+    clearTownUnitList(pWUnitList);
     pWProvinceName.setText(province);
-    fillTownUnitList();
+    pWProvinceWealth.setText(Integer.toString(StringToTown(province).getWealth()));
+    fillTownUnitList(province, pWUnitList);
+    pWTaxRate.getItems().clear();
+    pWTaxRate.getItems().add("Low Tax Rate");
+    pWTaxRate.getItems().add("Normal Tax Rate");
+    pWTaxRate.getItems().add("High Tax Rate");
+    pWTaxRate.getItems().add("Very High Tax Rate");
+    Town town = StringToTown(province);
+    switch(town.getTaxStatus()) {
+      case "Low":
+        pWTaxRate.getSelectionModel().select(0);
+        break;
+      case "Normal":
+        pWTaxRate.getSelectionModel().select(1);
+        break;
+      case "High":
+        pWTaxRate.getSelectionModel().select(2);
+        break;
+      case "Very high":
+        pWTaxRate.getSelectionModel().select(3);
+        break;
+    }
     provinceWindow.setVisible(true);
   }
 
-  public void fillTownUnitList() {
-    Town town = StringToTown(pWProvinceName.getText());
+  public void fillTownUnitList(String province, ListView<String> list) {
+    Town town = StringToTown(province);
     Army a = town.getArmy();
-    for (Unit u: a.getAllUnits()) {
-      pWUnitList.getItems().add(u.toString());
+    if (a.getAllUnits().size() == 0) {
+      list.getItems().add("No soldiers in this town");
+    } else {
+      for (Unit u: a.getAllUnits()) {
+        list.getItems().add(u.toString());
+      }
     }
   }
 
-  public void clearTownUnitList() {
-    pWUnitList.getItems().clear();
+  public void clearTownUnitList(ListView<String> list) {
+    list.getItems().clear();
   }
 
   @FXML
@@ -614,10 +733,16 @@ public class GloriaRomanusController{
         Alert alert = new Alert(AlertType.WARNING, "Please select a valid unit", ButtonType.OK);
         alert.showAndWait();    
       } else {
-        clearTownUnitList();
+        clearTownUnitList(pWUnitList);
         Town town = StringToTown(pWProvinceName.getText());
-        town.addUnit(unitFactory.createUnit(unit, faction, town));
-        fillTownUnitList();
+        Unit unitObject = unitFactory.createUnit(unit, faction, town);
+        faction.setGold(faction.getTotalGold() - unitObject.getCost());
+        if (unitObject.getTurnsToMake() > 0) {
+          town.trainUnit(unitObject);
+        } else {
+          town.addUnit(unitObject);
+        }
+        fillTownUnitList(pWProvinceName.getText(), pWUnitList);
       }
     }
   }
@@ -627,9 +752,23 @@ public class GloriaRomanusController{
   public void openInvadeWindow() {
     sWOwnershipLabel.setText("ENEMY PROVINCE");
     sWProvinceName.setText(targetProvince);
+    sWProvinceWealth.setText(Integer.toString(StringToTown(targetProvince).getWealth()));
     sWFactionName.setText(getFaction(targetProvince).getFactionName());
+    sWConfirmButton.setText("Confirm Invade");
+    clearTownUnitList(sWUnitList);
+    fillTownUnitList(targetProvince, sWUnitList);
     secondWindow.setVisible(true);
+  }
 
+  public void openMoveWindow() {
+    sWOwnershipLabel.setText("YOUR PROVINCE");
+    sWProvinceName.setText(targetProvince);
+    sWProvinceWealth.setText(Integer.toString(StringToTown(targetProvince).getWealth()));
+    sWFactionName.setText(getFaction(targetProvince).getFactionName());
+    sWConfirmButton.setText("Confirm Move");
+    clearTownUnitList(sWUnitList);
+    fillTownUnitList(targetProvince, sWUnitList);
+    secondWindow.setVisible(true);
   }
 
   @FXML
@@ -637,6 +776,7 @@ public class GloriaRomanusController{
     String humanProvince = pWProvinceName.getText();
     Army yourArmy = StringToTown(humanProvince).getArmy();
     Army enemyArmy = StringToTown(targetProvince).getArmy();
+<<<<<<< src/unsw/gloriaromanus/Controller/GloriaRomanusController.java
     //INVADE CODE FOR JIBI
     Infantry infantry1 = new Infantry("Archers");
     yourArmy.addUnit(infantry1);
@@ -664,6 +804,9 @@ public class GloriaRomanusController{
       humanProvince, targetProvince,
       current, enemy
     );
+=======
+    //INVADE CODE FOR JIBI, AFTER BATTLE HAS FINISHED SET invadeMode=false
+>>>>>>> src/unsw/gloriaromanus/Controller/GloriaRomanusController.java
 
   }
   @FXML
@@ -671,7 +814,141 @@ public class GloriaRomanusController{
     invadeMode = true;
   }
 
+  @FXML
+  public void handleMoveButton() {
+    moveMode = true;
+  }
 
+  @FXML
+  public void handlePWTaxRate() {
+    switch(pWTaxRate.getValue().toString()) {
+      case "Low Tax Rate":
+        StringToTown(pWProvinceName.getText()).updateTaxStatus("Low");
+        break;
+      case "Normal Tax Rate":
+        StringToTown(pWProvinceName.getText()).updateTaxStatus("Normal");
+        break;
+      case "High Tax Rate":
+        StringToTown(pWProvinceName.getText()).updateTaxStatus("High");
+        break;
+      case "Very High Tax Rate":
+        StringToTown(pWProvinceName.getText()).updateTaxStatus("Very high");
+        break;
+    }
+  }
+
+  @FXML
+  public void handleEndTurnButton() {
+    closeWindows();
+    Faction f = StringToFaction(humanFaction);
+    f.endTurnUpdate();
+    if (goal.checkWin(f)) {
+      Alert alert = new Alert(AlertType.WARNING, "Congrats you have won!", ButtonType.OK);
+      alert.showAndWait(); 
+      terminate();
+    } else {
+      if (turnCount == numPlayers - 1) {
+        year++;
+        turnCount = 0;
+      } else {
+        turnCount++;
+      }
+      setNextFaction();
+    }
+  }
+
+  public void setNextFaction() {
+    int index = 0;
+    for (String f : factionNames) {
+      if (f.equals(humanFaction)) {
+        index = factionNames.indexOf(f);
+        break;
+      } 
+    }
+    try {
+      index++;
+      humanFaction = factionNames.get(index);
+    } catch (Exception indexOutOfBoundsException) {
+      humanFaction = factionNames.get(0);
+    }
+    initialiseTopBar();
+  }
+
+  public void initialiseTopBar() {
+    topBarGold.textProperty().bind(StringToFaction(humanFaction).getGoldProperty().asString());
+    topBarWealth.textProperty().bind(StringToFaction(humanFaction).getWealthProperty().asString());
+    topBarFaction.setText(humanFaction);
+    topBarYear.setText(Integer.toString(year));
+  }
+  @FXML
+  public void handleGoalsButton() {
+    if(goalsWindow.isVisible()) {
+      goalsWindow.setVisible(false);
+    } else {
+      goalsWindow.setVisible(true);
+    }
+  }
+
+  // after Options is clicked and Save Game selected show text field for input
+  @FXML
+  private void handleSaveGame(ActionEvent event){
+    saveFileName.setVisible(true);
+    saveGame.setVisible(true);
+    saveGameBackButton.setVisible(true);
+  }
+  // if Main menu button is clicked 
+  @FXML
+  private void handleMainMenuButton(ActionEvent event){
+    Alert alert = new Alert(AlertType.WARNING, "All Unsaved Progress Will Be Lost!", ButtonType.OK);
+    alert.showAndWait();
+    goToMenuButton.setVisible(true);
+  }
+  
+  // gets the user input file name for the new save file
+  // saves creates the save file and prints out a confirmation
+  @FXML
+  private void handleSaveGameButton(ActionEvent event){
+    String fileName = saveFileName.getText();
+    try {
+      new SaveFile(getGameFactionList(), fileName, year);
+      saveFileName.setVisible(false);
+      saveGame.setVisible(false);
+      Alert alert = new Alert(AlertType.CONFIRMATION, "Current Game is Saved as "+fileName+".json", ButtonType.OK);
+      alert.showAndWait();
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+  }
+  @FXML
+  private void handleSaveGameBack(ActionEvent event){
+    saveFileName.setVisible(false);
+    saveGame.setVisible(false);
+    saveGameBackButton.setVisible(false);
+  }
+  @FXML
+  private void handleGoToMenuButton(ActionEvent event){
+    terminate();
+    startScreen.start();
+  }
+  @FXML
+  private void handleExitGame(ActionEvent event){
+    Alert alert = new Alert(AlertType.CONFIRMATION, 
+    "You are about to exit the game all unsaved progress will be lost", 
+    ButtonType.OK, ButtonType.CANCEL);
+    Optional<ButtonType> result = alert.showAndWait();
+    if( result.get() == ButtonType.CANCEL ){ return; }
+    else{
+      terminate();
+      System.exit(0);
+    }
+  }
+  public void setStartScreen(StartScreen startScreen){
+    this.startScreen = startScreen;
+  }
+  public void setYear(int gameYear){
+    this.year = gameYear;
+  }
   /**
    * Stops and releases all resources used in application.
    */
@@ -681,4 +958,5 @@ public class GloriaRomanusController{
       mapView.dispose();
     }
   }
+
 }

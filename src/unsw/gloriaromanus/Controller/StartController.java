@@ -26,6 +26,8 @@ public class StartController {
 
     private GameMenu gameMenu;
 
+    private LoadGameFile loadFile;
+
     @FXML
     public void initialize() {
         titleImage.setImage(new Image((new File("images/Title.png")).toURI().toString()));
@@ -39,9 +41,11 @@ public class StartController {
     public void setNewGame(GameMenu gameMenu) {
         this.gameMenu = gameMenu;
     }
-
+    public void setLoadMenu(LoadGameFile loadFile) {
+        this.loadFile = loadFile;
+    }
     @FXML
 	private void handleLoadGame(ActionEvent event) {
-        return;
+        loadFile.start();
 	}
 }
