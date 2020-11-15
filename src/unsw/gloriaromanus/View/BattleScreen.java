@@ -35,16 +35,8 @@ public class BattleScreen {
     }
 
     public void start(Army human, Army enemy, String humanProvince, String targetProvince, Faction currFac, Faction enemyFac) {
-        String path = "sound/haloTheme.mp3";
-        Media media = new Media(new File(path).toURI().toString());
-        MediaPlayer mediaPlayer = new MediaPlayer(media); 
-        mediaPlayer.setOnEndOfMedia(new Runnable() {
-            @Override
-            public void run() {
-                mediaPlayer.seek(Duration.ZERO);
-            }
-        });
-        mediaPlayer.play();
+        musicUtils.stopSound();
+        musicUtils.playSound("battleMusic.mp3");
         controller.setHumanArmy(human);
         controller.setEnemyArmy(enemy);
         controller.reset();
