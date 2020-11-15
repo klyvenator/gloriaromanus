@@ -173,61 +173,80 @@ public class Army {
         return availableUnits.get(r.nextInt(availableUnits.size()));
     }
 
-    public boolean canMoveTo(Town t) throws IOException{
+    public boolean canMoveTo(Town t, Map<Town,Faction> provinceToFactionMap) throws IOException{
         String content = Files.readString(Paths.get("src/unsw/gloriaromanus/province_adjacency_matrix_fully_connected.json"));
         JSONObject provinceAdjacencyMatrix = new JSONObject(content);
 
         int lowestMovement  = findLowestMovement();
-        if (lowestMovement > findShortestDistance(0, provinceAdjacencyMatrix, currentlyOn.getTownName(), t.getTownName())) {
+        int shortestDistance = findShortestDistance(0, provinceAdjacencyMatrix, currentlyOn.getTownName(), t.getTownName(), provinceToFactionMap);
+        if (lowestMovement >= shortestDistance) {
+            reduceMovePoints(shortestDistance);
             return true;
         }
         return false;
     }
 
-    public int findShortestDistance(int shortest, JSONObject matrix, String root, String dest) throws IOException {
-        Queue<String> queue = new LinkedList<String>();
-
-        Map<String, Boolean> visited = new HashMap<String, Boolean>();
-        for (String province: matrix.keySet()) {
-            visited.put(province, false);
+    public Faction getFaction(String provinceName, Map<Town,Faction> provinceToOwningFactionMap) {
+        for (Town t: provinceToOwningFactionMap.keySet()){
+          if (t.getTownName().equals(provinceName)) {
+            return provinceToOwningFactionMap.get(t);
+          }
         }
-        
+        return null;
+      }
+
+    public int findShortestDistance(int shortest, JSONObject matrix, String root, String dest, Map<Town,Faction> provinceToFactionMap) throws IOException {
+        Queue<String> queue = new LinkedList<String>();
+        boolean found = false;
+        Map<String, String> visited = new HashMap<String,String>();
+        Faction humanFaction = getFaction(root, provinceToFactionMap);
+
         queue.add(root);
+        visited.put(root, root);
         for (String province: matrix.getJSONObject(root).keySet()) {
-            if (connected(province, root)) {
+            if (connected(province, root) && (getFaction(province, provinceToFactionMap) == humanFaction)) {
                 queue.add(province);
             }
         }
-        visited.replace(root, true);
+
         String s = null;
-        while (!queue.isEmpty()) {
+        while (!queue.isEmpty() && found == false) {
             s = queue.peek();
             queue.remove();
+
             if (s.equals(dest)) {
-                return shortest;
+                found = true;
             }
             else {
-                if (!visited.get(s)) {
-                    visited.replace(s, true);
+                if (visited.get(s) != null) {
                     for (String province : matrix.getJSONObject(s).keySet()) {
-                        if (connected(province, s)) {
+                        if (connected(province, s) && visited.get(province) == null && (getFaction(province, provinceToFactionMap) == humanFaction)) {
+                            visited.put(province, s);
                             queue.add(province);
                         }
                     }
-
                 }
-                shortest++;
             }
         }
 
+        String i = dest;
+        //System.out.println(i + " " + root);
+        while (!i.equals(root)) {
+            i = visited.get(i);
+            if (i == null) {
+                return shortest = Integer.MAX_VALUE;
+            }
+            shortest++;
+        }
+        System.out.println(shortest);
         return shortest;
     }
 
     public int findLowestMovement() {
         int lowest = Integer.MAX_VALUE;
         for (Unit u : units) {
-            if (u.getMovementPoints() < lowest) {
-                lowest = u.getMovementPoints();
+            if (u.getMovesLeft() < lowest) {
+                lowest = u.getMovesLeft();
             }
         }
         return lowest;
@@ -245,8 +264,16 @@ public class Army {
         currentlyOn = t;
     }
 
-    public static void main(String[] args) {
+    public void resetMoves() {
+        for(Unit u: units) {
+            u.resetMoves();
+        }
+    }
 
+    public void reduceMovePoints(int amount) {
+        for (Unit u: units) {
+            u.setMovesLeft(u.getMovesLeft() - amount);
+        }
     }
 
 }
