@@ -1,5 +1,6 @@
 package unsw.gloriaromanus.View;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import unsw.gloriaromanus.Controller.*;
+import unsw.gloriaromanus.Model.*;
 
 public class PlayGloriaRomanus{
 
@@ -18,11 +20,14 @@ public class PlayGloriaRomanus{
   private Stage stage;
   private String title;
 
-  public PlayGloriaRomanus(Stage stage, List<String> listOfFactionNames) throws IOException {
+  public PlayGloriaRomanus(Stage stage, List<String> listOfFactionNames, List<Faction> facList, StartScreen startScreen, int year) throws IOException {
     this.stage = stage;
 
     controller = new GloriaRomanusController();
     controller.setFactionList(listOfFactionNames);
+    controller.setLoadGameFactionList(facList);
+    controller.setStartScreen(startScreen);
+    controller.setYear(year);
     FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
     loader.setController(controller);
 
@@ -32,6 +37,8 @@ public class PlayGloriaRomanus{
   }
 
   public void startGame() throws IOException{
+    musicUtils.stopSound();
+    musicUtils.playSound("haloTheme.mp3");
     // set up the stage
     stage.setTitle("Gloria Romanus");
     stage.setWidth(800);

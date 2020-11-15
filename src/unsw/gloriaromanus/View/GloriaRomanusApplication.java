@@ -1,43 +1,34 @@
 package unsw.gloriaromanus.View;
 
+import java.io.File;
 import java.io.IOException;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
-
+import javafx.util.Duration;
 import unsw.gloriaromanus.Controller.*;
 
 public class GloriaRomanusApplication extends Application {
 
   private static GloriaRomanusController controller;
+  
 
   @Override
   public void start(Stage stage) throws IOException {
     // set up the scene
     StartScreen startScreen = new StartScreen(stage);
     GameMenu gameMenu = new GameMenu(stage,startScreen);
-    //PlayGloriaRomanus play = new PlayGloriaRomanus(stage,finalPlayers);
-    //gameMenu.getController().setGameApplication(play);
+    LoadGameFile loadFile = new LoadGameFile(stage, startScreen);
     startScreen.getController().setNewGame(gameMenu);
-
+    startScreen.getController().setLoadMenu(loadFile);
     startScreen.start();
     
   }
- /*  public void startGame(Stage stage) throws IOException{
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
-    Parent root = loader.load();
-    controller = loader.getController();
-    Scene scene = new Scene(root);
-    // set up the stage
-    stage.setTitle("Gloria Romanus");
-    stage.setWidth(800);
-    stage.setHeight(700);
-    stage.setScene(scene);
-    stage.show();
-  } */
   /**
    * Stops and releases all resources used in application.
    */
