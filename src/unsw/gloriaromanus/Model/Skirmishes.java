@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+import javafx.beans.property.DoubleProperty;
 import javafx.scene.control.TextArea;
 import unsw.gloriaromanus.Model.Enums.Range;
 import unsw.gloriaromanus.Model.Enums.FightStatus;
@@ -39,6 +40,16 @@ public class Skirmishes {
 
     public FightStatus getStatus() {
         return status;
+    }
+
+    public void setUnitBindings(DoubleProperty p1, DoubleProperty p2) {
+        p1.bindBidirectional(unitA.getNumTroopsProperty());
+        p2.bindBidirectional(unitB.getNumTroopsProperty());
+    }
+
+    public void removeUnitBindings(DoubleProperty p1, DoubleProperty p2) {
+        p1.unbindBidirectional(unitA.getNumTroopsProperty());
+        p2.unbindBidirectional(unitB.getNumTroopsProperty());
     }
 
     private void writeToTerminal(String msg) {
