@@ -61,16 +61,16 @@ public class Army {
 
     public void activateArmyAbilities() {
         for (Unit unit : units) {
-            if (unit.isAbilityType("army")) {
-                unit.activateAbility();
+            if (unit != null) {
+                unit.activateAbility(ArmyTarget.class);
             }
         }
     }
 
     public void cancelArmyAbilities() {
         for (Unit unit : units) {
-            if (unit.isAbilityType("army")) {
-                unit.cancelAbility();
+            if (unit != null) {
+                unit.cancelAbility(ArmyTarget.class);
             }
         }
     }
