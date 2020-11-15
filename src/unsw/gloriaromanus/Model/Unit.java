@@ -25,6 +25,7 @@ public abstract class Unit {
     private IntegerProperty numTroopsProperty;
     // private int numTroops = 100;  // the number of troops in this unit (should reduce based on depletion)
     private int attack = 10;  // can be either missile or melee attack to simplify. Could improve implementation by differentiating!
+    private int charge = 0;  // can be either missile or melee attack to simplify. Could improve implementation by differentiating!
     private DefenseStat defense;   // armour defense
     private int morale = 10;  // resistance to fleeing
     private int speed = 10;  // ability to disengage from disadvantageous battle
@@ -37,6 +38,7 @@ public abstract class Unit {
     private Faction faction;
     
     private Ability ability;
+    private AbilityContainer abilityContainer;
 
     private boolean broken;
 
@@ -44,9 +46,9 @@ public abstract class Unit {
         this.name = name;
         this.type = Range.MELEE;
         this.defense = new DefenseStat();
-
         this.army = null;
 
+        this.abilityContainer = null;
         this.numTroopsProperty = new SimpleIntegerProperty(100);
         broken = false;
     }
@@ -60,6 +62,77 @@ public abstract class Unit {
         Getters and Setters
     */
 
+    public int getAttrValue(String attrName) {
+        int value = 0;
+        switch (attrName) {
+            case "attack":
+                value = getAttack();
+                break;
+        
+            case "charge":
+                value = getCharge();
+                break;
+        
+            case "defense": // note the 'u'
+                value = getDefense().getDefenseSkill();
+                break;
+        
+            case "armour":
+                value = getDefense().getArmour();
+                break;
+        
+            case "shield":
+                value = getDefense().getShield();
+                break;
+        
+            case "speed":
+                value = getSpeed();
+                break;
+        
+            case "morale":
+                value = getSpeed();
+                break;
+        
+            default:
+                break;
+        }
+        return value;
+    }
+
+    public void setAttrValue(String attrName, int value) {
+        switch (attrName) {
+            case "attack":
+                setAttack(value);
+                break;
+        
+            case "charge":
+                setCharge(value);
+                break;
+        
+            case "defense": // note the 'u'
+                getDefense().setDefenseSkill(value);
+                break;
+        
+            case "armour":
+                getDefense().setArmour(value);
+                break;
+        
+            case "shield":
+                getDefense().setShield(value);
+                break;
+        
+            case "speed":
+                setSpeed(value);
+                break;
+        
+            case "morale":
+                setMorale(value);
+                break;
+        
+            default:
+                break;
+        }
+    }
     public String getName() {
         return name;
     }
@@ -80,6 +153,9 @@ public abstract class Unit {
     }
 
     public void setNumTroops(int numTroops) {
+        if (numTroops < 0) {
+            numTroops = 0;
+        }
         this.numTroopsProperty.set(numTroops);
     }
 
@@ -105,6 +181,26 @@ public abstract class Unit {
         return defense.getRangedDef();
     }
 
+    public int getArmour() {
+        return defense.getArmour();
+    }
+
+    public int getShield() {
+        return defense.getShield();
+    }
+
+    public void setDefense(int value) {
+        defense.setDefenseSkill(value);
+    }
+
+    public void setArmour(int value) {
+        defense.setArmour(value);
+    }
+
+    public void setShield(int value) {
+        defense.setShield(value);
+    }
+
     public int getMorale() {
         return morale;
     }
@@ -123,8 +219,20 @@ public abstract class Unit {
         return attack;
     }
 
+    public int getCharge() {
+        return charge;
+    }
+
+    public int getTotalAttack() {
+        return attack + charge;
+    }
+
     public void setAttack(int attack) {
         this.attack = attack;
+    }
+
+    public void setCharge(int charge) {
+        this.charge = charge;
     }
 
     public int getCost() {
@@ -139,6 +247,22 @@ public abstract class Unit {
     }
     public void setTurnsToMake(int turnsToMake) {
         this.turnsToMake = turnsToMake;
+    }
+
+    public void setAbilityContainer(AbilityContainer container) {
+        this.abilityContainer = container;
+    }
+
+    public AbilityContainer getAbilityContainer() {
+        return abilityContainer;
+    }
+
+    public void setAbilityContainerTarget(Unit unit) {
+        abilityContainer.setTarget(unit);
+    }
+
+    public void setAbilityContainerTarget(Army army) {
+        abilityContainer.setTarget(army);
     }
 
     public Ability getAbility() {
@@ -202,15 +326,21 @@ public abstract class Unit {
         */
     }
 
-    public void activateAbility() {
-        if (ability != null) {
-            ability.apply();
+    public <T> void activateAbility(Class<T> targetType) {
+        if (
+            abilityContainer != null  &&
+            targetType != null
+        ) {
+            abilityContainer.activate(targetType);
         }
     }
 
-    public void cancelAbility() {
-        if (ability != null) {
-            ability.cancel();
+    public <T> void cancelAbility(Class<T> targetType) {
+        if (
+            abilityContainer != null  &&
+            targetType != null
+        ) {
+            abilityContainer.deactivate(targetType);
         }
     }
     
