@@ -19,7 +19,7 @@ public class Town {
         this.townName = townName;
         this.tax = new Tax(); // set tax rate to low
         this.wealth = 10; // set initial province wealth to 10
-        this.army = new Army();
+        this.army = new Army(this);
         unitsInTraining = new HashMap<Unit, Integer>();
     }
     public Town(String townName) {
@@ -111,8 +111,11 @@ public class Town {
     }
 
     public void removeArmy(Army a) {
+        if (army == a) {
+            army.getAllUnits().clear();
+        }
         for (Unit u: a.getAllUnits()) {
-            a.removeUnit(u);
+            army.removeUnit(u);
         }
     }
 
