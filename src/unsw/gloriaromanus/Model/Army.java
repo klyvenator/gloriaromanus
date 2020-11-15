@@ -22,6 +22,8 @@ public class Army {
     public Army(Town currentlyOn) {
         this();
         this.currentlyOn = currentlyOn;
+        units = new ArrayList<Unit>();
+        numAvailableUnits = new SimpleIntegerProperty(0);
     }
 
     public void addUnit(Unit unit) {
@@ -164,6 +166,12 @@ public class Army {
 
     public boolean canMoveTo(Town t) {
         return true;
+    }
+
+    public void move(Town t) {
+        t.addArmy(this);
+        currentlyOn.removeArmy(this);
+        currentlyOn = t;
     }
 
 }
