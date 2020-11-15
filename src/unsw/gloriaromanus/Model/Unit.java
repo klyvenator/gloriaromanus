@@ -6,6 +6,7 @@ import java.util.Random;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ChangeListener;
 import unsw.gloriaromanus.Model.Enums.Range;
 
 /**
@@ -68,6 +69,14 @@ public abstract class Unit {
     }
     public IntegerProperty getNumTroopsProperty() {
         return numTroopsProperty;
+    }
+
+    public void addNumTroopsListener(ChangeListener<? super Number> listener) {
+        numTroopsProperty.addListener(listener);
+    }
+
+    public void removeNumTroopsListener(ChangeListener<? super Number> listener) {
+        numTroopsProperty.removeListener(listener);
     }
 
     public void setNumTroops(int numTroops) {
