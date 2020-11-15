@@ -71,13 +71,13 @@ public class UnitFactory implements Factory{
             } 
         }
         if (json.has("defense")) {
-            newUnit.getDefense().setDefenseSkill(json.getInt("defense"));
+            newUnit.setDefense(json.getInt("defense"));
         }
         if (json.has("armour")) {
-            newUnit.getDefense().setArmour(json.getInt("armour"));
+            newUnit.setArmour(json.getInt("armour"));
         }
         if (json.has("shield")) {
-            newUnit.getDefense().setShield(json.getInt("defense"));
+            newUnit.setShield(json.getInt("shield"));
         }
         if (json.has("morale")) {
             newUnit.setMorale(json.getInt("morale"));
@@ -95,17 +95,12 @@ public class UnitFactory implements Factory{
             newUnit.setTurnsToMake(json.getInt("turns"));
         }
 
+        AbilityContainer container = null;
         if (json.has("specialAbility")) {
-            Ability ability = abilityFactory.deserialise(json.getString("specialAbility"));
-            if (ability != null) {
-                ability.setUnit(newUnit);
-                newUnit.setAbility(ability);
-            }
-            
-        } else {
-            newUnit.setAbility(null);
+            container = abilityFactory.deserialise(json.getString("specialAbility"));
         }
-
+        newUnit.setAbilityContainer(container);
+        
         return newUnit;
 
     }

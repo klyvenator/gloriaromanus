@@ -13,24 +13,10 @@ public abstract class Engagements {
      */
     public Unit engage(Unit a, Unit b) {
         
-        if (a.isAbilityType("engagement")) {
-            a.activateAbility();
-        }
-        if (b.isAbilityType("engagement")) {
-            b.activateAbility();
-        }
-        
         // No special order
         attack(a, b);
         attack(b, a);
 
-        if (a.isAbilityType("engagement")) {
-            a.cancelAbility();
-        }
-        if (b.isAbilityType("engagement")) {
-            b.cancelAbility();
-        }
-    
         if ((a.getNumTroops() <= 0) && (b.getNumTroops() <= 0)) {
             // Both defeated, no winner
             return null;
@@ -52,16 +38,8 @@ public abstract class Engagements {
      * @return
      */
     public Unit routeEngage(Unit routing, Unit pursuing) {
-        
-        if (pursuing.isAbilityType("engagement")) {
-            pursuing.activateAbility();
-        }
 
         attack(pursuing, routing);
-
-        if (pursuing.isAbilityType("engagement")) {
-            pursuing.cancelAbility();
-        }
 
         if (routing.getNumTroops() <= 0) {
             return pursuing;

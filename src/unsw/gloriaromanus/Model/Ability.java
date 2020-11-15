@@ -1,21 +1,23 @@
 package unsw.gloriaromanus.Model;
 
 public abstract class Ability {
-    private Unit unit;
+    private String attrName;
 
-    Ability() {
-        unit = null;
+    public Ability(String attrName) {
+        this.attrName = attrName;
     }
 
-    public Unit getUnit() {
-        return unit;
+    protected int getAttrValue(Unit unit) {
+        return unit.getAttrValue(attrName);
     }
 
-    public void setUnit(Unit unit) {
-        this.unit = unit;
+    protected void setAttrValue(Unit unit, int value) {
+        unit.setAttrValue(attrName, value);
     }
+
+    public abstract void apply(Unit unit);
+    public abstract void cancel(Unit unit);
+
     
-    public abstract void apply();
-    public abstract void cancel();
 
 }

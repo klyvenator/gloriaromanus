@@ -2,7 +2,7 @@
     "Melee Infantry":{
         "type": "melee",
         "category": "infantry",
-        "number": 1,
+        "number": 100,
         "attack": 1,
         "defense": 1,
         "armour": 1,
@@ -16,7 +16,7 @@
     "Heavy Infantry":{
         "type": "melee",
         "category": "infantry",
-        "number": 1,
+        "number": 100,
         "attack": 1,
         "defense": 1,
         "armour": 1,
@@ -29,7 +29,7 @@
     "Spearman":{
         "type": "melee",
         "category": "infantry",
-        "number": 1,
+        "number": 100,
         "attack": 1,
         "defense": 1,
         "armour": 1,
@@ -42,7 +42,7 @@
     "Javelin":{
         "type": "ranged",
         "category": "infantry",
-        "number": 1,
+        "number": 100,
         "attack": 1,
         "defense": 1,
         "armour": 1,
@@ -56,7 +56,7 @@
     "Legionary":{
         "Type": "melee",
         "category": "infantry",
-        "number": 1,
+        "number": 100,
         "attack": 1,
         "defense": 1,
         "armour": 1,
@@ -70,7 +70,7 @@
     "Beserker":{
         "Type": "melee",
         "category": "infantry",
-        "number": 1,
+        "number": 100,
         "attack": 1,
         "defense": 1,
         "armour": 1,
@@ -84,7 +84,7 @@
     "Melee Cavalry":{
         "Type": "melee",
         "category": "cavalry",
-        "number": 1,
+        "number": 100,
         "attack": 1,
         "charge": 1,
         "defense": 1,
@@ -99,7 +99,7 @@
     "Chariot":{
         "Type": "melee",
         "category": "cavalry",
-        "number": 1,
+        "number": 100,
         "attack": 1,
         "charge": 2,
         "defense": 1,
@@ -113,7 +113,7 @@
     "Elephant":{
         "Type": "melee",
         "category": "cavalry",
-        "number": 1,
+        "number": 100,
         "attack": 1,
         "charge": 4,
         "defense": 1,
@@ -128,7 +128,7 @@
     "Horse Archer":{
         "Type": "ranged",
         "category": "cavalry",
-        "number": 1,
+        "number": 100,
         "attack": 1,
         "defense": 1,
         "armour": 1,
@@ -141,7 +141,7 @@
     "Druid":{
         "Type": "ranged",
         "category": "infantry",
-        "number": 1,
+        "number": 100,
         "attack": 1,
         "defense": 1,
         "armour": 1,
@@ -155,7 +155,7 @@
     "Artillery":{
         "Type": "ranged",
         "category": "artillery",
-        "number": 1,
+        "number": 100,
         "attack": 1,
         "defense": 1,
         "armour": 1,
@@ -168,7 +168,7 @@
     "Missile Infantry":{
         "Type": "ranged",
         "category": "artillery",
-        "number": 1,
+        "number": 100,
         "attack": 1,
         "defense": 1,
         "armour": 1,

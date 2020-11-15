@@ -60,11 +60,11 @@ public class BattleController {
     @FXML
     private Circle enemyUnit;
 
-    @FXML
-    private Rectangle humanHealth;
+    // @FXML
+    // private Rectangle humanHealth;
 
-    @FXML
-    private Rectangle enemyHealth;
+    // @FXML
+    // private Rectangle enemyHealth;
 
     @FXML
     private Button startBattleButton;
@@ -114,10 +114,11 @@ public class BattleController {
     }
     public void reset() {
         battleMessages.clear();
+        startBattleButton.setVisible(true);
         unitAhealth = new SimpleIntegerProperty();
         unitBhealth = new SimpleIntegerProperty();
-        humanHealth.setWidth(attackerArmy.numAvailableUnits() * 15);
-        enemyHealth.setWidth(defenderArmy.numAvailableUnits() * 15);
+        // humanHealth.setWidth(attackerArmy.numAvailableUnits() * 15);
+        // enemyHealth.setWidth(defenderArmy.numAvailableUnits() * 15);
         armyAsize = null;
         armyBsize = null;
         
@@ -247,7 +248,7 @@ public class BattleController {
         battleMessages.appendText("Starting battle!\n");
         BattleResolver resolver = new BattleResolver(attackerArmy, defenderArmy, battleMessages);
         
-        resolver.setArmyBindings(humanHealth.widthProperty(), enemyHealth.widthProperty());
+        //resolver.setArmyBindings(humanHealth.widthProperty(), enemyHealth.widthProperty());
         resolver.setUnitBindings(humanUnit.radiusProperty(), enemyUnit.radiusProperty());
         //resolver.setNumTroopsListeners(unitAnumTroops, unitBnumTroops);
         // setArmyBindings();
