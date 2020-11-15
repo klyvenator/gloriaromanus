@@ -169,8 +169,7 @@ public class GloriaRomanusController{
     moveMode = false;
 
   }
-/* USE SWINVADEBUTTON INSTEAD.
-
+  
   public void setBattleScreen(BattleScreen battleScreen) {
     this.battleScreen = battleScreen;
   }
@@ -182,18 +181,25 @@ public class GloriaRomanusController{
     // DEBUG
     Army a = new Army();
     Army b = new Army();
-
+  
     Infantry infantry = new Infantry("Archers");
     a.addUnit(infantry);
-
+  
     Artillery artillery = new Artillery("Catapults");
     b.addUnit(artillery);
-
+  
     battleScreen.start(
       a,//provinceToArmyMap.get(humanProvince),
-      b//provinceToArmyMap.get(enemyProvince)
+      b,//provinceToArmyMap.get(enemyProvince)
+      "attacker",
+      "home",
+      null,
+      null
     );
   }
+
+/* USE SWINVADEBUTTON INSTEAD.
+
 
   @FXML
   public void clickedInvadeButton(ActionEvent e) throws IOException {
@@ -521,7 +527,9 @@ public class GloriaRomanusController{
       String randomTown = list.get(randomIndex);
       Faction randomFaction = facList.get(randomFactionIndex);
 
-      randomFaction.addTown(randomFaction, randomTown);
+      Town randTown = randomFaction.addTown(randomFaction, randomTown);
+      randTown.setArmy(new Army(randTown));
+
       list.remove(randomIndex);
     }
     return facList;
@@ -626,9 +634,36 @@ public class GloriaRomanusController{
 
   @FXML
   public void handlesWConfirmButton() {
-    Army yourArmy = StringToTown(pWProvinceName.getText()).getArmy();
+    String humanProvince = pWProvinceName.getText();
+    Army yourArmy = StringToTown(humanProvince).getArmy();
     Army enemyArmy = StringToTown(targetProvince).getArmy();
     //INVADE CODE FOR JIBI
+    Infantry infantry1 = new Infantry("Archers");
+    yourArmy.addUnit(infantry1);
+  
+    Infantry infantry2 = new Infantry("Archers Again");
+    yourArmy.addUnit(infantry2);
+    
+    Infantry infantry3 = new Infantry("Archers three");
+    yourArmy.addUnit(infantry3);
+    
+    Artillery artillery1 = new Artillery("Catapults");
+    enemyArmy.addUnit(artillery1);
+    
+    Artillery artillery2 = new Artillery("Catapults lol");
+    enemyArmy.addUnit(artillery2);
+
+    Artillery artillery3 = new Artillery("Catapults again");
+    enemyArmy.addUnit(artillery3);
+
+    Faction current = provinceToOwningFactionMap.get(StringToTown(humanProvince));
+    Faction enemy = provinceToOwningFactionMap.get(StringToTown(targetProvince));
+
+    battleScreen.start(
+      yourArmy, enemyArmy,
+      humanProvince, targetProvince,
+      current, enemy
+    );
 
   }
   @FXML
