@@ -22,10 +22,8 @@ public class musicUtils {
                     player.seek(Duration.ZERO);
                 }
             }); 
-            System.out.println("playing " + fileName);
             player.play();
         }else{
-            System.out.println("continuing curr song");
             return;
         }
     }
