@@ -15,7 +15,7 @@
             <Image url="@../../../../images/Title.png" />
          </image>
       </ImageView>
-      <ComboBox fx:id="chooseFaction1" layoutX="100.0" layoutY="229.0" onAction="#handleP1faction" prefHeight="25.0" prefWidth="92.0" promptText="Player 1" visibleRowCount="6">
+      <ComboBox fx:id="chooseFaction1" layoutX="100.0" layoutY="229.0" prefHeight="25.0" prefWidth="92.0" promptText="Player 1" visibleRowCount="6">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
@@ -52,7 +52,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <ComboBox fx:id="chooseFaction2" layoutX="208.0" layoutY="229.0" onAction="#handleP2faction" prefHeight="25.0" prefWidth="92.0" promptText="Player 2" visibleRowCount="6">
+      <ComboBox fx:id="chooseFaction2" layoutX="208.0" layoutY="229.0" prefHeight="25.0" prefWidth="92.0" promptText="Player 2" visibleRowCount="6">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
@@ -60,7 +60,7 @@
             <DropShadow />
          </effect>
       </ComboBox>
-      <ComboBox fx:id="chooseFaction3" layoutX="100.0" layoutY="278.0" onAction="#handleP3faction" prefHeight="25.0" prefWidth="92.0" promptText="Player 3" visibleRowCount="6">
+      <ComboBox fx:id="chooseFaction3" layoutX="100.0" layoutY="278.0" prefHeight="25.0" prefWidth="92.0" promptText="Player 3" visibleRowCount="6">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
@@ -68,7 +68,7 @@
             <DropShadow />
          </effect>
       </ComboBox>
-      <ComboBox fx:id="chooseFaction4" layoutX="208.0" layoutY="278.0" onAction="#handleP4faction" prefHeight="25.0" prefWidth="92.0" promptText="Player 4" visibleRowCount="6">
+      <ComboBox fx:id="chooseFaction4" layoutX="208.0" layoutY="278.0" prefHeight="25.0" prefWidth="92.0" promptText="Player 4" visibleRowCount="6">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
