@@ -162,7 +162,7 @@ public class BattleResolver {
             
             printStartSkirmishMessage(skirmish);
             
-            skirmish.activateSkirmishAbilities();
+            skirmish.activateUnitAbilities();
 
             skirmish.setUnitBindings(unitAbinding, unitBbinding);
 
@@ -177,7 +177,7 @@ public class BattleResolver {
 
             // TODO skirmish.removeUnitBindings()
             
-            skirmish.cancelSkirmishAbilities();
+            skirmish.cancelUnitAbilities();
         
             printEndSkirmishMessage(skirmish);
 
@@ -207,7 +207,7 @@ public class BattleResolver {
         armyB.cancelArmyAbilities();
 
         // Wait after each battle
-        try {TimeUnit.SECONDS.sleep(3);}
+        try {TimeUnit.SECONDS.sleep(1);}
         catch (Exception e) {
             // just continue
         }
