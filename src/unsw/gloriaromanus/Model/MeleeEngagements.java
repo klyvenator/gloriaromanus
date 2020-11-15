@@ -17,9 +17,9 @@ public class MeleeEngagements extends Engagements {
         // TODO Diff. attack damage values for missile, melee?
         double part2;
         try { 
-            part2 = attacker.getAttack() / defender.getDefenseMelee();
+            part2 = 1.0 * attacker.getAttack() / defender.getDefenseMelee();
         } catch (ArithmeticException e) {
-            part2 = attacker.getAttack() / MIN_DEFENSE;
+            part2 = 1.0 * attacker.getAttack() / MIN_DEFENSE;
         }
 
         Random r = new Random();
