@@ -90,10 +90,12 @@ public class UnitFactory implements Factory{
         if (json.has("cost")) {
             newUnit.setCost(json.getInt("cost"));
         }
-        if (json.has("turns")) {
-            newUnit.setTurnsToMake(json.getInt("turns"));
+        if (json.has("turnsToProduce")) {
+            newUnit.setTurnsToMake(json.getInt("turnsToProduce"));
         }
-
+        if (json.has("movesLeft")) {
+            newUnit.setMovesLeft(json.getInt("movesLeft"));
+        }
         AbilityContainer container = null;
         if (json.has("specialAbility")) {
             container = abilityFactory.deserialise(json.getString("specialAbility"));
