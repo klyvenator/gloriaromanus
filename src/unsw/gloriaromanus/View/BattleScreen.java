@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import unsw.gloriaromanus.Controller.BattleController;
 import unsw.gloriaromanus.Model.Army;
+import unsw.gloriaromanus.Model.Faction;
 
 public class BattleScreen {
 
@@ -27,11 +28,12 @@ public class BattleScreen {
         scene = new Scene(root);
     }
 
-    public void start(Army human, Army enemy, String humanProvince, String targetProvince) {
+    public void start(Army human, Army enemy, String humanProvince, String targetProvince, Faction currFac, Faction enemyFac) {
         controller.setHumanArmy(human);
         controller.setEnemyArmy(enemy);
         controller.reset();
         controller.setProvinceNames(humanProvince, targetProvince);
+        controller.setFactionNames(currFac.getFactionName(), enemyFac.getFactionName());
         controller.setArmyBindings();
 
         stage.setTitle(title);
