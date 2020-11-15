@@ -93,5 +93,12 @@ public class Faction {
     public void endTurnUpdate() {
         calculateTotalWealth();
         reduceTrainingCount();
+        resetUnitMoves();
+    }
+
+    public void resetUnitMoves() {
+        for(Town t: towns) {
+            t.getArmy().resetMoves();
+        }
     }
 }
