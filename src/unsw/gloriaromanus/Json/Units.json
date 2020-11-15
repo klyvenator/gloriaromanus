@@ -9,7 +9,7 @@
         "shield": 1,
         "speed": 1,
         "morale": 1,
-        "turnsToProduce": 1,
+        "turnsToProduce": 0,
         "cost": 100,
         "specialAbility": "shieldCharge"
     },
@@ -92,8 +92,8 @@
         "shield": 1,
         "speed": 3,
         "morale": 1,
-        "turnsToProduce": 1,
-        "cost": 175,
+        "turnsToProduce": 0,
+        "cost": 200,
         "specialAbility": "heroicCharge"
     },
     "Chariot":{
@@ -175,7 +175,7 @@
         "shield": 1,
         "speed": 1,
         "morale": 1,
-        "turnsToProduce": 1,
+        "turnsToProduce": 0,
         "cost": 150
     }
 
