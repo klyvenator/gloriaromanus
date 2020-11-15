@@ -8,29 +8,28 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import unsw.gloriaromanus.Controller.*;
 
-import javafx.application.Application;
-
-public class StartScreen{
-
+public class LoadGameFile {
+    
     private Stage stage;
     private String title;
-    private StartController controller;
+    private LoadFileController controller;
     private Scene scene;
-    
 
-    public StartScreen(Stage stage) throws IOException {
+    public LoadGameFile(Stage stage, StartScreen startScreen) throws IOException {
         this.stage = stage;
         this.title = "Start Menu";
-        controller = new StartController();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Start.fxml"));
+        controller = new LoadFileController();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("LoadFile.fxml"));
         loader.setController(controller);
 
         Parent root = loader.load();
         scene = new Scene(root);
+        controller.setStartScreen(startScreen);
+        controller.setStage(stage);
     }
-    
+
     public void start() {
-        musicUtils.playSound("openingTheme.mp3");
+        controller.setData();
         stage.setTitle(title);
         stage.setScene(scene);
         stage.show();
@@ -38,8 +37,7 @@ public class StartScreen{
     public Stage getStage() {
         return stage;
     }
-    public StartController getController() {
+    public LoadFileController getController() {
         return controller;
     }
-
 }

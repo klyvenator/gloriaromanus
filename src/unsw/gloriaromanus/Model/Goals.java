@@ -52,6 +52,50 @@ public class Goals {
         return winConditions.conditionFulfilled(f);
     }
 
+    @Override
+    public String toString() {
+        List<String> conditions = new ArrayList<String>();
+        stringWinConditions(winConditions, conditions);
+        String completeString = "";
+        for (String s : conditions) {
+            switch(s) {
+                case "TREASURY":
+                    completeString = completeString + "Gold > " + gold;
+                    break;
+                case "WEALTH":
+                    completeString = completeString + "Wealth > " + wealth;
+                    break;
+                case "CONQUER":
+                    completeString = completeString + "Conquer all provinces";
+                    break;
+                case "AND":
+                    completeString = completeString + " AND\n";
+                    break;
+                    case "OR":
+                    completeString = completeString + " OR\n";
+                    break;
+            }
+        }
+        return completeString;
+    }
+
+    public void stringWinConditions(ComponentEvaluator c, List<String> s) {
+        if (c instanceof CompositeEvaluator) {
+            CompositeEvaluator composite = (CompositeEvaluator)c;
+            if(composite.getCompList().size() == 1) {
+                stringWinConditions(composite.getCompList().get(0), s);
+            } else if (composite.getCompList().size() == 2) {
+                stringWinConditions(composite.getCompList().get(0), s);
+                s.add(composite.getOp().toString());
+                stringWinConditions(composite.getCompList().get(1), s);
+            }
+        } else {
+            LeafEvaluator leaf = (LeafEvaluator)c;
+           s.add(leaf.getCondition().toString());
+        }
+    }
+
+
     public void printWinConditions(ComponentEvaluator c) {
         if (c instanceof CompositeEvaluator) {
             CompositeEvaluator composite = (CompositeEvaluator)c;
