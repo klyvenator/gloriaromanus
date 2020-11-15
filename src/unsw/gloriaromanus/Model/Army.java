@@ -1,8 +1,15 @@
 package unsw.gloriaromanus.Model;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Random;
+
+import org.json.JSONObject;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -22,6 +29,8 @@ public class Army {
     public Army(Town currentlyOn) {
         this();
         this.currentlyOn = currentlyOn;
+        units = new ArrayList<Unit>();
+        numAvailableUnits = new SimpleIntegerProperty(0);
     }
 
     public void addUnit(Unit unit) {
@@ -162,8 +171,59 @@ public class Army {
         return availableUnits.get(r.nextInt(availableUnits.size()));
     }
 
-    public boolean canMoveTo(Town t) {
-        return true;
+    public boolean canMoveTo(Town t) throws IOException{
+        String content = Files.readString(Paths.get("src/unsw/gloriaromanus/province_adjacency_matrix_fully_connected.json"));
+        JSONObject provinceAdjacencyMatrix = new JSONObject(content);
+
+        int lowestMovement  = findLowestMovement();
+        if (lowestMovement > findShortestDistance(0, provinceAdjacencyMatrix, currentlyOn.getTownName(), t.getTownName())) {
+            return true;
+        }
+        return false;
+    }
+
+    public int findShortestDistance(int shortest, JSONObject matrix, String root, String dest) {
+        Queue<String> queue = new LinkedList<String>();
+        String s = null;
+        shortest++;
+        for (String province: matrix.getJSONObject(root).keySet()) {
+            queue.add(province);
+        }
+        s = queue.peek();
+        queue.remove();
+        
+        while (!queue.isEmpty()) {
+            if (s.equals(dest)) {
+                return shortest;
+            }
+            else {
+                findShortestDistance(shortest, matrix, root, dest);
+            }
+        }
+
+        return shortest;
+    }
+
+    public int findLowestMovement() {
+        int lowest = Integer.MAX_VALUE;
+        for (Unit u : units) {
+            if (u.getMovementPoints() < lowest) {
+                lowest = u.getMovementPoints();
+            }
+        }
+        return lowest;
+    }
+
+    private boolean confirmIfProvincesConnected(String province1, String province2) throws IOException {
+        String content = Files.readString(Paths.get("src/unsw/gloriaromanus/province_adjacency_matrix_fully_connected.json"));
+        JSONObject provinceAdjacencyMatrix = new JSONObject(content);
+        return provinceAdjacencyMatrix.getJSONObject(province1).getBoolean(province2);
+      }
+
+    public void move(Town t) {
+        t.addArmy(this);
+        currentlyOn.removeArmy(this);
+        currentlyOn = t;
     }
 
 }
