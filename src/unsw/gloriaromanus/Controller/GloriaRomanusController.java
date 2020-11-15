@@ -209,8 +209,8 @@ public class GloriaRomanusController{
     } 
     // TODO = load this from a configuration file you create (user should be able to
     // select in loading screen)
-    humanFaction = "Rome";
-
+    //humanFaction = "Rome";
+    humanFaction = factionNames.get(1); // gets the head of the factionNames list whatever it is
     currentlySelectedHumanProvince = null;
     currentlySelectedEnemyProvince = null;
 
@@ -938,17 +938,20 @@ public class GloriaRomanusController{
       e.printStackTrace();
     }
   }
+  // if the back button is pressed hide the menu buttons and go back to playing
   @FXML
   private void handleSaveGameBack(ActionEvent event){
     saveFileName.setVisible(false);
     saveGame.setVisible(false);
     saveGameBackButton.setVisible(false);
   }
+  // closes the map and returns to main menu
   @FXML
   private void handleGoToMenuButton(ActionEvent event){
     terminate();
     startScreen.start();
   }
+  // confirms player wants to exit and safely closes application
   @FXML
   private void handleExitGame(ActionEvent event){
     Alert alert = new Alert(AlertType.CONFIRMATION, 

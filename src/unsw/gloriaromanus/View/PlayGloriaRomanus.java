@@ -1,5 +1,6 @@
 package unsw.gloriaromanus.View;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -8,6 +9,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
 
 import unsw.gloriaromanus.Controller.*;
 import unsw.gloriaromanus.Model.*;
@@ -36,6 +40,16 @@ public class PlayGloriaRomanus{
   }
 
   public void startGame() throws IOException{
+    String path = "sound/haloTheme.mp3";
+    Media media = new Media(new File(path).toURI().toString());
+    MediaPlayer mediaPlayer = new MediaPlayer(media); 
+    mediaPlayer.setOnEndOfMedia(new Runnable() {
+        @Override
+        public void run() {
+            mediaPlayer.seek(Duration.ZERO);
+        }
+    });
+    mediaPlayer.play();
     // set up the stage
     stage.setTitle("Gloria Romanus");
     stage.setWidth(800);
