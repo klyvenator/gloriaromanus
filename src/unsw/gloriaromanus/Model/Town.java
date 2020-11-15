@@ -47,6 +47,9 @@ public class Town {
     public Army getArmy(){
         return this.army;
     }
+    public void setArmy(Army army) {
+        this.army = army;
+    }
     private int getTaxOwed(){
         int currWealth = getWealth();
         if( currWealth <= 0 ) return 0;
