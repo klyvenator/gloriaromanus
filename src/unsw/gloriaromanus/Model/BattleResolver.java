@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.scene.control.TextArea;
 import unsw.gloriaromanus.Model.Enums.BattleStatus;
 import unsw.gloriaromanus.Model.Enums.FightStatus;
@@ -16,6 +17,8 @@ public class BattleResolver {
     private IntegerProperty armyBsize;
     private DoubleProperty unitAbinding;
     private DoubleProperty unitBbinding;
+    private ChangeListener<? super Number> listenerA;
+    private ChangeListener<? super Number> listenerB;
     private Town invaderProvince;
     private Town defenderProvince;
     private BattleStatus status;
@@ -71,6 +74,7 @@ public class BattleResolver {
         p2.bind(armyBsize);
     }
 
+    // Deprecated
     public void removeArmyBindings() {
         armyAsize = new SimpleIntegerProperty();
         armyAsize.setValue(armyA.numAvailableUnits());
@@ -82,6 +86,11 @@ public class BattleResolver {
     public void setUnitBindings(DoubleProperty p1, DoubleProperty p2) {
         unitAbinding = p1;
         unitBbinding = p2;
+    }
+
+    public void setNumTroopsListeners(ChangeListener<? super Number> listener1, ChangeListener<? super Number> listener2) {
+        this.listenerA = listener1;
+        this.listenerB = listener2;
     }
 
     private void writeToTerminal(String msg) {
@@ -157,9 +166,12 @@ public class BattleResolver {
 
             skirmish.setUnitBindings(unitAbinding, unitBbinding);
 
+            //skirmish.setNumTroopsListeners(listenerA, listenerB);
             // TODO skirmish.setUnitBindings(..., ...)
             // TODO Print Unit.toString() to print out unit name in confrontation
             skirmish.startEngagements();
+
+            //skirmish.removeNumTroopsListeners(listenerA, listenerB);
             
             skirmish.removeUnitBindings(unitAbinding, unitBbinding);
 
