@@ -763,7 +763,8 @@ public class GloriaRomanusController{
           unitsList.remove("Elephant");
           break;
       }
-    String[] units = {"Select unit", "Melee Infantry", "Legionary"};
+    String[] units = new String[unitsList.size()];
+    units = unitsList.toArray(units);
     pWRecruitList.getItems().clear();
     pWRecruitList.getItems().addAll(units);
     pWRecruitList.getSelectionModel().selectFirst();
