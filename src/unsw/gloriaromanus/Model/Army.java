@@ -178,7 +178,7 @@ public class Army {
         JSONObject provinceAdjacencyMatrix = new JSONObject(content);
 
         int lowestMovement  = findLowestMovement();
-        int shortestDistance = findShortestDistance(0, provinceAdjacencyMatrix, currentlyOn.getTownName(), t.getTownName());
+        int shortestDistance = findShortestDistance(0, provinceAdjacencyMatrix, currentlyOn.getTownName(), t.getTownName(), provinceToFactionMap);
         if (lowestMovement >= shortestDistance) {
             reduceMovePoints(shortestDistance);
             return true;
@@ -186,15 +186,25 @@ public class Army {
         return false;
     }
 
-    public int findShortestDistance(int shortest, JSONObject matrix, String root, String dest) throws IOException {
+    public Faction getFaction(String provinceName, Map<Town,Faction> provinceToOwningFactionMap) {
+        for (Town t: provinceToOwningFactionMap.keySet()){
+          if (t.getTownName().equals(provinceName)) {
+            return provinceToOwningFactionMap.get(t);
+          }
+        }
+        return null;
+      }
+
+    public int findShortestDistance(int shortest, JSONObject matrix, String root, String dest, Map<Town,Faction> provinceToFactionMap) throws IOException {
         Queue<String> queue = new LinkedList<String>();
         boolean found = false;
         Map<String, String> visited = new HashMap<String,String>();
+        Faction humanFaction = getFaction(root, provinceToFactionMap);
 
         queue.add(root);
         visited.put(root, root);
         for (String province: matrix.getJSONObject(root).keySet()) {
-            if (connected(province, root)) {
+            if (connected(province, root) && (getFaction(province, provinceToFactionMap) == humanFaction)) {
                 queue.add(province);
             }
         }
@@ -210,7 +220,7 @@ public class Army {
             else {
                 if (visited.get(s) != null) {
                     for (String province : matrix.getJSONObject(s).keySet()) {
-                        if (connected(province, s) && visited.get(province) == null) {
+                        if (connected(province, s) && visited.get(province) == null && (getFaction(province, provinceToFactionMap) == humanFaction)) {
                             visited.put(province, s);
                             queue.add(province);
                         }
@@ -220,8 +230,12 @@ public class Army {
         }
 
         String i = dest;
+        //System.out.println(i + " " + root);
         while (!i.equals(root)) {
             i = visited.get(i);
+            if (i == null) {
+                return shortest = Integer.MAX_VALUE;
+            }
             shortest++;
         }
         System.out.println(shortest);

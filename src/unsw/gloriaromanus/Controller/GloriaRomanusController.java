@@ -856,7 +856,10 @@ public class GloriaRomanusController{
     } else if (moveMode) {
       // Movement Code
       Town destinationProvince = StringToTown(targetProvince);
-      if (yourArmy.canMoveTo(destinationProvince, provinceToOwningFactionMap)) {
+      if (targetProvince.equals(humanProvince)) {
+        Alert alert = new Alert(AlertType.WARNING, "Cannot move to own town", ButtonType.OK);
+        alert.showAndWait();       
+      } else if (yourArmy.canMoveTo(destinationProvince, provinceToOwningFactionMap)) {
         yourArmy.move(destinationProvince);
         reloadTownUnitList(sWUnitList, targetProvince);
         reloadTownUnitList(pWUnitList, humanProvince);
@@ -895,8 +898,14 @@ public class GloriaRomanusController{
 
   @FXML
   public void handleMoveButton() {
-    moveMode = true;
-    invadeMode = false;
+    Town t = StringToTown(pWProvinceName.getText());
+    if (t.getArmy().getAllUnits().size() == 0) {
+      Alert alert = new Alert(AlertType.WARNING, "You need an army to move.", ButtonType.OK);
+      alert.showAndWait(); 
+    } else {
+      moveMode = true;
+      invadeMode = false;
+    }
   }
 
   @FXML
