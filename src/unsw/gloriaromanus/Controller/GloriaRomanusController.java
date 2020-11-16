@@ -795,11 +795,10 @@ public class GloriaRomanusController{
         faction.setGold(faction.getTotalGold() - unitObject.getCost());
         if (unitObject.getTurnsToMake() > 0) {
           town.trainUnit(unitObject);
-          Alert alert = new Alert(AlertType.INFORMATION, unitObject.getName() + " will take " + unitObject.getTurnsToMake() + "turns to make.", ButtonType.OK);
+          System.out.println(unit + " " + town.getUnitsInTraining().size());
+          Alert alert = new Alert(AlertType.INFORMATION, unitObject.getName() + " will take " + unitObject.getTurnsToMake() + " turns to make.", ButtonType.OK);
           alert.showAndWait(); 
         } else {
-          Alert alert = new Alert(AlertType.INFORMATION, unitObject.getName() + "has been recruited!", ButtonType.OK);
-          alert.showAndWait(); 
           town.addUnit(unitObject);
         }
         fillTownUnitList(pWProvinceName.getText(), pWUnitList);

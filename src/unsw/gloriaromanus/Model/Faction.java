@@ -68,6 +68,7 @@ public class Faction {
             for(Unit u: t.getUnitsInTraining().keySet()) {
                 Integer i = t.getUnitsInTraining().get(u);
                 i--;
+                t.getUnitsInTraining().replace(u, i);
                 if (i == 0) {
                     removeList.add(u);
                     t.getArmy().addUnit(u);
