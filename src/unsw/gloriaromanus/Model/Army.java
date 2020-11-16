@@ -51,6 +51,11 @@ public class Army {
 
     public void removeUnit(Unit u) {
         units.remove(u);
+        numAvailableUnits.set(numAvailableUnits.get() - 1);
+    }
+
+    public void setNumAvailableUnits(int num) {
+        this.numAvailableUnits.set(num);
     }
 
     // Getters and Setters

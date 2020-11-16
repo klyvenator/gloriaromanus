@@ -28,6 +28,7 @@ public class Town {
     public Town(String townName) {
         this.faction = null;
         this.townName = townName;
+        this.army = new Army(this);
         this.tax = new Tax(); // set tax rate to low
         this.wealth = 10; // set initial province wealth to 10
         unitsInTraining = new HashMap<Unit, Integer>();
@@ -114,13 +115,16 @@ public class Town {
     }
 
     public void removeArmy(Army a) {
+        System.out.println(army + "-" + a);
         if (army == a) {
             army.getAllUnits().clear();
+            army.setNumAvailableUnits(0);
+        } else {
+            for (Unit u: a.getAllUnits()) {
+                army.removeUnit(u);
+            }
         }
-        for (Unit u: a.getAllUnits()) {
-            army.removeUnit(u);
-        }
-        System.out.println(townName + " " + army.getAllUnits());
+        System.out.println(army.getAllUnits().size() + a.getAllUnits().size());
     }
 
     public void setRecentlyInvaded(boolean recentlyInvaded) {
