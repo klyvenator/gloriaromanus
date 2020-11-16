@@ -64,6 +64,18 @@ public class BattleResolver {
         return status;
     }
 
+    public void setTextArea(TextArea area) {
+        this.terminal = area;
+    }
+
+    public Army getArmyA() {
+        return armyA;
+    }
+
+    public Army getArmyB() {
+        return armyB;
+    }
+
     public void updateArmyNumAvailableUnits() {
         armyA.updateNumAvailableUnits();
         armyB.updateNumAvailableUnits();

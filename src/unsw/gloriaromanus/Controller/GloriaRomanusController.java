@@ -359,7 +359,7 @@ public class GloriaRomanusController{
             provinceTown = town;
             Faction factionObject = provinceToOwningFactionMap.get(provinceTown);
             String faction = factionObject.getFactionName();
-            TextSymbol t = new TextSymbol(provinceTown.getWealth(),
+            TextSymbol t = new TextSymbol(10,
             faction + "\n" + provinceTown.getTownName() + "\n", 0xFFFF0000,
             HorizontalAlignment.CENTER, VerticalAlignment.BOTTOM);
 
@@ -829,6 +829,7 @@ public class GloriaRomanusController{
     secondWindow.setVisible(true);
   }
 
+
   @FXML
   public void handlesWConfirmButton() throws IOException{
     String humanProvince = pWProvinceName.getText();
@@ -840,6 +841,8 @@ public class GloriaRomanusController{
         Alert alert = new Alert(AlertType.WARNING, "Only adjacent provinces can war! Please move your army.", ButtonType.OK);
         alert.showAndWait();
       } else {
+        closeWindows();
+
         Town enemyProvince = StringToTown(targetProvince);
         Army enemyArmy = enemyProvince.getArmy();
         Faction current = provinceToOwningFactionMap.get(StringToTown(humanProvince));
@@ -853,48 +856,27 @@ public class GloriaRomanusController{
           current, enemy
         );
 
-        // battleScreen.start(
-        //   yourArmy, enemyArmy,
-        //   humanProvince, targetProvince,
-        //   current, enemy
-        // );
-
-        // try {TimeUnit.SECONDS.sleep(6);}
-        // catch (Exception e) {
-        //     // just continue
-        // }
         
-        BattleController controller = battleScreen.getController();
-        if (controller == null) {
-          System.out.println("No controller");
-        }
-        // resolver = controller.getBattleResolver();
-
-        if (resolver == null) {
-          System.out.println("No resolver");
-        }
-
         if (resolver.getStatus() == BattleStatus.WIN_A) {
-          Alert alert = new Alert(AlertType.INFORMATION, current.getFactionName() + " has won!", ButtonType.OK);
-          alert.showAndWait(); 
-        } else if (resolver.getStatus() == BattleStatus.WIN_A) {
-          Alert alert = new Alert(AlertType.INFORMATION, enemy.getFactionName() + " has won!", ButtonType.OK);
-          alert.showAndWait(); 
-        } else {
-          Alert alert = new Alert(AlertType.WARNING, "Battle still ongoing?", ButtonType.OK);
-          alert.showAndWait(); 
-        }
-        
+          enemyProvince.setFaction(current);
+          provinceToOwningFactionMap.replace(enemyProvince, enemy, current);
+          enemy.removeTown(enemyProvince);
+          current.addTown(enemyProvince);
+          enemyProvince.removeArmy(enemyArmy);
+          enemyProvince.addArmy(yourArmy);
+          yourProvince.removeArmy(yourArmy);
+          enemyProvince.setRecentlyInvaded(true);
+        } 
+
         if (enemy.getTowns().size() == 0) {
           factionNames.remove(enemy.getFactionName());
           numPlayers--;
           Alert alert = new Alert(AlertType.WARNING, enemy.getFactionName() + " has lost!", ButtonType.OK);
           alert.showAndWait(); 
-        }
+        }        
       }
 
       invadeMode = false;
-      closeWindows();
       
     } else if (moveMode) {
       // Movement Code
@@ -932,6 +914,9 @@ public class GloriaRomanusController{
     Town t = StringToTown(pWProvinceName.getText());
     if (t.getArmy().getAllUnits().size() == 0) {
       Alert alert = new Alert(AlertType.WARNING, "You need an army to invade.", ButtonType.OK);
+      alert.showAndWait(); 
+    } else if (t.getRecentlyInvaded()) {
+      Alert alert = new Alert(AlertType.WARNING, "Town recently conquered, try again next turn", ButtonType.OK);
       alert.showAndWait(); 
     } else {
       invadeMode = true;
