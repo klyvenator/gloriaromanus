@@ -358,7 +358,7 @@ public class GloriaRomanusController{
             provinceTown = town;
             Faction factionObject = provinceToOwningFactionMap.get(provinceTown);
             String faction = factionObject.getFactionName();
-            TextSymbol t = new TextSymbol(10,
+            TextSymbol t = new TextSymbol(provinceTown.getWealth(),
             faction + "\n" + provinceTown.getTownName() + "\n", 0xFFFF0000,
             HorizontalAlignment.CENTER, VerticalAlignment.BOTTOM);
 
@@ -619,6 +619,7 @@ public class GloriaRomanusController{
 
       Town randTown = randomFaction.addTown(randomFaction, randomTown);
       randTown.setArmy(new Army(randTown));
+      randTown.setWealth(300);
 
       list.remove(randomIndex);
     }
