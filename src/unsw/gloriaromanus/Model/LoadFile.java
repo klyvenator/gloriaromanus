@@ -92,7 +92,7 @@ public class LoadFile {
             Town town = new Town(fac, townName);
             town.setWealth(townObject.getInt("Town Wealth"));
             town.updateTaxStatus(townObject.getString("Tax Type"));
-            town.setRecentlyInvaded(townObject.getInt("recentlyInvaded"));
+            town.setRecentlyInvaded(townObject.getBoolean("recentlyInvaded"));
             fac.addTown(town);
             // gets the array of units for each town
             JSONArray units = townObject.getJSONArray("Units");
