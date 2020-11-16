@@ -38,6 +38,7 @@ public class Army {
     public void addUnit(Unit unit) {
         units.add(unit);
         numAvailableUnits.set(numAvailableUnits.get() + 1);
+        unit.setAbilityContainerTarget(this);
     }
 
     public void addNumAvailableUnitsListener(ChangeListener<? super Number> listener) {

@@ -260,11 +260,15 @@ public abstract class Unit {
     }
 
     public void setAbilityContainerTarget(Unit unit) {
-        abilityContainer.setTarget(unit);
+        if (ability != null) {
+            abilityContainer.setTarget(unit);
+        }
     }
 
     public void setAbilityContainerTarget(Army army) {
-        abilityContainer.setTarget(army);
+        if (ability != null) {
+            abilityContainer.setTarget(army);
+        }
     }
 
     public Ability getAbility() {
