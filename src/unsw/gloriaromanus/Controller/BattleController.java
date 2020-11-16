@@ -85,8 +85,6 @@ public class BattleController {
 
     private Timeline humanAttacks;
     private Timeline enemyAttacks;
-
-    private BattleResolver resolver;
     
     public BattleController(PlayGloriaRomanus mainMap) {
         this.mainMap = mainMap;
@@ -246,17 +244,9 @@ public class BattleController {
         startBattle();
     }
 
-    public BattleResolver getBattleResolver() {
-        return resolver;
-    }
-
-    public void setBattleResolver(BattleResolver resolver) {
-        this.resolver = resolver;
-    }
-    
     private void startBattle() {
         battleMessages.appendText("Starting battle!\n");
-        resolver = new BattleResolver(attackerArmy, defenderArmy, battleMessages);
+        BattleResolver resolver = new BattleResolver(attackerArmy, defenderArmy, battleMessages);
         
         //resolver.setArmyBindings(humanHealth.widthProperty(), enemyHealth.widthProperty());
         resolver.setUnitBindings(humanUnit.radiusProperty(), enemyUnit.radiusProperty());
