@@ -1,6 +1,7 @@
 package unsw.gloriaromanus.Controller;
 
 import unsw.gloriaromanus.Model.*;
+import unsw.gloriaromanus.Model.Enums.BattleStatus;
 import unsw.gloriaromanus.View.BattleScreen;
 import unsw.gloriaromanus.View.StartScreen;
 import unsw.gloriaromanus.View.musicUtils;
@@ -822,6 +823,8 @@ public class GloriaRomanusController{
   }
 
   @FXML
+  private TextArea textarea;
+  @FXML
   public void handlesWConfirmButton() throws IOException{
     String humanProvince = pWProvinceName.getText();
     Town yourProvince = StringToTown(humanProvince);
@@ -832,10 +835,13 @@ public class GloriaRomanusController{
         Alert alert = new Alert(AlertType.WARNING, "Only adjacent provinces can war! Please move your army.", ButtonType.OK);
         alert.showAndWait();
       } else {
+        closeWindows();
+
         Town enemyProvince = StringToTown(targetProvince);
         Army enemyArmy = enemyProvince.getArmy();
         Faction current = provinceToOwningFactionMap.get(StringToTown(humanProvince));
         Faction enemy = provinceToOwningFactionMap.get(StringToTown(targetProvince));
+        BattleResolver resolver = battleScreen.getBattleResolver();
     
         battleScreen.start(
           yourArmy, enemyArmy,
@@ -843,15 +849,26 @@ public class GloriaRomanusController{
           current, enemy
         );
 
+        
+        if (resolver.getStatus() == BattleStatus.WIN_A) {
+          enemyProvince.setFaction(current);
+          provinceToOwningFactionMap.replace(enemyProvince, enemy, current);
+          enemy.removeTown(enemyProvince);
+          current.addTown(enemyProvince);
+          enemyProvince.removeArmy(enemyArmy);
+          enemyProvince.addArmy(yourArmy);
+          yourProvince.removeArmy(yourArmy);
+          enemyProvince.setRecentlyInvaded(true);
+        } 
+
         if (enemy.getTowns().size() == 0) {
           factionNames.remove(enemy.getFactionName());
           numPlayers--;
           Alert alert = new Alert(AlertType.WARNING, enemy.getFactionName() + " has lost!", ButtonType.OK);
           alert.showAndWait(); 
-        }
+        }        
       }
       invadeMode = false;
-      closeWindows();
       
     } else if (moveMode) {
       // Movement Code
@@ -889,6 +906,9 @@ public class GloriaRomanusController{
     Town t = StringToTown(pWProvinceName.getText());
     if (t.getArmy().getAllUnits().size() == 0) {
       Alert alert = new Alert(AlertType.WARNING, "You need an army to invade.", ButtonType.OK);
+      alert.showAndWait(); 
+    } else if (t.getRecentlyInvaded()) {
+      Alert alert = new Alert(AlertType.WARNING, "Town recently conquered, try again next turn", ButtonType.OK);
       alert.showAndWait(); 
     } else {
       invadeMode = true;

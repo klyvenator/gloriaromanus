@@ -94,11 +94,22 @@ public class Faction {
         calculateTotalWealth();
         reduceTrainingCount();
         resetUnitMoves();
+        resetInvadeStatus();
+    }
+
+    public void resetInvadeStatus() {
+        for (Town t: towns) {
+            t.setRecentlyInvaded(false);
+        }
     }
 
     public void resetUnitMoves() {
         for(Town t: towns) {
             t.getArmy().resetMoves();
         }
+    }
+
+    public void removeTown(Town t) {
+        towns.remove(t);
     }
 }

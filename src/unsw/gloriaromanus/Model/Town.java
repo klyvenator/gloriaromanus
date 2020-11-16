@@ -13,6 +13,7 @@ public class Town {
     private Tax tax;
     private Map<Unit, Integer> unitsInTraining;
     public Army army;
+    private boolean recentlyInvaded;
 
     public Town(Faction faction, String townName){
         this.faction = faction;
@@ -21,6 +22,7 @@ public class Town {
         this.wealth = 10; // set initial province wealth to 10
         this.army = new Army(this);
         unitsInTraining = new HashMap<Unit, Integer>();
+        this.recentlyInvaded = false;
     }
     public Town(String townName) {
         this.faction = null;
@@ -118,6 +120,14 @@ public class Town {
             army.removeUnit(u);
         }
         System.out.println(townName + " " + army.getAllUnits());
+    }
+
+    public void setRecentlyInvaded(boolean recentlyInvaded) {
+        this.recentlyInvaded = recentlyInvaded;
+    }
+    
+    public boolean getRecentlyInvaded() {
+        return recentlyInvaded;
     }
 
     
