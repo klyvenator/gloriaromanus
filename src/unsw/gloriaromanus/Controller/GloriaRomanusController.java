@@ -100,14 +100,11 @@ public class GloriaRomanusController{
   private Map<String, Army> provinceToArmyMap;
   // private Map<String, Town> provinceToTownMap;
 
-  private BattleScreen battleScreen;
-
   private String humanFaction;
 
   private Feature currentlySelectedHumanProvince;
   private Feature currentlySelectedEnemyProvince;
   private Feature currentlySelectedProvince;
-  private Feature targetProvinceFeature;
 
 
   private FeatureLayer featureLayer_provinces;
@@ -232,7 +229,6 @@ public class GloriaRomanusController{
     initialiseProvinceWindow();
     unitFactory = new UnitFactory();
     currentlySelectedProvince = null;
-    targetProvinceFeature = null;
     targetProvince = null;
     invadeMode = false;
     moveMode = false;
@@ -245,25 +241,6 @@ public class GloriaRomanusController{
 
   }
   
-  public void setBattleScreen(BattleScreen battleScreen) {
-    this.battleScreen = battleScreen;
-  }
-
-  private void battleStuff() {
-    String humanProvince = (String)currentlySelectedHumanProvince.getAttributes().get("name");
-    String enemyProvince = (String)currentlySelectedEnemyProvince.getAttributes().get("name");
-    
-    // DEBUG
-    Army a = new Army();
-    Army b = new Army();
-  
-    Infantry infantry = new Infantry("Archers");
-    a.addUnit(infantry);
-  
-    Artillery artillery = new Artillery("Catapults");
-    b.addUnit(artillery);
-  
-  }
 
 /* USE SWINVADEBUTTON INSTEAD.
 
@@ -478,7 +455,6 @@ public class GloriaRomanusController{
                     alert.showAndWait(); 
                   } else {
                     targetProvince = province;
-                    targetProvinceFeature = f;
                     openInvadeWindow();
                   }
                 } else if (moveMode) {
