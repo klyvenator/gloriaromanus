@@ -35,11 +35,12 @@ public class BattleScreen {
         scene = new Scene(root);
     }
 
-    public void start(Army human, Army enemy, String humanProvince, String targetProvince, Faction currFac, Faction enemyFac) {
+    public void start(BattleResolver resolver, String humanProvince, String targetProvince, Faction currFac, Faction enemyFac) {
         musicUtils.stopSound();
         musicUtils.playSound("battleMusic.mp3");
-        controller.setHumanArmy(human);
-        controller.setEnemyArmy(enemy);
+        controller.setBattleResolver(resolver);
+        controller.setHumanArmy(resolver.getArmyA());
+        controller.setEnemyArmy(resolver.getArmyB());
         controller.reset();
         controller.setProvinceNames(humanProvince, targetProvince);
         controller.setFactionNames(currFac.getFactionName(), enemyFac.getFactionName());
@@ -50,7 +51,10 @@ public class BattleScreen {
         stage.show();
     }
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> 75011d7ffde7f987f396b3b3202ed76081157c78
     public BattleController getController() {
         return controller;
     }
@@ -59,6 +63,10 @@ public class BattleScreen {
         this.controller = controller;
     }
 
+<<<<<<< HEAD
+    
+=======
 
+>>>>>>> 75011d7ffde7f987f396b3b3202ed76081157c78
     
 }

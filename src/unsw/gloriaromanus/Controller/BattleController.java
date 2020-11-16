@@ -253,10 +253,11 @@ public class BattleController {
     public void setBattleResolver(BattleResolver resolver) {
         this.resolver = resolver;
     }
-    
+
     private void startBattle() {
         battleMessages.appendText("Starting battle!\n");
-        resolver = new BattleResolver(attackerArmy, defenderArmy, battleMessages);
+        resolver.setTextArea(battleMessages);
+        //resolver = new BattleResolver(attackerArmy, defenderArmy, battleMessages);
         
         //resolver.setArmyBindings(humanHealth.widthProperty(), enemyHealth.widthProperty());
         resolver.setUnitBindings(humanUnit.radiusProperty(), enemyUnit.radiusProperty());

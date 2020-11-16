@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 
@@ -187,7 +188,7 @@ public class GloriaRomanusController{
   private int turnCount;
   private int numPlayers;
 
-
+  private BattleResolver resolver;
 
   @FXML
   private void initialize() throws JsonParseException, JsonMappingException, IOException {
@@ -791,10 +792,15 @@ public class GloriaRomanusController{
         faction.setGold(faction.getTotalGold() - unitObject.getCost());
         if (unitObject.getTurnsToMake() > 0) {
           town.trainUnit(unitObject);
+          Alert alert = new Alert(AlertType.INFORMATION, unitObject.getName() + " will take " + unitObject.getTurnsToMake() + "turns to make.", ButtonType.OK);
+          alert.showAndWait(); 
         } else {
+          Alert alert = new Alert(AlertType.INFORMATION, unitObject.getName() + "has been recruited!", ButtonType.OK);
+          alert.showAndWait(); 
           town.addUnit(unitObject);
         }
         fillTownUnitList(pWProvinceName.getText(), pWUnitList);
+        
       }
     }
   }
@@ -841,9 +847,11 @@ public class GloriaRomanusController{
         Army enemyArmy = enemyProvince.getArmy();
         Faction current = provinceToOwningFactionMap.get(StringToTown(humanProvince));
         Faction enemy = provinceToOwningFactionMap.get(StringToTown(targetProvince));
-        BattleResolver resolver = battleScreen.getController().getBattleResolver();
+    
+        resolver = new BattleResolver(yourArmy, enemyArmy);
+
         battleScreen.start(
-          yourArmy, enemyArmy,
+          resolver,
           humanProvince, targetProvince,
           current, enemy
         );
@@ -867,6 +875,7 @@ public class GloriaRomanusController{
           alert.showAndWait(); 
         }        
       }
+
       invadeMode = false;
       
     } else if (moveMode) {
