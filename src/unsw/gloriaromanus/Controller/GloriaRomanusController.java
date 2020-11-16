@@ -358,9 +358,9 @@ public class GloriaRomanusController{
             provinceTown = town;
             Faction factionObject = provinceToOwningFactionMap.get(provinceTown);
             String faction = factionObject.getFactionName();
-            TextSymbol t = new TextSymbol(10, 
-            faction + "\n" + provinceTown.getTownName() + "\n" + provinceTown.getWealth() + "\n", 
-            0xFFFF0000, HorizontalAlignment.CENTER, VerticalAlignment.BOTTOM);
+            TextSymbol t = new TextSymbol(10,
+            faction + "\n" + provinceTown.getTownName() + "\n", 0xFFFF0000,
+            HorizontalAlignment.CENTER, VerticalAlignment.BOTTOM);
 
             switch (faction) {
               case "Gaul":
@@ -842,7 +842,6 @@ public class GloriaRomanusController{
         Faction current = provinceToOwningFactionMap.get(StringToTown(humanProvince));
         Faction enemy = provinceToOwningFactionMap.get(StringToTown(targetProvince));
         BattleResolver resolver = battleScreen.getController().getBattleResolver();
-    
         battleScreen.start(
           yourArmy, enemyArmy,
           humanProvince, targetProvince,

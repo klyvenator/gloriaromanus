@@ -14,6 +14,7 @@ import javafx.util.Duration;
 
 import unsw.gloriaromanus.Controller.BattleController;
 import unsw.gloriaromanus.Model.Army;
+import unsw.gloriaromanus.Model.BattleResolver;
 import unsw.gloriaromanus.Model.Faction;
 
 public class BattleScreen {
@@ -48,8 +49,16 @@ public class BattleScreen {
         stage.setScene(scene);
         stage.show();
     }
-    public BattleController getController(){
-        return this.controller;
+
+
+    public BattleController getController() {
+        return controller;
     }
+
+    public void setController(BattleController controller) {
+        this.controller = controller;
+    }
+
+
     
 }
