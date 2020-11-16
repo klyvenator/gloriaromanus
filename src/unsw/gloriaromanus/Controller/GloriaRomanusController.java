@@ -254,14 +254,6 @@ public class GloriaRomanusController{
     Artillery artillery = new Artillery("Catapults");
     b.addUnit(artillery);
   
-    battleScreen.start(
-      a,//provinceToArmyMap.get(humanProvince),
-      b,//provinceToArmyMap.get(enemyProvince)
-      "attacker",
-      "home",
-      null,
-      null
-    );
   }
 
 /* USE SWINVADEBUTTON INSTEAD.
@@ -856,7 +848,7 @@ public class GloriaRomanusController{
           current, enemy
         );
 
-        
+        System.out.println(resolver.getStatus());
         if (resolver.getStatus() == BattleStatus.WIN_A) {
           enemyProvince.setFaction(current);
           provinceToOwningFactionMap.replace(enemyProvince, enemy, current);

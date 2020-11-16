@@ -51,10 +51,6 @@ public class BattleScreen {
         stage.show();
     }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 75011d7ffde7f987f396b3b3202ed76081157c78
     public BattleController getController() {
         return controller;
     }
@@ -63,10 +59,6 @@ public class BattleScreen {
         this.controller = controller;
     }
 
-<<<<<<< HEAD
     
-=======
-
->>>>>>> 75011d7ffde7f987f396b3b3202ed76081157c78
     
 }
