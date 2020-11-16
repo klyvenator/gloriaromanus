@@ -894,7 +894,7 @@ public class GloriaRomanusController{
         alert.showAndWait(); 
       }
     }
-    addAllPointGraphics();
+    
   }
 
   private boolean connected(String province1, String province2) throws IOException {
