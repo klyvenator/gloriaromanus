@@ -832,6 +832,7 @@ public class GloriaRomanusController{
 
         System.out.println(resolver.getStatus());
         if (resolver.getStatus() == BattleStatus.WIN_A) {
+          // Invader wins
           enemyProvince.setFaction(current);
           provinceToOwningFactionMap.replace(enemyProvince, enemy, current);
           enemy.removeTown(enemyProvince);
@@ -839,8 +840,17 @@ public class GloriaRomanusController{
           enemyProvince.removeArmy(enemyArmy);
           enemyProvince.addArmy(yourArmy);
           yourProvince.removeArmy(yourArmy);
+          yourArmy.removeDefeatedUnits();
+          yourArmy.setAllUnbroken();
           enemyProvince.setRecentlyInvaded(true);
-        } 
+        } else if (resolver.getStatus() == BattleStatus.WIN_B) {
+          // Defender wins
+          yourArmy.removeDefeatedUnits();
+          yourArmy.setAllUnbroken();
+          enemyArmy.removeDefeatedUnits();
+          enemyArmy.setAllUnbroken();
+          enemyProvince.setRecentlyInvaded(true);
+        }
 
         if (enemy.getTowns().size() == 0) {
           factionNames.remove(enemy.getFactionName());

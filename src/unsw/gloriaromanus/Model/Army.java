@@ -80,6 +80,14 @@ public class Army {
         numAvailableUnits.set(getNumUnits());
     }
 
+    public void removeDefeatedUnits() {
+        for (Unit unit : units) {
+            if (unit != null && unit.getNumTroops() <= 0) {
+                units.remove(unit);
+            }
+        }
+    }
+
     public void activateArmyAbilities() {
         for (Unit unit : units) {
             if (unit != null) {
