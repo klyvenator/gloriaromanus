@@ -65,7 +65,7 @@ public class AbilityContainer {
         if (target == null) {return;}
         if (target.getClass() == targetClass) {
             if (terminal != null) {terminal.appendText("Activating " + name + "!\n");}
-            apply(target.getUnits());
+            apply(target.getUnits(), terminal);
         }
     }
 
@@ -76,12 +76,12 @@ public class AbilityContainer {
         }
     }
 
-    public void apply(List<Unit> units) {
+    public void apply(List<Unit> units, TextArea terminal) {
         if (units == null) {return;}
         for (Unit unit : units) {
             if (unit == null) {continue;}
             for (Ability ability : abilities) {
-                ability.apply(unit);
+                ability.apply(unit, terminal);
             }
         }
     }

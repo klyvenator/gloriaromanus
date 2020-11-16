@@ -1,5 +1,7 @@
 package unsw.gloriaromanus.Model;
 
+import javafx.scene.control.TextArea;
+
 public class MultiplierAbility extends Ability {
     private double multiplier;
 
@@ -29,10 +31,11 @@ public class MultiplierAbility extends Ability {
     }
 
     @Override
-    public void apply(Unit unit) {
+    public void apply(Unit unit, TextArea terminal) {
         int oldValue = super.getAttrValue(unit);
 
         double newValue = 1.0 * oldValue * multiplier;
+        if (terminal != null) {terminal.appendText(getAttrName() + " multiplied by " + multiplier);}
 
         if (newValue > 999) {
             newValue = 999;

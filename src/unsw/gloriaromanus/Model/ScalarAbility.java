@@ -1,5 +1,7 @@
 package unsw.gloriaromanus.Model;
 
+import javafx.scene.control.TextArea;
+
 public class ScalarAbility extends Ability {
     private int value;
 
@@ -18,10 +20,11 @@ public class ScalarAbility extends Ability {
     }
 
     @Override
-    public void apply(Unit unit) {
+    public void apply(Unit unit, TextArea terminal) {
         int oldValue = super.getAttrValue(unit);
 
         int newValue = oldValue + value;
+        if (terminal != null) {terminal.appendText(getAttrName() + " increased (scalar) by " + value);}
 
         if (newValue > 999) {
             newValue = 999;
