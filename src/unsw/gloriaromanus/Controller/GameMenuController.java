@@ -85,26 +85,31 @@ public class GameMenuController {
 
     @FXML
     private void handle3players(ActionEvent event) {
-        if (numPlayers != 3) {
+        /*if (numPlayers != 3) {
             setData();
             chooseFaction1.setVisible(true);
             chooseFaction2.setVisible(true);
             chooseFaction3.setVisible(true);
             chooseFaction4.setVisible(false);
             numPlayers = 3;
-        }
+        }*/
+        Alert alert = new Alert(AlertType.WARNING, "To be implemented!", ButtonType.OK);
+        alert.showAndWait(); 
     }
 
     @FXML
     private void handle4players(ActionEvent event) {
-        if (numPlayers != 4) {
+        /*if (numPlayers != 4) {
             setData();
             chooseFaction1.setVisible(true);
             chooseFaction2.setVisible(true);
             chooseFaction3.setVisible(true);
             chooseFaction4.setVisible(true);
             numPlayers = 4;
-        }
+        }*/
+
+        Alert alert = new Alert(AlertType.WARNING, "Please select an enemy faction", ButtonType.OK);
+        alert.showAndWait(); 
     }
 
     @FXML
@@ -133,8 +138,6 @@ public class GameMenuController {
             // start Game
             //System.out.println(finalPlayers);
             play = new PlayGloriaRomanus(stage,finalPlayers, null, startScreen, 0);
-            BattleScreen battleScreen = new BattleScreen(stage, play);
-            play.getController().setBattleScreen(battleScreen);
             play.startGame();
         }
     }

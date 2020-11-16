@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 public class Town {
     
     public Faction faction; 
@@ -129,6 +130,5 @@ public class Town {
     public boolean getRecentlyInvaded() {
         return recentlyInvaded;
     }
-
     
 }

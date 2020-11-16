@@ -76,6 +76,7 @@ import org.geojson.FeatureCollection;
 import org.geojson.LngLatAlt;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class GloriaRomanusController{
@@ -98,8 +99,6 @@ public class GloriaRomanusController{
   // private Map<String, List<Unit>> provinceToUnitListMap;
   private Map<String, Army> provinceToArmyMap;
   // private Map<String, Town> provinceToTownMap;
-
-  private BattleScreen battleScreen;
 
   private String humanFaction;
 
@@ -161,6 +160,8 @@ public class GloriaRomanusController{
   private VBox goalsWindow;
   @FXML
   private Label gWConditions;
+  @FXML
+  private VBox battleWindow;
 
   private String targetProvince;
   private boolean invadeMode;
@@ -183,6 +184,10 @@ public class GloriaRomanusController{
   private Button saveGameBackButton;
   @FXML
   private Button goToMenuButton;
+
+  @FXML
+  private TextArea battleMessages;
+
   private Goals goal;
   private int year;
   private int turnCount;
@@ -236,33 +241,6 @@ public class GloriaRomanusController{
 
   }
   
-  public void setBattleScreen(BattleScreen battleScreen) {
-    this.battleScreen = battleScreen;
-  }
-
-  private void battleStuff() {
-    String humanProvince = (String)currentlySelectedHumanProvince.getAttributes().get("name");
-    String enemyProvince = (String)currentlySelectedEnemyProvince.getAttributes().get("name");
-    
-    // DEBUG
-    Army a = new Army();
-    Army b = new Army();
-  
-    Infantry infantry = new Infantry("Archers");
-    a.addUnit(infantry);
-  
-    Artillery artillery = new Artillery("Catapults");
-    b.addUnit(artillery);
-  
-    battleScreen.start(
-      a,//provinceToArmyMap.get(humanProvince),
-      b,//provinceToArmyMap.get(enemyProvince)
-      "attacker",
-      "home",
-      null,
-      null
-    );
-  }
 
 /* USE SWINVADEBUTTON INSTEAD.
 
@@ -362,6 +340,7 @@ public class GloriaRomanusController{
             TextSymbol t = new TextSymbol(10,
             faction + "\n" + provinceTown.getTownName() + "\n", 0xFFFF0000,
             HorizontalAlignment.CENTER, VerticalAlignment.BOTTOM);
+
 
             switch (faction) {
               case "Gaul":
@@ -791,12 +770,12 @@ public class GloriaRomanusController{
         Unit unitObject = unitFactory.createUnit(unit, faction, town);
         faction.setGold(faction.getTotalGold() - unitObject.getCost());
         if (unitObject.getTurnsToMake() > 0) {
+          musicUtils.playSoundOnceOntop("goldBag.mp3");
           town.trainUnit(unitObject);
-          Alert alert = new Alert(AlertType.INFORMATION, unitObject.getName() + " will take " + unitObject.getTurnsToMake() + "turns to make.", ButtonType.OK);
+          System.out.println(unit + " " + town.getUnitsInTraining().size());
+          Alert alert = new Alert(AlertType.INFORMATION, unitObject.getName() + " will take " + unitObject.getTurnsToMake() + " turns to make.", ButtonType.OK);
           alert.showAndWait(); 
         } else {
-          Alert alert = new Alert(AlertType.INFORMATION, unitObject.getName() + "has been recruited!", ButtonType.OK);
-          alert.showAndWait(); 
           town.addUnit(unitObject);
         }
         fillTownUnitList(pWProvinceName.getText(), pWUnitList);
@@ -847,16 +826,11 @@ public class GloriaRomanusController{
         Army enemyArmy = enemyProvince.getArmy();
         Faction current = provinceToOwningFactionMap.get(StringToTown(humanProvince));
         Faction enemy = provinceToOwningFactionMap.get(StringToTown(targetProvince));
-    
-        resolver = new BattleResolver(yourArmy, enemyArmy);
+ 
+        resolver = new BattleResolver(yourArmy, enemyArmy);   
+        openBattleWindow();
 
-        battleScreen.start(
-          resolver,
-          humanProvince, targetProvince,
-          current, enemy
-        );
-
-        
+        System.out.println(resolver.getStatus());
         if (resolver.getStatus() == BattleStatus.WIN_A) {
           enemyProvince.setFaction(current);
           provinceToOwningFactionMap.replace(enemyProvince, enemy, current);
@@ -894,7 +868,7 @@ public class GloriaRomanusController{
         alert.showAndWait(); 
       }
     }
-
+    
   }
 
   private boolean connected(String province1, String province2) throws IOException {
@@ -908,6 +882,45 @@ public class GloriaRomanusController{
     fillTownUnitList(province, list);
   }
 
+
+
+  @FXML
+  public void handleBattleButton() throws JsonParseException, JsonMappingException, IOException {
+    battleWindow.setVisible(false);
+    addAllPointGraphics();
+  }
+
+
+
+  private void openBattleWindow() {
+    battleMessages.clear();
+    battleWindow.setVisible(true);
+    musicUtils.playSoundOnceOntop("swordClash.mp3");
+    battleMessages.appendText("Starting battle!\n");
+    resolver.setTextArea(battleMessages);
+    //resolver = new BattleResolver(attackerArmy, defenderArmy, battleMessages);
+    
+    //resolver.setArmyBindings(humanHealth.widthProperty(), enemyHealth.widthProperty());
+    //resolver.setUnitBindings(humanUnit.radiusProperty(), enemyUnit.radiusProperty());
+    //resolver.setNumTroopsListeners(unitAnumTroops, unitBnumTroops);
+    // setArmyBindings();
+
+    resolver.startBattle();
+
+    resolver.removeArmyBindings();
+    
+    //removeArmyBindings();
+
+    battleMessages.appendText("Battle finished!\n");
+
+    if (resolver.getStatus() == BattleStatus.WIN_A) {
+        battleMessages.appendText("Invader wins!\n");
+    } else if (resolver.getStatus() == BattleStatus.WIN_B) {
+        battleMessages.appendText("Defender wins!\n");
+    }
+
+    // TODO Remove defeated armies and units, transfer troops
+}
 
   @FXML
   public void handleInvadeButton() {
