@@ -823,8 +823,7 @@ public class GloriaRomanusController{
     secondWindow.setVisible(true);
   }
 
-  @FXML
-  private TextArea textarea;
+
   @FXML
   public void handlesWConfirmButton() throws IOException{
     String humanProvince = pWProvinceName.getText();
