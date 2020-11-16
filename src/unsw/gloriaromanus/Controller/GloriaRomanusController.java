@@ -841,7 +841,7 @@ public class GloriaRomanusController{
         Army enemyArmy = enemyProvince.getArmy();
         Faction current = provinceToOwningFactionMap.get(StringToTown(humanProvince));
         Faction enemy = provinceToOwningFactionMap.get(StringToTown(targetProvince));
-        BattleResolver resolver = battleScreen.getBattleResolver();
+        BattleResolver resolver = battleScreen.getController().getBattleResolver();
     
         battleScreen.start(
           yourArmy, enemyArmy,
