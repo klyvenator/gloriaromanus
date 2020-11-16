@@ -794,6 +794,7 @@ public class GloriaRomanusController{
         Unit unitObject = unitFactory.createUnit(unit, faction, town);
         faction.setGold(faction.getTotalGold() - unitObject.getCost());
         if (unitObject.getTurnsToMake() > 0) {
+          musicUtils.playSoundOnceOntop("goldBag.mp3");
           town.trainUnit(unitObject);
           System.out.println(unit + " " + town.getUnitsInTraining().size());
           Alert alert = new Alert(AlertType.INFORMATION, unitObject.getName() + " will take " + unitObject.getTurnsToMake() + " turns to make.", ButtonType.OK);
@@ -891,7 +892,7 @@ public class GloriaRomanusController{
         alert.showAndWait(); 
       }
     }
-
+    
   }
 
   private boolean connected(String province1, String province2) throws IOException {
@@ -918,6 +919,7 @@ public class GloriaRomanusController{
   private void openBattleWindow() {
     battleMessages.clear();
     battleWindow.setVisible(true);
+    musicUtils.playSoundOnceOntop("swordClash.mp3");
     battleMessages.appendText("Starting battle!\n");
     resolver.setTextArea(battleMessages);
     //resolver = new BattleResolver(attackerArmy, defenderArmy, battleMessages);

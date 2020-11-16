@@ -30,5 +30,9 @@ public class musicUtils {
     public static void stopSound(){
         player.stop();
     }
-
+    public static void playSoundOnceOntop(String fileName){
+        Media m = new Media(new File("sounds/"+fileName).toURI().toString());
+        player = new MediaPlayer(m);
+        player.play();
+    }
 }
