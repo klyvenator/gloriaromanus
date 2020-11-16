@@ -107,8 +107,8 @@ public class Skirmishes {
     }
 
     public void activateUnitAbilities() {
-        if (unitA != null) {unitA.activateAbility(UnitTarget.class);}
-        if (unitB != null) {unitB.activateAbility(UnitTarget.class);}
+        if (unitA != null) {unitA.activateAbility(UnitTarget.class, terminal);}
+        if (unitB != null) {unitB.activateAbility(UnitTarget.class, terminal);}
     }
 
     public void cancelUnitAbilities() {

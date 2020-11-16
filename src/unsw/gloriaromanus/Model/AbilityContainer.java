@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.json.JSONObject;
 
+import javafx.scene.control.TextArea;
+
 public class AbilityContainer {
     private String name;
     private List<Ability> abilities;
@@ -59,9 +61,10 @@ public class AbilityContainer {
         return name;
     }
 
-    public <T> void activate(Class<T> targetClass) {
+    public <T> void activate(Class<T> targetClass, TextArea terminal) {
         if (target == null) {return;}
         if (target.getClass() == targetClass) {
+            if (terminal != null) {terminal.appendText("Activating " + name + "!\n");}
             apply(target.getUnits());
         }
     }

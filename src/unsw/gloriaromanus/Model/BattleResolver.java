@@ -158,8 +158,8 @@ public class BattleResolver {
         
         // TODO Print battle start
 
-        armyA.activateArmyAbilities();
-        armyB.activateArmyAbilities();
+        armyA.activateArmyAbilities(terminal);
+        armyB.activateArmyAbilities(terminal);
 
         Unit selectedA = null, selectedB = null;
 

@@ -7,6 +7,7 @@ import java.util.Random;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ChangeListener;
+import javafx.scene.control.TextArea;
 //import sun.security.action.GetBooleanAction;
 import unsw.gloriaromanus.Model.Enums.Range;
 
@@ -332,12 +333,12 @@ public abstract class Unit {
         */
     }
 
-    public <T> void activateAbility(Class<T> targetType) {
+    public <T> void activateAbility(Class<T> targetType, TextArea terminal) {
         if (
             abilityContainer != null  &&
             targetType != null
         ) {
-            abilityContainer.activate(targetType);
+            abilityContainer.activate(targetType, terminal);
         }
     }
 

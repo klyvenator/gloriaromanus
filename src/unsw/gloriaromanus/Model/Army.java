@@ -16,6 +16,7 @@ import org.json.JSONObject;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ChangeListener;
+import javafx.scene.control.TextArea;
 
 public class Army {
     private List<Unit> units;
@@ -88,10 +89,10 @@ public class Army {
         }
     }
 
-    public void activateArmyAbilities() {
+    public void activateArmyAbilities(TextArea terminal) {
         for (Unit unit : units) {
             if (unit != null) {
-                unit.activateAbility(ArmyTarget.class);
+                unit.activateAbility(ArmyTarget.class, terminal);
             }
         }
     }
