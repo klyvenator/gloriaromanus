@@ -76,6 +76,7 @@ import org.geojson.FeatureCollection;
 import org.geojson.LngLatAlt;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class GloriaRomanusController{
@@ -106,6 +107,7 @@ public class GloriaRomanusController{
   private Feature currentlySelectedHumanProvince;
   private Feature currentlySelectedEnemyProvince;
   private Feature currentlySelectedProvince;
+  private Feature targetProvinceFeature;
 
 
   private FeatureLayer featureLayer_provinces;
@@ -230,6 +232,7 @@ public class GloriaRomanusController{
     initialiseProvinceWindow();
     unitFactory = new UnitFactory();
     currentlySelectedProvince = null;
+    targetProvinceFeature = null;
     targetProvince = null;
     invadeMode = false;
     moveMode = false;
@@ -361,6 +364,7 @@ public class GloriaRomanusController{
             faction + "\n" + provinceTown.getTownName() + "\n", 0xFFFF0000,
             HorizontalAlignment.CENTER, VerticalAlignment.BOTTOM);
 
+
             switch (faction) {
               case "Gaul":
                 // note can instantiate a PictureMarkerSymbol using the JavaFX Image class - so could
@@ -474,6 +478,7 @@ public class GloriaRomanusController{
                     alert.showAndWait(); 
                   } else {
                     targetProvince = province;
+                    targetProvinceFeature = f;
                     openInvadeWindow();
                   }
                 } else if (moveMode) {
@@ -904,8 +909,9 @@ public class GloriaRomanusController{
 
 
   @FXML
-  public void handleBattleButton() {
+  public void handleBattleButton() throws JsonParseException, JsonMappingException, IOException {
     battleWindow.setVisible(false);
+    addAllPointGraphics();
   }
 
 
