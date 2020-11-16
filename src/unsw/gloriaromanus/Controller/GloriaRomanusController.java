@@ -161,6 +161,8 @@ public class GloriaRomanusController{
   private VBox goalsWindow;
   @FXML
   private Label gWConditions;
+  @FXML
+  private VBox battleWindow;
 
   private String targetProvince;
   private boolean invadeMode;
@@ -183,6 +185,10 @@ public class GloriaRomanusController{
   private Button saveGameBackButton;
   @FXML
   private Button goToMenuButton;
+
+  @FXML
+  private TextArea battleMessages;
+
   private Goals goal;
   private int year;
   private int turnCount;
@@ -839,14 +845,9 @@ public class GloriaRomanusController{
         Army enemyArmy = enemyProvince.getArmy();
         Faction current = provinceToOwningFactionMap.get(StringToTown(humanProvince));
         Faction enemy = provinceToOwningFactionMap.get(StringToTown(targetProvince));
-    
-        resolver = new BattleResolver(yourArmy, enemyArmy);
-
-        battleScreen.start(
-          resolver,
-          humanProvince, targetProvince,
-          current, enemy
-        );
+ 
+        resolver = new BattleResolver(yourArmy, enemyArmy);   
+        openBattleWindow();
 
         System.out.println(resolver.getStatus());
         if (resolver.getStatus() == BattleStatus.WIN_A) {
@@ -900,6 +901,43 @@ public class GloriaRomanusController{
     fillTownUnitList(province, list);
   }
 
+
+
+  @FXML
+  public void handleBattleButton() {
+    battleWindow.setVisible(false);
+  }
+
+
+
+  private void openBattleWindow() {
+    battleMessages.clear();
+    battleWindow.setVisible(true);
+    battleMessages.appendText("Starting battle!\n");
+    resolver.setTextArea(battleMessages);
+    //resolver = new BattleResolver(attackerArmy, defenderArmy, battleMessages);
+    
+    //resolver.setArmyBindings(humanHealth.widthProperty(), enemyHealth.widthProperty());
+    //resolver.setUnitBindings(humanUnit.radiusProperty(), enemyUnit.radiusProperty());
+    //resolver.setNumTroopsListeners(unitAnumTroops, unitBnumTroops);
+    // setArmyBindings();
+
+    resolver.startBattle();
+
+    resolver.removeArmyBindings();
+    
+    //removeArmyBindings();
+
+    battleMessages.appendText("Battle finished!\n");
+
+    if (resolver.getStatus() == BattleStatus.WIN_A) {
+        battleMessages.appendText("Invader wins!\n");
+    } else if (resolver.getStatus() == BattleStatus.WIN_B) {
+        battleMessages.appendText("Defender wins!\n");
+    }
+
+    // TODO Remove defeated armies and units, transfer troops
+}
 
   @FXML
   public void handleInvadeButton() {
