@@ -358,8 +358,8 @@ public class GloriaRomanusController{
             provinceTown = town;
             Faction factionObject = provinceToOwningFactionMap.get(provinceTown);
             String faction = factionObject.getFactionName();
-            TextSymbol t = new TextSymbol(provinceTown.getWealth(),
-            faction + "\n" + provinceTown.getTownName() + "\n", 0xFFFF0000,
+            TextSymbol t = new TextSymbol(10,
+            faction + "\n" + provinceTown.getTownName() + "\n" + provinceTown.getWealth() + "\n", 0xFFFF0000,
             HorizontalAlignment.CENTER, VerticalAlignment.BOTTOM);
 
             switch (faction) {
