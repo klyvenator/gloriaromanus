@@ -14,6 +14,7 @@ import javafx.util.Duration;
 
 import unsw.gloriaromanus.Controller.BattleController;
 import unsw.gloriaromanus.Model.Army;
+import unsw.gloriaromanus.Model.BattleResolver;
 import unsw.gloriaromanus.Model.Faction;
 
 public class BattleScreen {
@@ -34,11 +35,12 @@ public class BattleScreen {
         scene = new Scene(root);
     }
 
-    public void start(Army human, Army enemy, String humanProvince, String targetProvince, Faction currFac, Faction enemyFac) {
+    public void start(BattleResolver resolver, String humanProvince, String targetProvince, Faction currFac, Faction enemyFac) {
         musicUtils.stopSound();
         musicUtils.playSound("battleMusic.mp3");
-        controller.setHumanArmy(human);
-        controller.setEnemyArmy(enemy);
+        controller.setBattleResolver(resolver);
+        controller.setHumanArmy(resolver.getArmyA());
+        controller.setEnemyArmy(resolver.getArmyB());
         controller.reset();
         controller.setProvinceNames(humanProvince, targetProvince);
         controller.setFactionNames(currFac.getFactionName(), enemyFac.getFactionName());

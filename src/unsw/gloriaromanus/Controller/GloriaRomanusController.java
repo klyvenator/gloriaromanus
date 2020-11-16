@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 
@@ -844,13 +845,34 @@ public class GloriaRomanusController{
         Faction current = provinceToOwningFactionMap.get(StringToTown(humanProvince));
         Faction enemy = provinceToOwningFactionMap.get(StringToTown(targetProvince));
     
+        resolver = new BattleResolver(yourArmy, enemyArmy);
+
         battleScreen.start(
-          yourArmy, enemyArmy,
+          resolver,
           humanProvince, targetProvince,
           current, enemy
         );
 
-        resolver = battleScreen.getController().getBattleResolver();
+        // battleScreen.start(
+        //   yourArmy, enemyArmy,
+        //   humanProvince, targetProvince,
+        //   current, enemy
+        // );
+
+        // try {TimeUnit.SECONDS.sleep(6);}
+        // catch (Exception e) {
+        //     // just continue
+        // }
+        
+        BattleController controller = battleScreen.getController();
+        if (controller == null) {
+          System.out.println("No controller");
+        }
+        // resolver = controller.getBattleResolver();
+
+        if (resolver == null) {
+          System.out.println("No resolver");
+        }
 
         if (resolver.getStatus() == BattleStatus.WIN_A) {
           Alert alert = new Alert(AlertType.INFORMATION, current.getFactionName() + " has won!", ButtonType.OK);
