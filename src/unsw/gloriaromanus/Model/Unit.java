@@ -147,11 +147,11 @@ public abstract class Unit {
     }
 
     public void addNumTroopsListener(ChangeListener<? super Number> listener) {
-        numTroopsProperty.addListener(listener);
+        if (listener != null) {numTroopsProperty.addListener(listener);}
     }
 
     public void removeNumTroopsListener(ChangeListener<? super Number> listener) {
-        numTroopsProperty.removeListener(listener);
+        if (listener != null) {numTroopsProperty.removeListener(listener);}
     }
 
     public void setNumTroops(int numTroops) {

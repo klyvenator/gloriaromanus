@@ -44,13 +44,13 @@ public class Skirmishes {
     }
 
     public void setUnitBindings(DoubleProperty p1, DoubleProperty p2) {
-        p1.bindBidirectional(unitA.getNumTroopsProperty());
-        p2.bindBidirectional(unitB.getNumTroopsProperty());
+        if (p1 != null) {p1.bindBidirectional(unitA.getNumTroopsProperty());}
+        if (p2 != null) {p2.bindBidirectional(unitB.getNumTroopsProperty());}
     }
 
     public void removeUnitBindings(DoubleProperty p1, DoubleProperty p2) {
-        p1.unbindBidirectional(unitA.getNumTroopsProperty());
-        p2.unbindBidirectional(unitB.getNumTroopsProperty());
+        if (p1 != null) {p1.unbindBidirectional(unitA.getNumTroopsProperty());}
+        if (p2 != null) {p2.unbindBidirectional(unitB.getNumTroopsProperty());}
     }
 
     public void setNumTroopsListeners(ChangeListener<? super Number> listener1, ChangeListener<? super Number> listener2) {
