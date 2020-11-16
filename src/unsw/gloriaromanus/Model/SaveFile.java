@@ -84,6 +84,7 @@ public class SaveFile {
             jsonObject.put("Tax Type", t.getTaxStatus());
             jsonObject.put("Town Wealth", t.getWealth());
             jsonObject.put("name", t.getTownName());
+            jsonObject.put("recentlyInvaded", t.getRecentlyInvaded());
             units = addUnits(t.getArmy().getAllUnits());
             jsonObject.put("Units", units);
             town.put(t.getTownName(), jsonObject);
